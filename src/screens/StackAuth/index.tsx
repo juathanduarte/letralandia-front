@@ -1,3 +1,4 @@
 import { Login } from './LoginScreen/Login';
+import { Register } from './RegisterScreen/Register';
 
-export { Login };
+export { Login, Register };

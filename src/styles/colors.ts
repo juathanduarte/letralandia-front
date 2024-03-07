@@ -12,4 +12,5 @@ export default {
   title: '#3E3E3E',
   white: '#FFFFFF',
   gray: '#CCCCCC',
+  grayLight: '#EEEEEE',
 };

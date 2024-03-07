@@ -38,7 +38,7 @@ const getButtonVariant = (variant: string) => {
   switch (variant) {
     case 'primary':
       return css`
-        background-color: ${colors.greenLight};
+        background-color: ${colors.title};
       `;
     case 'secondary':
       return css`
