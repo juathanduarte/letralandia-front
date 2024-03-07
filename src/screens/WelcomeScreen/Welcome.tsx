@@ -1,7 +1,7 @@
+import letralandiaLogo from '@/assets/letralandiaLogo.png';
+import ufpelLogo from '@/assets/ufpelLogo.png';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import letralandiaLogo from '../../assets/letralandiaLogo.png';
-import ufpelLogo from '../../assets/ufpelLogo.png';
 import { Container, ImageContainer, LogoImage } from './style';
 
 export function Welcome() {

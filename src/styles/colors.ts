@@ -11,4 +11,5 @@ export default {
   redLight: '#F64B3C',
   title: '#3E3E3E',
   white: '#FFFFFF',
+  gray: '#CCCCCC',
 };
