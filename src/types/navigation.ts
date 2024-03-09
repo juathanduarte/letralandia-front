@@ -7,6 +7,7 @@ export type RootStackParamList = {
   Welcome: undefined;
   Login: undefined;
   Register: undefined;
+  CreateProfile: undefined;
   SelectProfile: undefined;
   // RequestRide: { data: Ride };
   // RideInformations: {

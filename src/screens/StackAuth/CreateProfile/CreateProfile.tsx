@@ -10,9 +10,10 @@ import { Container, LogoImage, Title, WrapperBody } from './style';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ProfileSchema, profileSchema } from '../../../schemas';
+import { RootStackScreenProps } from '@/types/navigation';
 
 export function CreateProfile() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootStackScreenProps<'CreateProfile'>['navigation']>();
 
   const {
     control,
@@ -30,7 +31,7 @@ export function CreateProfile() {
 
   const handleCreateProfile = async () => {
     console.log('CreateProfile');
-    // navigation.navigate('Home' as never);
+    navigation.navigate('SelectProfile');
 
     // const data = await mutateAsync({
     //   email: getValues('email'),
