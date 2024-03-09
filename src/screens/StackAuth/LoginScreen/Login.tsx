@@ -1,9 +1,12 @@
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
+import { RootStackScreenProps } from '@/types/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import letralandiaLogo from '../../../assets/letralandiaLogo.png';
+import { LoginSchema, loginSchema } from '../../../schemas';
 import {
   Container,
   ImageContainer,
@@ -14,14 +17,10 @@ import {
   WrapperButtons,
   WrapperInputs,
 } from './style';
-
 // import { login } from '../../services/user';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginSchema, loginSchema } from '../../../schemas';
-
 export function Login() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootStackScreenProps<'Login'>['navigation']>();
 
   const {
     control,
@@ -38,7 +37,7 @@ export function Login() {
   // });
 
   const handleRegister = () => {
-    navigation.navigate('Register' as never);
+    navigation.navigate('Register');
   };
 
   const handlePassword = () => {
@@ -47,7 +46,7 @@ export function Login() {
 
   const handleLogin = async () => {
     console.log('Login');
-    // navigation.navigate('Home' as never);
+    navigation.navigate('SelectProfile');
 
     // const data = await mutateAsync({
     //   email: getValues('email'),

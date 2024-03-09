@@ -3,10 +3,11 @@ import React from 'react';
 
 import { Login, Register } from '../screens/StackAuth';
 import { Welcome } from '../screens/WelcomeScreen/Welcome';
+import TabRoutes from './user.tabs.routes';
 
 const Stack = createNativeStackNavigator();
 
-export const LoginRoutes: React.FC = () => {
+export default function AppRoutes(){
   return (
     <Stack.Navigator
       screenOptions={{
@@ -16,6 +17,7 @@ export const LoginRoutes: React.FC = () => {
       <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="SelectProfile" component={TabRoutes} />
     </Stack.Navigator>
   );
 };

@@ -2,10 +2,12 @@ import letralandiaLogo from '@/assets/letralandiaLogo.png';
 import ufpelLogo from '@/assets/ufpelLogo.png';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
+import type { RootStackScreenProps } from '../../types/navigation';
 import { Container, ImageContainer, LogoImage } from './style';
 
+
 export function Welcome() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootStackScreenProps<'Welcome'>['navigation']>();
   const [showUfpelLogo, setShowUfpelLogo] = useState(true);
 
   useEffect(() => {
@@ -15,7 +17,8 @@ export function Welcome() {
 
     if (!showUfpelLogo) {
       const loginTimer = setTimeout(() => {
-        navigation.navigate('Login' as never);
+        // navigation.navigate('Login');
+        navigation.navigate('SelectProfile');
       }, 2000);
 
       return () => clearTimeout(loginTimer);

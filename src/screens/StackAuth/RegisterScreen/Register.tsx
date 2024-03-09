@@ -2,6 +2,7 @@ import Button from '@/components/Button/Button';
 import Icon from '@/components/Icon/Icon';
 import Input from '@/components/Input/Input';
 import { RegisterSchema, registerSchema } from '@/schemas';
+import { RootStackScreenProps } from '@/types/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
@@ -10,7 +11,7 @@ import { TouchableOpacity } from 'react-native';
 import { Container, Title, WrapperBody, WrapperInputs } from './style';
 
 export function Register() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootStackScreenProps<'Register'>['navigation']>();
 
   const {
     handleSubmit,
