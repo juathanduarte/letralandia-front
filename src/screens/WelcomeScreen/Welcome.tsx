@@ -17,7 +17,7 @@ export function Welcome() {
     if (!showUfpelLogo) {
       const loginTimer = setTimeout(() => {
         // navigation.navigate('Login');
-        navigation.navigate('SelectProfile');
+        navigation.navigate('Login');
       }, 2000);
 
       return () => clearTimeout(loginTimer);

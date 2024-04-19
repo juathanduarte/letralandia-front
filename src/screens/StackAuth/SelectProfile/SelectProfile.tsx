@@ -1,10 +1,9 @@
 import Button from '@/components/Button/Button';
-import CardProfile from '@/components/CardProfile/CardProfile';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import vectorSelectProfile from '../../../assets/vectorSelectProfile.png';
-import { Container, LogoImage, Title, WrapperBody, WrapperCards } from './style';
+import { Container, LogoImage, Title, WrapperBody } from './style';
 
 import avatarMenina1 from '../../../assets/avatarMenina1.png';
 import avatarMenina2 from '../../../assets/avatarMenina2.png';
@@ -32,7 +31,7 @@ export function SelectProfile() {
         <LogoImage source={vectorSelectProfile} resizeMode="contain" />
 
         <Title>Quem é você?</Title>
-        <WrapperCards>
+        {/* <WrapperCards>
           {[...Array(5)].map((_, index) => (
             <CardProfile
               key={index}
@@ -44,7 +43,7 @@ export function SelectProfile() {
               }
             />
           ))}
-        </WrapperCards>
+        </WrapperCards> */}
         <Button variant="primary" size="large" label="Novo perfil" onClick={handleCreateProfile} />
       </WrapperBody>
     </Container>

@@ -7,7 +7,7 @@ interface TextProps {
 
 const { width, height } = Dimensions.get('window');
 
-export const Container = styled.SafeAreaView`
+export const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;

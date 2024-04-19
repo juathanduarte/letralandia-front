@@ -4,7 +4,7 @@ export const setAsyncStorage = async ({ value, key }: { value: string; key: stri
   try {
     await AsyncStorage.setItem(key, value);
   } catch (e) {
-    // saving error
+    console.log('Erro ao salvar no AsyncStorage');
   }
 };
 
@@ -17,7 +17,7 @@ export const getAsyncStorage = async ({ key }: { key: string }) => {
     }
     return null;
   } catch (e) {
-    // error reading value
+    console.log('Erro ao buscar no AsyncStorage');
   }
 };
 
@@ -25,6 +25,6 @@ export const removeAsyncStorage = async ({ key }: { key: string }) => {
   try {
     await AsyncStorage.removeItem(key);
   } catch (e) {
-    // error reading value
+    console.log('Erro ao remover do AsyncStorage');
   }
 };

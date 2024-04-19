@@ -45,6 +45,7 @@ export const TextInput = styled.TextInput`
 `;
 
 export const ErrorText = styled.Text`
+  margin-top: 2px;
   margin-bottom: 2px;
   color: ${colors.redLight};
   font-size: 12px;

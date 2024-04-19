@@ -69,7 +69,7 @@ export default function Input({
                 />
               </TouchableOpacity>
             )}
-            {error && <ErrorText>{error}</ErrorText>}
+            {/* {error && <ErrorText>{error}</ErrorText>} */}
           </WrapperIcon>
         )}
 
@@ -87,9 +87,9 @@ export default function Input({
               defaultValue={defaultValue}
               keyboardType={inputNumber ? 'numeric' : 'default'}
             />
-            {error && <ErrorText>{error}</ErrorText>}
           </WrapperDefault>
         )}
+        {error && <ErrorText>{error}</ErrorText>}
       </WrapperInput>
     </Wrapper>
   );
