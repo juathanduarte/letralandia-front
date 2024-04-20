@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/contexts/AuthContext';
 import {
   Nunito_200ExtraLight,
   Nunito_300Light,
@@ -55,7 +56,11 @@ const AppNavigator = () => {
 
   ///TODO: Adicionar o QueryClientProvider
   // TODO: Adicionar o AuthProvider
-  return <Routes />;
+  return (
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
+  );
 };
 
 export default AppNavigator;

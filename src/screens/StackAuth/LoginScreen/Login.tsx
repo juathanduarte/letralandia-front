@@ -14,11 +14,13 @@ import {
   WrapperInputs,
 } from './style';
 
+import { AuthActionTypes, useAuth } from '@/contexts/AuthContext';
 import { login } from '@/services/user';
-import { setAsyncStorage } from '@/utils/AsyncStorage';
 
 export function Login() {
   const navigation = useNavigation();
+  const { dispatch } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -44,13 +46,17 @@ export function Login() {
 
     const data = await login(user);
 
-    if (data.access_token) {
-      await setAsyncStorage({ key: 'access_token', value: data.access_token });
-    }
+    if (data.access_token && data.userId) {
+      dispatch({
+        type: AuthActionTypes.LOGIN_SUCCESS,
+        payload: {
+          accessToken: data.access_token,
+          userId: data.userId,
+        },
+      });
 
-    // Navega para a próxima tela se tudo estiver correto
-    navigation.navigate('SelectProfile');
-    // Implementar lógica de autenticação aqui
+      navigation.navigate('SelectProfile');
+    }
   };
 
   // Validação de e-mail usando regex

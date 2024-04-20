@@ -1,79 +1,108 @@
-import Button from '@/components/Button/Button';
-import Input from '@/components/Input/Input';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import { TouchableOpacity } from 'react-native';
+
+import Button from '@/components/Button/Button';
+import Icon from '@/components/Icon/Icon';
+import Input from '@/components/Input/Input';
+import { useAuth } from '@/contexts/AuthContext';
+import { createProfile } from '@/services/user';
+import colors from '@/styles/colors';
+
 import vectorSelectProfile from '../../../assets/vectorSelectProfile.png';
-import { Container, LogoImage, Title, WrapperBody } from './style';
-
-// import { login } from '../../services/user';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ProfileSchema, profileSchema } from '../../../schemas';
-import { RootStackScreenProps } from '@/types/navigation';
+import {
+  Container,
+  GenderButton,
+  GenderButtonWrapper,
+  LogoImage,
+  Title,
+  WrapperInfo,
+} from './style';
 
 export function CreateProfile() {
-  const navigation = useNavigation<RootStackScreenProps<'CreateProfile'>['navigation']>();
+  const navigation = useNavigation();
+  const { state } = useAuth();
+  const userId = state.userId;
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
+  const [error, setError] = useState('');
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProfileSchema>({
-    resolver: zodResolver(profileSchema),
-  });
-
-  // const { mutateAsync } = useMutation({
-  //   // mutationFn: login,
-  //   onError: (error) => {},
-  //   onSuccess: (data) => {},
-  // });
-
-  const handleCreateProfile = async () => {
-    console.log('CreateProfile');
-    navigation.navigate('SelectProfile');
-
-    // const data = await mutateAsync({
-    //   email: getValues('email'),
-    //   password: getValues('password'),
-    // });
-    // await signIn(data.accessToken, data.refreshToken);
+  const validateInput = () => {
+    if (!name.trim()) {
+      setError('Campo obrigatório');
+      return false;
+    }
+    setError('');
+    return true;
   };
 
-  //TODO: Verificar o por que do erro não estar chegando com a message correta.
+  const handleCreateProfile = async () => {
+    if (validateInput()) {
+      const profileData = {
+        name,
+        gender,
+      };
+
+      try {
+        const data = await createProfile(userId, profileData);
+        // Verifica se os dados retornados estão corretos
+        if (data && data.id && data.userId && data.name === name && data.gender === gender) {
+          navigation.navigate('SelectProfile');
+        } else {
+          setError('Erro ao criar o perfil. Por favor, tente novamente.');
+        }
+      } catch (error) {
+        console.error('Erro ao criar perfil:', error);
+        setError('Erro ao conectar ao serviço. Por favor, tente novamente.');
+      }
+    }
+  };
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  const getButtonColor = (buttonGender) => {
+    return gender === buttonGender
+      ? buttonGender === 'male'
+        ? colors.blue
+        : colors.pink
+      : buttonGender === 'male'
+        ? colors.blueLight
+        : colors.pinkLight;
+  };
 
   return (
     <Container>
-      <WrapperBody>
-        <LogoImage source={vectorSelectProfile} resizeMode="contain" />
-
-        <Title>Qual é seu nome?</Title>
-
-        <Controller
-          name="name"
-          control={control}
-          render={({
-            field: { value = '', onChange },
-            fieldState: { invalid, error, isDirty },
-          }) => (
-            <Input
-              variant={'login'}
-              label="Digite o seu nome"
-              iconSize={20}
-              error={error?.message === 'Required' ? 'Campo obrigatório' : error?.message}
-              value={value}
-              onChange={onChange}
-            />
-          )}
+      <TouchableOpacity onPress={handleGoBack}>
+        <Icon icon="arrow-left" size={24} color="black" lib="FontAwesome" />
+      </TouchableOpacity>
+      <LogoImage source={vectorSelectProfile} resizeMode="contain" />
+      <Title>Qual é seu nome?</Title>
+      <WrapperInfo>
+        <Input
+          variant={'login'}
+          label="Digite o seu nome"
+          iconSize={20}
+          error={error}
+          value={name}
+          onChange={(text) => setName(text)}
         />
-
-        <Button
-          variant="primary"
-          size="large"
-          label="Salvar e continuar"
-          onClick={handleSubmit(handleCreateProfile)}
-        />
-      </WrapperBody>
+        <GenderButtonWrapper>
+          <GenderButton onPress={() => setGender('male')} color={getButtonColor('male')}>
+            <Icon icon="male" size={24} color="white" lib="IonIcons" />
+          </GenderButton>
+          <GenderButton onPress={() => setGender('female')} color={getButtonColor('female')}>
+            <Icon icon="female" size={24} color="white" lib="IonIcons" />
+          </GenderButton>
+        </GenderButtonWrapper>
+      </WrapperInfo>
+      <Button
+        variant="primary"
+        size="large"
+        label="Salvar e continuar"
+        onClick={handleCreateProfile}
+      />
     </Container>
   );
 }

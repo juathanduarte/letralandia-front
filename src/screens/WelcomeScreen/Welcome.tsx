@@ -1,5 +1,6 @@
 import letralandiaLogo from '@/assets/letralandiaLogo.png';
 import ufpelLogo from '@/assets/ufpelLogo.png';
+import { useAuth } from '@/contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import type { RootStackScreenProps } from '../../types/navigation';
@@ -8,23 +9,32 @@ import { Container, ImageContainer, LogoImage } from './style';
 export function Welcome() {
   const navigation = useNavigation<RootStackScreenProps<'Welcome'>['navigation']>();
   const [showUfpelLogo, setShowUfpelLogo] = useState(true);
+  const {
+    state: { isAuthenticated },
+  } = useAuth();
 
   useEffect(() => {
-    const splashTimer = setTimeout(() => {
+    let splashTimer = setTimeout(() => {
       setShowUfpelLogo(false);
     }, 3000);
 
+    return () => clearTimeout(splashTimer);
+  }, []);
+
+  useEffect(() => {
     if (!showUfpelLogo) {
       const loginTimer = setTimeout(() => {
-        // navigation.navigate('Login');
-        navigation.navigate('Login');
+        // Redireciona baseado no estado de autenticação
+        if (isAuthenticated) {
+          navigation.navigate('SelectProfile');
+        } else {
+          navigation.navigate('Login');
+        }
       }, 2000);
 
       return () => clearTimeout(loginTimer);
     }
-
-    return () => clearTimeout(splashTimer);
-  }, [showUfpelLogo, navigation]);
+  }, [showUfpelLogo, navigation, isAuthenticated]);
 
   return (
     <Container>
