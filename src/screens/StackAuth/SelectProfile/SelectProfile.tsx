@@ -6,38 +6,46 @@ import { getProfiles } from '@/services/user';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
-import avatarMenina1 from '../../../assets/avatarMenina1.png';
-import avatarMenina2 from '../../../assets/avatarMenina2.png';
-import avatarMenina3 from '../../../assets/avatarMenina3.png';
-import avatarMenina4 from '../../../assets/avatarMenina4.png';
-import avatarMenino1 from '../../../assets/avatarMenino1.png';
-import avatarMenino2 from '../../../assets/avatarMenino2.png';
-import avatarMenino3 from '../../../assets/avatarMenino3.png';
-import avatarMenino4 from '../../../assets/avatarMenino4.png';
-import { Container, LogoImage, Title, WrapperBody, WrapperCards } from './style';
+import { TouchableOpacity } from 'react-native';
+import {
+  Container,
+  LogoImage,
+  ScrollViewContainer,
+  Text,
+  Title,
+  WrapperCards,
+  WrapperHeader,
+  WrapperRow,
+} from './style';
 
 import vectorSelectProfile from '../../../assets/vectorSelectProfile.png';
-
-const girlAvatars = [avatarMenina1, avatarMenina2, avatarMenina3, avatarMenina4];
-const boyAvatars = [avatarMenino1, avatarMenino2, avatarMenino3, avatarMenino4];
 
 export function SelectProfile() {
   const navigation = useNavigation<RootStackScreenProps<'SelectProfile'>['navigation']>();
   const { state } = useAuth();
   const userId = state.userId;
   const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function fetchProfiles() {
-      if (userId) {
-        const profiles = await getProfiles(userId);
-        setProfiles(profiles);
+      if (!userId) return;
+
+      setLoading(true);
+      try {
+        const fetchedProfiles = await getProfiles(userId);
+        setProfiles(fetchedProfiles);
+      } catch (err) {
+        setError('Failed to load profiles');
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchProfiles();
-  }, []);
+  }, [userId]);
 
   const handleCreateProfile = () => {
     navigation.navigate('CreateProfile');
@@ -49,28 +57,29 @@ export function SelectProfile() {
 
   return (
     <Container>
-      <TouchableOpacity onPress={handleGoBack}>
-        <Icon icon="arrow-left" size={24} color="black" lib="FontAwesome" />
-      </TouchableOpacity>
-      <WrapperBody>
+      <WrapperHeader>
+        <TouchableOpacity onPress={handleGoBack}>
+          <Icon icon="arrow-left" size={24} color="black" lib="FontAwesome" />
+        </TouchableOpacity>
         <LogoImage source={vectorSelectProfile} resizeMode="contain" />
-        <Title>Quem é você?</Title>
-        <WrapperCards>
-          {profiles.length === 0 && <Text>Nenhum perfil</Text>}
-          {profiles.map((profile) => (
-            <CardProfile
-              key={profile.id}
-              name={profile.name}
-              icon={
-                Math.random() < 0.5
-                  ? girlAvatars[Math.floor(Math.random() * girlAvatars.length)]
-                  : boyAvatars[Math.floor(Math.random() * boyAvatars.length)]
-              }
-            />
-          ))}
-        </WrapperCards>
-        <Button variant="primary" size="large" label="Novo perfil" onClick={handleCreateProfile} />
-      </WrapperBody>
+      </WrapperHeader>
+      {profiles.length === 0 && <Text>Nenhum perfil registrado, crie um! 😀</Text>}
+      {profiles.length > 0 && (
+        <>
+          <Title>Quem é você?</Title>
+          <ScrollViewContainer>
+            <WrapperCards>
+              <WrapperRow>
+                {error && <Text>{error}</Text>}
+                {profiles.map((profile) => (
+                  <CardProfile key={profile.id} name={profile.name} gender={profile.gender} />
+                ))}
+              </WrapperRow>
+            </WrapperCards>
+          </ScrollViewContainer>
+        </>
+      )}
+      <Button variant="primary" size="large" label="Novo perfil" onClick={handleCreateProfile} />
     </Container>
   );
 }

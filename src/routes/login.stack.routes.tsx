@@ -22,6 +22,7 @@ export default function AppRoutes() {
         <>
           <Stack.Screen name="Welcome" component={Welcome} />
           <Stack.Screen name="SelectProfile" component={SelectProfile} />
+          <Stack.Screen name="CreateProfile" component={CreateProfile} />
         </>
       ) : (
         <>

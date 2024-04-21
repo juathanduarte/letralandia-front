@@ -45,7 +45,6 @@ export function CreateProfile() {
 
       try {
         const data = await createProfile(userId, profileData);
-        // Verifica se os dados retornados estão corretos
         if (data && data.id && data.userId && data.name === name && data.gender === gender) {
           navigation.navigate('SelectProfile');
         } else {

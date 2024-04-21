@@ -10,11 +10,13 @@ export const Container = styled.View`
   justify-content: space-between;
 `;
 
+export const WrapperHeader = styled.View`
+  gap: 16px;
+`;
+
 export const LogoImage = styled.Image`
   width: ${width * 0.75}px;
   height: ${height * 0.3}px;
-  align-items: center;
-  justify-content: center;
   width: 100%;
 `;
 
@@ -24,16 +26,22 @@ export const Title = styled.Text`
   text-align: center;
 `;
 
-export const WrapperBody = styled.View`
+export const ScrollViewContainer = styled.View`
+  height: ${height * 0.4}px;
   width: 100%;
-  align-items: center;
-  justify-content: center;
-  gap: 52px;
 `;
 
-export const WrapperCards = styled.View`
+export const WrapperCards = styled.ScrollView`
   width: 100%;
-  align-items: center;
-  justify-content: center;
+  height: 100%;
+`;
+
+export const WrapperRow = styled.View`
   gap: 16px;
+`;
+
+export const Text = styled.Text`
+  font-size: 16px;
+  font-family: ${fonts.text_regular};
+  text-align: center;
 `;
