@@ -4,7 +4,7 @@ export default {
   pink: '#F87692',
   pinkLight: '#FFA3B7',
   blue: '#57D1CA',
-  blueLight: '#53C8C1',
+  blueLight: '#ace5e1',
   green: '#055816',
   greenLight: '#76BF4C',
   red: '#C81912',

@@ -24,7 +24,7 @@ export function CreateProfile() {
   const { state } = useAuth();
   const userId = state.userId;
   const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('male');
   const [error, setError] = useState('');
 
   const validateInput = () => {
