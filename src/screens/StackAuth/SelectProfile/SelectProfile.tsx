@@ -20,7 +20,7 @@ import {
 
 import vectorSelectProfile from '../../../assets/vectorSelectProfile.png';
 
-export function SelectProfile() {
+export function SelectProfile({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'SelectProfile'>['navigation']>();
   const { state } = useAuth();
   const userId = state.userId;
@@ -45,7 +45,7 @@ export function SelectProfile() {
     }
 
     fetchProfiles();
-  }, [userId]);
+  }, [userId, route.params?.reload]);
 
   const handleCreateProfile = () => {
     navigation.navigate('CreateProfile');

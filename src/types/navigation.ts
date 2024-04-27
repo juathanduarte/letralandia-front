@@ -5,7 +5,7 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   CreateProfile: undefined;
-  SelectProfile: undefined;
+  SelectProfile: { reload?: boolean };
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<
