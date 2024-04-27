@@ -50,6 +50,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function initializeAuth() {
       const accessToken = await getAsyncStorage({ key: 'accessToken' });
+      console.log('accessToken', accessToken);
       if (accessToken) {
         try {
           const userData = await getMe(accessToken);

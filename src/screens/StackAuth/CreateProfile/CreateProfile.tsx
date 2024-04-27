@@ -46,7 +46,7 @@ export function CreateProfile() {
       try {
         const data = await createProfile(userId, profileData);
         if (data && data.id && data.userId && data.name === name && data.gender === gender) {
-          navigation.navigate('SelectProfile', { reload: true });
+          navigation.navigate('SelectProfile', { reload: new Date().getTime() });
         } else {
           setError('Erro ao criar o perfil. Por favor, tente novamente.');
         }
