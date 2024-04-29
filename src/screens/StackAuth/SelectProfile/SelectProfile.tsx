@@ -52,6 +52,13 @@ export function SelectProfile({ route }) {
     navigation.navigate('CreateProfile');
   };
 
+  const handleSelectProfile = (profileId: number) => {
+    navigation.navigate('Tabs', {
+      screen: 'Home',
+      params: { profileId: profileId },
+    });
+  };
+
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -81,7 +88,14 @@ export function SelectProfile({ route }) {
               <WrapperRow>
                 {error && <Text>{error}</Text>}
                 {profiles.map((profile) => (
-                  <CardProfile key={profile.id} name={profile.name} gender={profile.gender} />
+                  <CardProfile
+                    key={profile.id}
+                    name={profile.name}
+                    gender={profile.gender}
+                    onClick={() => {
+                      handleSelectProfile(profile.id);
+                    }}
+                  />
                 ))}
               </WrapperRow>
             </WrapperCards>

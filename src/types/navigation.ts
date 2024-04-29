@@ -6,7 +6,8 @@ export type RootStackParamList = {
   Register: undefined;
   CreateProfile: undefined;
   SelectProfile: { reload: number };
-  Home: undefined;
+  Tabs: { screen: keyof RootStackParamList; params?: any };
+  Home: { profileId: number };
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<

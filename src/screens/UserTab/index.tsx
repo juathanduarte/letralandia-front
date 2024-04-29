@@ -1,3 +1,3 @@
-// import { CreateProfile } from '../StackAuth/CreateProfile/CreateProfile';
+import { Home } from './Home/Home';
 
-// export { CreateProfile };
+export { Home };
