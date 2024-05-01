@@ -10,7 +10,7 @@ interface ButtonContainerProps {
 export const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
   ${(props) => getButtonVariant(props.variant)}
   ${(props) => getButtonSize(props.size)}
-  border-radius: 24px;
+  ${(props) => getButtonBorder(props.size)}
   align-items: center;
   justify-content: center;
   opacity: ${(props) => (props.disabled ? 0.6 : 1)};
@@ -42,7 +42,7 @@ const getButtonVariant = (variant: string) => {
       `;
     case 'secondary':
       return css`
-        background-color: #2ecc71;
+        background-color: ${colors.redLight};
       `;
     default:
       return css`
@@ -68,6 +68,27 @@ const getButtonSize = (size: string) => {
     default:
       return css`
         padding: 12px;
+      `;
+  }
+};
+
+const getButtonBorder = (size: string) => {
+  switch (size) {
+    case 'small':
+      return css`
+        border-radius: 12px;
+      `;
+    case 'medium':
+      return css`
+        border-radius: 16px;
+      `;
+    case 'large':
+      return css`
+        border-radius: 24px;
+      `;
+    default:
+      return css`
+        border-radius: 16px;
       `;
   }
 };

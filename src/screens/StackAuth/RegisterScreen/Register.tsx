@@ -9,6 +9,7 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { TouchableOpacity } from 'react-native';
 import { Container, Title, WrapperBody, WrapperInputs } from './style';
+import colors from '@/styles/colors';
 
 export function Register() {
   const navigation = useNavigation<RootStackScreenProps<'Register'>['navigation']>();
@@ -41,7 +42,7 @@ export function Register() {
   return (
     <Container>
       <TouchableOpacity onPress={handleGoBack}>
-        <Icon icon="arrow-left" size={24} color="black" lib="FontAwesome" />
+        <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
       </TouchableOpacity>
       <Title>Cadastro</Title>
       <WrapperBody>

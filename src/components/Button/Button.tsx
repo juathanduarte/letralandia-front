@@ -4,7 +4,7 @@ import { ButtonContainer, ButtonIcon, ButtonLabel } from './style';
 
 interface ButtonProps {
   variant: 'primary' | 'secondary';
-  size: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large';
   label?: string;
   icon?: any;
   onClick?: () => void;

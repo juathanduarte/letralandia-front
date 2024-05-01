@@ -19,6 +19,7 @@ import {
   WrapperRow,
 } from './style';
 
+import colors from '@/styles/colors';
 import vectorSelectProfile from '../../../assets/vectorSelectProfile.png';
 
 export function SelectProfile({ route }) {
@@ -75,7 +76,7 @@ export function SelectProfile({ route }) {
     <Container>
       <WrapperHeader>
         <TouchableOpacity onPress={handleGoBack}>
-          <Icon icon="arrow-left" size={24} color="black" lib="FontAwesome" />
+          <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
         </TouchableOpacity>
         <LogoImage source={vectorSelectProfile} resizeMode="contain" />
       </WrapperHeader>

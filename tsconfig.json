@@ -6,6 +6,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/components/Modal/ModalProfile"],
   "isolatedModules": false //true to false
 }

@@ -74,7 +74,7 @@ export function CreateProfile() {
   return (
     <Container>
       <TouchableOpacity onPress={handleGoBack}>
-        <Icon icon="arrow-left" size={24} color="black" lib="FontAwesome" />
+        <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
       </TouchableOpacity>
       <LogoImage source={vectorSelectProfile} resizeMode="contain" />
       <Title>Qual é seu nome?</Title>
