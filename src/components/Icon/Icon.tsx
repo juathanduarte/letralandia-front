@@ -1,3 +1,4 @@
+import { AntDesign } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import IonIcons from '@expo/vector-icons/Ionicons';
 import React from 'react';
@@ -15,11 +16,16 @@ type IconProps =
   | ({
       lib: 'FontAwesome';
       icon: keyof typeof FontAwesome.glyphMap;
+    } & IconPropsBase)
+  | ({
+      lib: 'AntDesign';
+      icon: keyof typeof AntDesign.glyphMap;
     } & IconPropsBase);
 
 const Libs = {
   IonIcons,
   FontAwesome,
+  AntDesign,
 };
 
 export default function Icon({ icon, size, color = 'black', lib }: IconProps) {

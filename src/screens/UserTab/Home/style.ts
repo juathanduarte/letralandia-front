@@ -1,6 +1,9 @@
 import colors from '@/styles/colors';
 import fonts from '@/styles/fonts';
+import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
+
+const { width, height } = Dimensions.get('window');
 
 export const Container = styled.View`
   flex: 1;
@@ -33,4 +36,19 @@ export const WelcomeDescription = styled.Text`
   font-size: 16px;
   color: ${colors.title};
   font-family: ${fonts.text_extra_light};
+`;
+
+export const ScrollViewContainer = styled.View`
+  margin-top: 16px;
+  height: ${height * 0.7}px;
+  width: 100%;
+`;
+
+export const WrapperCards = styled.ScrollView`
+  width: 100%;
+  height: 100%;
+`;
+
+export const WrapperRow = styled.View`
+  gap: 16px;
 `;

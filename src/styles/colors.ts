@@ -1,6 +1,6 @@
 export default {
-  yellow: '#FFCB7C',
-  yellowBurned: '#FFBC57',
+  yellow: '#FFBC57',
+  yellowLight: '#FFCB7C',
   pink: '#F87692',
   pinkLight: '#FFA3B7',
   blue: '#57D1CA',

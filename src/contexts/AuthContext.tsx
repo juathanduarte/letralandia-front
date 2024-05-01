@@ -73,10 +73,8 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const accessToken = { value: state.accessToken, key: 'accessToken' };
-    if (state.accessToken) {
+    if (state.accessToken !== null) {
       setAsyncStorage(accessToken);
-    } else {
-      setAsyncStorage({ key: 'accessToken', value: null });
     }
   }, [state.accessToken]);
 

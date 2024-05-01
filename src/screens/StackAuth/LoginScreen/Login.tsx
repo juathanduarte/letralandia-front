@@ -80,7 +80,7 @@ export function Login() {
         <WrapperInputs>
           <Input
             variant={'login'}
-            iconInput="user" // Substituir pelo ícone de email
+            iconInput="envelope"
             label="E-mail"
             iconSize={20}
             error={emailError}

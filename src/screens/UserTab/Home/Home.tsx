@@ -1,21 +1,26 @@
+import { CardGame } from '@/components/CardGame/CardGame';
 import Icon from '@/components/Icon/Icon';
+import ProfileModal from '@/components/ModalProfile/ModalProfile';
 import { useAuth } from '@/contexts/AuthContext';
-import { getProfileDetails } from '@/services/user';
+import { getProfileDetails, logout } from '@/services/user';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
+import { removeAsyncStorage } from '@/utils/AsyncStorage';
 import { useNavigation } from '@react-navigation/native';
 import * as Speech from 'expo-speech';
 import React, { useEffect, useState } from 'react';
 import { Alert, Text, TouchableOpacity } from 'react-native';
 import {
   Container,
+  ScrollViewContainer,
   WelcomeButtonsContainer,
   WelcomeContainer,
   WelcomeDescription,
   WelcomeText,
   WelcomeTextContainer,
+  WrapperCards,
+  WrapperRow,
 } from './style';
-import ProfileModal from '@/components/ModalProfile/ModalProfile';
 
 export function Home({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'Home'>['navigation']>();
@@ -25,8 +30,46 @@ export function Home({ route }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [newName, setNewName] = useState('');
   const [newEmail, setNewEmail] = useState('');
-
   const [profileDetails, setProfileDetails] = useState(null);
+
+  const games = [
+    {
+      id: 1,
+      backgroundColor: colors.yellow,
+      title: 'Jogo 1',
+      emoji: '🐈',
+      emojiName: 'GATO',
+      emojiViewName: 'G TO',
+    },
+    {
+      id: 2,
+      backgroundColor: colors.blue,
+      title: 'Jogo 2',
+      emoji: '🐖',
+      emojiName: 'PORCO',
+      emojiViewName: '     ',
+    },
+    {
+      id: 3,
+      backgroundColor: colors.pink,
+      title: 'Jogo 3',
+      emoji: '🐸',
+      emojiName: 'SAPO',
+      emojiSyllables: ['SA', 'PO'],
+    },
+    {
+      id: 4,
+      backgroundColor: colors.gray,
+      title: 'Alfabeto',
+      emoji: '🆎',
+    },
+    {
+      id: 5,
+      backgroundColor: colors.gray,
+      title: 'Sílabas',
+      emoji: '🆎',
+    },
+  ];
 
   useEffect(() => {
     Speech.speak('Bem-vindo ao aplicativo!', {
@@ -73,6 +116,14 @@ export function Home({ route }) {
     }
   };
 
+  const handleLogout = () => {
+    const data = logout();
+    if (data !== null) {
+      removeAsyncStorage({ key: 'accessToken' });
+      navigation.navigate('Login');
+    }
+  };
+
   const handleGoBack = () => {
     navigation.navigate('SelectProfile', { reload: new Date().getTime() });
   };
@@ -103,11 +154,35 @@ export function Home({ route }) {
               <Icon icon="pencil" size={24} color={colors.title} lib="FontAwesome" />
             </TouchableOpacity>
             <TouchableOpacity onPress={confirmDelete}>
-              <Icon icon="trash" size={24} color={colors.redLight} lib="FontAwesome" />
+              <Icon icon="trash" size={24} color={colors.title} lib="FontAwesome" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLogout}>
+              <Icon icon="logout" size={24} color={colors.title} lib="AntDesign" />
             </TouchableOpacity>
           </WelcomeButtonsContainer>
         </WelcomeTextContainer>
         <WelcomeDescription>Vamos aprender brincando?</WelcomeDescription>
+        <ScrollViewContainer>
+          <WrapperCards>
+            <WrapperRow>
+              {games.map((game) => (
+                <CardGame
+                  key={game.id}
+                  id={game.id}
+                  backgroundColor={game.backgroundColor}
+                  title={game.title}
+                  emoji={game.emoji}
+                  emojiName={game.emojiName}
+                  emojiViewName={game.emojiViewName}
+                  onPress={() => {
+                    // TODO: implementar a navegação para a tela do jogo
+                    console.log('CardGame pressed', game.id);
+                  }}
+                />
+              ))}
+            </WrapperRow>
+          </WrapperCards>
+        </ScrollViewContainer>
       </WelcomeContainer>
     </Container>
   );
