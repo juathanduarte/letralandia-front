@@ -3,6 +3,7 @@ import Icon from '@/components/Icon/Icon';
 import ProfileModal from '@/components/ModalProfile/ModalProfile';
 import { useAuth } from '@/contexts/AuthContext';
 import { getProfileDetails, logout } from '@/services/user';
+import { deleteProfile } from '@/services/user/deleteProfile';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { removeAsyncStorage } from '@/utils/AsyncStorage';
@@ -101,13 +102,13 @@ export function Home({ route }) {
       },
       {
         text: 'Sim',
-        onPress: () => deleteProfile(userId, profileId),
+        onPress: () => handleDeleteProfile(userId, profileId),
         style: 'destructive',
       },
     ]);
   };
 
-  const deleteProfile = async (userId: any, profileId: any) => {
+  const handleDeleteProfile = async (userId: any, profileId: any) => {
     try {
       const data = await deleteProfile(userId, profileId);
       if (data !== null) navigation.navigate('SelectProfile', { reload: new Date().getTime() });
