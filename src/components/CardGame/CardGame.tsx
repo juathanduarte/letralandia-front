@@ -35,9 +35,9 @@ const CardGame: React.FC<CardGameProps> = ({
         <Emoji>{emoji}</Emoji>
         <ContainerRectangle>
           {emojiSyllabes.length > 0 &&
-            Array.from({ length: emojiSyllabes.length }).map((_, index) => (
-              <Rectangle backgroundColor={backgroundColor}>
-                <Letter key={index}></Letter>
+            emojiSyllabes.map((syllable, index) => (
+              <Rectangle key={index} backgroundColor={backgroundColor}>
+                <Letter>{syllable}</Letter>
               </Rectangle>
             ))}
           {emojiSyllabes.length === 0 &&

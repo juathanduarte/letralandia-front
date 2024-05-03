@@ -20,7 +20,6 @@ import { login } from '@/services/user';
 export function Login() {
   const navigation = useNavigation();
   const { dispatch } = useAuth();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');

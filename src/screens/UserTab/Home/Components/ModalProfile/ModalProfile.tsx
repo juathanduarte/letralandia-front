@@ -1,19 +1,28 @@
+import { useAuth } from '@/contexts/AuthContext';
+import { updateProfile } from '@/services/profile';
 import React, { useState } from 'react';
 import { Modal } from 'react-native';
-import Button from '../Button/Button';
-import Input from '../Input/Input';
+import Button from '../../../../../components/Button/Button';
+import Input from '../../../../../components/Input/Input';
 import { Container, ContainerBody, ContainerFooter } from './style';
+
+interface ProfileModalProps {
+  modalVisible: boolean;
+  setModalVisible: (visible: boolean) => void;
+  profileId: string;
+  fetchProfileDetails: () => void;
+}
 
 function ProfileModal({
   modalVisible,
   setModalVisible,
-  newName,
-  setNewName,
-  newEmail,
-  setNewEmail,
-}) {
+  profileId,
+  fetchProfileDetails,
+}: ProfileModalProps) {
+  const [newName, setNewName] = useState('');
   const [errorName, setErrorName] = useState('');
-  const [errorEmail, setErrorEmail] = useState('');
+  const { state } = useAuth();
+  const userId = state.userId;
 
   const validateName = (text) => {
     if (text.trim() === '') {
@@ -25,21 +34,8 @@ function ProfileModal({
     }
   };
 
-  const validateEmail = (text) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(text)) {
-      setErrorEmail('Por favor, insira um e-mail válido.');
-      return false;
-    } else {
-      setErrorEmail('');
-      return true;
-    }
-  };
-
   const resetFields = () => {
     setNewName('');
-    setNewEmail('');
-    setErrorEmail('');
     setErrorName('');
   };
 
@@ -48,12 +44,16 @@ function ProfileModal({
     setModalVisible(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const isNameValid = validateName(newName);
-    const isEmailValid = validateEmail(newEmail);
-    if (isNameValid && isEmailValid) {
-      // TODO: Implementar a lógica para salvar as alterações e fechar o modal
-      setModalVisible(false);
+    if (isNameValid) {
+      console.log('isNameValid', isNameValid);
+      const data = await updateProfile(userId, profileId, { name: newName });
+      if (data) {
+        resetFields();
+        setModalVisible(false);
+        fetchProfileDetails();
+      }
     }
   };
 
@@ -80,21 +80,9 @@ function ProfileModal({
               validateName(text);
             }}
           />
-          <Input
-            variant={'login'}
-            label="Edite seu e-mail"
-            iconSize={20}
-            iconInput={'envelope'}
-            error={errorEmail}
-            value={newEmail}
-            onChange={(text) => {
-              setNewEmail(text);
-              validateEmail(text);
-            }}
-          />
           <ContainerFooter>
-            <Button variant="primary" label="Salvar" onClick={handleSave} />
             <Button variant="secondary" label="Cancelar" onClick={handleCancel} />
+            <Button variant="primary" label="Salvar" onClick={handleSave} />
           </ContainerFooter>
         </ContainerBody>
       </Container>

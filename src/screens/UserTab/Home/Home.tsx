@@ -1,9 +1,10 @@
 import { CardGame } from '@/components/CardGame/CardGame';
 import Icon from '@/components/Icon/Icon';
-import ProfileModal from '@/components/ModalProfile/ModalProfile';
 import { useAuth } from '@/contexts/AuthContext';
-import { getProfileDetails, logout } from '@/services/user';
-import { deleteProfile } from '@/services/user/deleteProfile';
+import ProfileModal from '@/screens/UserTab/Home/Components/ModalProfile/ModalProfile';
+import { profileDetails } from '@/services/profile';
+import { deleteProfile } from '@/services/profile/deleteProfile';
+import { logout } from '@/services/user';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { removeAsyncStorage } from '@/utils/AsyncStorage';
@@ -29,9 +30,7 @@ export function Home({ route }) {
   const userId = state.userId;
   const { profileId } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
-  const [newName, setNewName] = useState('');
-  const [newEmail, setNewEmail] = useState('');
-  const [profileDetails, setProfileDetails] = useState(null);
+  const [profileData, setProfileData] = useState(null);
 
   const games = [
     {
@@ -72,19 +71,19 @@ export function Home({ route }) {
     },
   ];
 
+  const fetchProfileDetails = async () => {
+    try {
+      const data = await profileDetails(userId, profileId);
+      setProfileData(data);
+    } catch (error) {
+      console.error('Failed to fetch profile details:', error);
+    }
+  };
+
   useEffect(() => {
     Speech.speak('Bem-vindo ao aplicativo!', {
       language: 'pt-BR',
     });
-
-    async function fetchProfileDetails() {
-      try {
-        const data = await getProfileDetails(userId, profileId);
-        setProfileDetails(data);
-      } catch (error) {
-        console.error('Failed to fetch profile details:', error);
-      }
-    }
 
     fetchProfileDetails();
   }, [userId, profileId, route]);
@@ -134,18 +133,16 @@ export function Home({ route }) {
       <TouchableOpacity onPress={handleGoBack}>
         <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
       </TouchableOpacity>
-      {profileDetails === null && <Text>Carregando...</Text>}
+      {profileData === null && <Text>Carregando...</Text>}
       <WelcomeContainer>
         <ProfileModal
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-          newName={newName}
-          setNewName={setNewName}
-          newEmail={newEmail}
-          setNewEmail={setNewEmail}
+          profileId={profileId}
+          fetchProfileDetails={fetchProfileDetails}
         />
         <WelcomeTextContainer>
-          <WelcomeText>Olá, {profileDetails?.name}!</WelcomeText>
+          <WelcomeText>Olá, {profileData?.name}!</WelcomeText>
           <WelcomeButtonsContainer>
             <TouchableOpacity
               onPress={() => {
@@ -175,6 +172,7 @@ export function Home({ route }) {
                   emoji={game.emoji}
                   emojiName={game.emojiName}
                   emojiViewName={game.emojiViewName}
+                  emojiSyllabes={game.emojiSyllables}
                   onPress={() => {
                     // TODO: implementar a navegação para a tela do jogo
                     console.log('CardGame pressed', game.id);

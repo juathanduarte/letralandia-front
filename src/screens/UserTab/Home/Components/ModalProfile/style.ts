@@ -1,5 +1,9 @@
 import styled from 'styled-components/native';
 
+interface TextProps {
+  color?: string;
+}
+
 export const Container = styled.View`
   flex: 1;
   justify-content: center;

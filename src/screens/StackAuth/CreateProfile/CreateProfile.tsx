@@ -6,7 +6,7 @@ import Button from '@/components/Button/Button';
 import Icon from '@/components/Icon/Icon';
 import Input from '@/components/Input/Input';
 import { useAuth } from '@/contexts/AuthContext';
-import { createProfile } from '@/services/user';
+import { createProfile } from '@/services/profile';
 import colors from '@/styles/colors';
 
 import vectorSelectProfile from '../../../assets/vectorSelectProfile.png';
