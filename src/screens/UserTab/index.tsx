@@ -1,4 +1,5 @@
+import { Alphabet } from './Alphabet/Alphabet';
 import { Home } from './Home/Home';
 import { ParentArea } from './ParentArea/ParentArea';
 
-export { Home, ParentArea };
+export { Alphabet, Home, ParentArea };

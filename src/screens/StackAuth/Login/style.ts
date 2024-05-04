@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import styled from 'styled-components/native';
 
 interface TextProps {
@@ -11,7 +11,7 @@ export const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
 `;
 
 export const Title = styled.Text`

@@ -9,6 +9,7 @@ import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { removeAsyncStorage } from '@/utils/AsyncStorage';
 import { useNavigation } from '@react-navigation/native';
+import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
 import React, { useEffect, useState } from 'react';
 import { Alert, Text, TouchableOpacity } from 'react-native';
@@ -81,7 +82,9 @@ export function Home({ route }) {
   };
 
   useEffect(() => {
-    Speech.speak('Bem-vindo ao aplicativo!', {
+    Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
+
+    Speech.speak('Bem-vindo ao LetraLandia!', {
       language: 'pt-BR',
     });
 
@@ -89,12 +92,11 @@ export function Home({ route }) {
   }, [userId, profileId, route]);
 
   const confirmDelete = () => {
-    const message = 'Tem certeza de que deseja excluir este perfil?';
-    Speech.speak(message, {
+    Speech.speak('Tem certeza de que deseja excluir este perfil?', {
       language: 'pt-BR',
     });
 
-    Alert.alert('Excluir Perfil', message, [
+    Alert.alert('Excluir Perfil', 'Tem certeza de que deseja excluir este perfil?', [
       {
         text: 'Não',
         style: 'cancel',
@@ -176,6 +178,10 @@ export function Home({ route }) {
                   onPress={() => {
                     // TODO: implementar a navegação para a tela do jogo
                     console.log('CardGame pressed', game.id);
+
+                    if (game.id === 4) {
+                      navigation.navigate('Alphabet');
+                    }
                   }}
                 />
               ))}

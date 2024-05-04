@@ -1,5 +1,5 @@
 import { SelectProfile } from '@/screens/StackAuth';
-import { Home, ParentArea } from '@/screens/UserTab';
+import { Alphabet, Home, ParentArea } from '@/screens/UserTab';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
@@ -52,6 +52,7 @@ export default function TabRoutes() {
       <Stack.Screen name="CreateProfile" component={CreateProfile} />
       <Stack.Screen name="SelectProfile" component={SelectProfile} />
       <Stack.Screen name="Tabs" component={TabScreens} />
+      <Stack.Screen name="Alphabet" component={Alphabet} />
     </Stack.Navigator>
   );
 }

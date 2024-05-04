@@ -1,13 +1,13 @@
 import colors from '@/styles/colors';
 import fonts from '@/styles/fonts';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import styled from 'styled-components/native';
 
 const { width, height } = Dimensions.get('window');
 
 export const Container = styled.View`
   flex: 1;
-  padding: 16px;
+  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
   gap: 32px;
 `;
 

@@ -9,6 +9,7 @@ export type RootStackParamList = {
   Tabs: { screen: keyof RootStackParamList; params?: any };
   Home: { profileId: number };
   ParentArea: { profileId: number };
+  Alphabet: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<
