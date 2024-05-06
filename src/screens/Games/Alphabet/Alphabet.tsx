@@ -6,11 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import * as Speech from 'expo-speech';
 import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { HeaderWrapper } from './HeaderWrapper';
 import {
   BodyWrapper,
   ButtonWrapper,
   Container,
-  HeaderWrapper,
+  HeaderTitle,
+  HeaderTitleWrapper,
   VerticalCenteringWrapper,
 } from './style';
 
@@ -68,6 +70,9 @@ export function Alphabet() {
           <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
         </TouchableOpacity>
       </HeaderWrapper>
+      <HeaderTitleWrapper>
+        <HeaderTitle>Alfabeto</HeaderTitle>
+      </HeaderTitleWrapper>
       <VerticalCenteringWrapper>
         <BodyWrapper>
           {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter, index) => (

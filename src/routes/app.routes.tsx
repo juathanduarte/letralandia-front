@@ -1,11 +1,17 @@
+import {
+  Alphabet,
+  SelectPhaseFirstGame,
+  SelectPhaseSecondGame,
+  SelectPhaseThirdGame,
+} from '@/screens/Games';
 import { SelectProfile } from '@/screens/StackAuth';
-import { Alphabet, Home, ParentArea } from '@/screens/UserTab';
+import { Home, ParentArea } from '@/screens/UserTab';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import Icon from '../components/Icon/Icon';
 import { CreateProfile, Login, Register } from '../screens/StackAuth';
-import { Welcome } from '../screens/WelcomeScreen/Welcome';
+import { Welcome } from '../screens/Welcome/Welcome';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -53,6 +59,9 @@ export default function TabRoutes() {
       <Stack.Screen name="SelectProfile" component={SelectProfile} />
       <Stack.Screen name="Tabs" component={TabScreens} />
       <Stack.Screen name="Alphabet" component={Alphabet} />
+      <Stack.Screen name="SelectPhaseFirstGame" component={SelectPhaseFirstGame} />
+      <Stack.Screen name="SelectPhaseSecondGame" component={SelectPhaseSecondGame} />
+      <Stack.Screen name="SelectPhaseThirdGame" component={SelectPhaseThirdGame} />
     </Stack.Navigator>
   );
 }

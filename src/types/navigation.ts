@@ -10,6 +10,9 @@ export type RootStackParamList = {
   Home: { profileId: number };
   ParentArea: { profileId: number };
   Alphabet: undefined;
+  SelectPhaseFirstGame: undefined;
+  SelectPhaseSecondGame: undefined;
+  SelectPhaseThirdGame: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<

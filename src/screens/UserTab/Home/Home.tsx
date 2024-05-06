@@ -82,14 +82,20 @@ export function Home({ route }) {
   };
 
   useEffect(() => {
-    Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
-
-    Speech.speak('Bem-vindo ao LetraLandia!', {
-      language: 'pt-BR',
-    });
-
     fetchProfileDetails();
   }, [userId, profileId, route]);
+
+  useEffect(() => {
+    Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
+    if (profileData !== null) {
+      Speech.speak(
+        'Olá' + profileData?.name + '!, Bem-vindo ao LetraLandia! Vamos aprender brincando?',
+        {
+          language: 'pt-BR',
+        }
+      );
+    }
+  }, [profileData]);
 
   const confirmDelete = () => {
     Speech.speak('Tem certeza de que deseja excluir este perfil?', {
@@ -123,6 +129,31 @@ export function Home({ route }) {
     if (data !== null) {
       removeAsyncStorage({ key: 'accessToken' });
       navigation.navigate('Login');
+    }
+  };
+
+  const handleSelectGame = (gameId: number) => {
+    console.log('Selected game:', gameId);
+    switch (gameId) {
+      case 1:
+        navigation.navigate('SelectPhaseFirstGame');
+        break;
+      case 2:
+        navigation.navigate('SelectPhaseSecondGame');
+        break;
+      case 3:
+        navigation.navigate('SelectPhaseThirdGame');
+        break;
+      case 4:
+        console.log('Alphabet');
+        navigation.navigate('Alphabet');
+        break;
+      case 5:
+        console.log('Syllables');
+        // navigation.navigate('Syllables', { profileId });
+        break;
+      default:
+        break;
     }
   };
 
@@ -176,12 +207,7 @@ export function Home({ route }) {
                   emojiViewName={game.emojiViewName}
                   emojiSyllabes={game.emojiSyllables}
                   onPress={() => {
-                    // TODO: implementar a navegação para a tela do jogo
-                    console.log('CardGame pressed', game.id);
-
-                    if (game.id === 4) {
-                      navigation.navigate('Alphabet');
-                    }
+                    handleSelectGame(game.id);
                   }}
                 />
               ))}
