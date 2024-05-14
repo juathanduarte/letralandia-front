@@ -1,6 +1,7 @@
 export default {
   yellow: '#FFBC57',
   yellowLight: '#FFCB7C',
+  yellowBackground: '#e1d8c4',
   pink: '#F87692',
   pinkLight: '#FFA3B7',
   blue: '#57D1CA',

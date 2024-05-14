@@ -6,13 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import * as Speech from 'expo-speech';
 import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { HeaderWrapper } from './HeaderWrapper';
 import {
   BodyWrapper,
   ButtonWrapper,
   Container,
   HeaderTitle,
   HeaderTitleWrapper,
+  HeaderWrapper,
   VerticalCenteringWrapper,
 } from './style';
 

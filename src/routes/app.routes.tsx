@@ -1,8 +1,11 @@
 import {
   Alphabet,
+  FirstGame,
+  SecondGame,
   SelectPhaseFirstGame,
   SelectPhaseSecondGame,
   SelectPhaseThirdGame,
+  ThirdGame,
 } from '@/screens/Games';
 import { SelectProfile } from '@/screens/StackAuth';
 import { Home, ParentArea } from '@/screens/UserTab';
@@ -62,6 +65,9 @@ export default function TabRoutes() {
       <Stack.Screen name="SelectPhaseFirstGame" component={SelectPhaseFirstGame} />
       <Stack.Screen name="SelectPhaseSecondGame" component={SelectPhaseSecondGame} />
       <Stack.Screen name="SelectPhaseThirdGame" component={SelectPhaseThirdGame} />
+      <Stack.Screen name="FirstGame" component={FirstGame} />
+      <Stack.Screen name="SecondGame" component={SecondGame} />
+      <Stack.Screen name="ThirdGame" component={ThirdGame} />
     </Stack.Navigator>
   );
 }

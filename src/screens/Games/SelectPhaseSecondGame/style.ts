@@ -9,8 +9,9 @@ export const Container = styled.View`
 
 export const HeaderWrapper = styled.View`
   flex-direction: row;
-  background-color: ${colors.blueLight};
+  background-color: ${colors.blue};
   width: 100%;
+  height: 80px;
   border-radius: 0 0 16px 16px;
   padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
   justify-content: space-between;
@@ -26,7 +27,7 @@ export const HeaderTitle = styled.Text`
   font-size: 22px;
   font-family: ${fonts.text_semi_bold};
   color: ${colors.title};
-  background-color: ${colors.blueLight};
+  background-color: ${colors.blue};
   border-radius: 24px;
   border: 1px solid ${colors.title};
   bottom: 15px;
@@ -40,4 +41,9 @@ export const VerticalCenteringWrapper = styled.View`
   flex: 1;
   justify-content: center;
   padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
+`;
+
+export const BodyWrapper = styled.View`
+  padding: 0px 16px;
+  gap: 32px;
 `;

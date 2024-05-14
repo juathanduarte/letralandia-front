@@ -1,4 +1,11 @@
 import { AuthProvider } from '@/contexts/AuthContext';
+import { FontProvider } from '@/contexts/FontContext'; // Certifique-se de que o caminho esteja correto
+import {
+  DancingScript_400Regular,
+  DancingScript_500Medium,
+  DancingScript_600SemiBold,
+  DancingScript_700Bold,
+} from '@expo-google-fonts/dancing-script';
 import {
   Nunito_200ExtraLight,
   Nunito_300Light,
@@ -24,6 +31,10 @@ const AppNavigator = () => {
     Nunito_600SemiBold,
     Nunito_700Bold,
     Nunito_800ExtraBold,
+    DancingScript_400Regular,
+    DancingScript_500Medium,
+    DancingScript_600SemiBold,
+    DancingScript_700Bold,
   });
 
   useEffect(() => {
@@ -54,11 +65,11 @@ const AppNavigator = () => {
     return null;
   }
 
-  ///TODO: Adicionar o QueryClientProvider
-  // TODO: Adicionar o AuthProvider
   return (
     <AuthProvider>
-      <Routes />
+      <FontProvider>
+        <Routes />
+      </FontProvider>
     </AuthProvider>
   );
 };

@@ -13,6 +13,9 @@ export type RootStackParamList = {
   SelectPhaseFirstGame: undefined;
   SelectPhaseSecondGame: undefined;
   SelectPhaseThirdGame: undefined;
+  FirstGame: { gameId: number };
+  SecondGame: undefined;
+  ThirdGame: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<
