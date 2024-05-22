@@ -26,6 +26,7 @@ export const Button = styled.TouchableOpacity<ButtonProps>`
 `;
 
 export const CustomText = styled.Text<CustomTextProps>`
-  font-size: 24px;
-  font-family: ${({ isLastTwo }) => (isLastTwo ? fonts.cursive_text_bold : fonts.text_extra_bold)};
+  font-size: 18px;
+  font-family: ${({ isLastTwo }) =>
+    isLastTwo ? fonts.cursive_text_regular : fonts.text_extra_bold};
 `;

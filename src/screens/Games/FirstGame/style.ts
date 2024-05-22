@@ -21,11 +21,15 @@ export const HeaderWrapper = styled.View`
   align-items: center;
 `;
 
-export const BodyGame = styled.View``;
+export const BodyGame = styled.View`
+  flex: 1;
+  justify-content: center;
+`;
 
 export const HeaderGame = styled.View`
-  flex-direction: column;
+  flex: 1;
   align-items: center;
+  flex-direction: column;
   padding: 16px;
 `;
 
@@ -39,19 +43,29 @@ export const LettersWrapper = styled.View`
   gap: 8px;
 `;
 
-export const Letter = styled.Text<LetterProps>`
-  font-size: 64px;
-  color: ${colors.title};
-  font-family: ${(props) => props.font};
-`;
-
 export const Options = styled.View<LetterProps>`
-  width: 80px;
-  height: 80px;
+  flex: 1;
+  height: 100px;
   background-color: ${(props) => (props.letter === ' ' ? colors.yellow : colors.yellowLight)};
   border-radius: 8px;
+  justify-content: ${(props) => (props.font === 'Pacifico_400Regular' ? '' : 'center')};
+`;
+
+export const Letter = styled.Text<LetterProps>`
+  width: 100%;
+  font-size: ${(props) => (props.font === 'Pacifico_400Regular' ? '42px' : '58px')};
+  color: ${colors.title};
+  font-family: ${(props) => props.font};
+  text-align: center;
+`;
+
+export const OptionsSelect = styled.TouchableOpacity<LetterProps>`
+  height: 100px;
+  width: 30%;
+  background-color: ${colors.yellowLight};
+  border-radius: 8px;
   justify-content: center;
-  align-items: center;
+  margin-bottom: 8px;
 `;
 
 export const Separator = styled.View`
@@ -60,4 +74,11 @@ export const Separator = styled.View`
   background-color: ${colors.white};
 `;
 
-export const LettersGame = styled.View``;
+export const LettersGame = styled.View`
+  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
+  gap: 8px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+`;

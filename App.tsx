@@ -1,11 +1,7 @@
 import { AuthProvider } from '@/contexts/AuthContext';
-import { FontProvider } from '@/contexts/FontContext'; // Certifique-se de que o caminho esteja correto
-import {
-  DancingScript_400Regular,
-  DancingScript_500Medium,
-  DancingScript_600SemiBold,
-  DancingScript_700Bold,
-} from '@expo-google-fonts/dancing-script';
+import { FontProvider } from '@/contexts/FontContext';
+import { Pacifico_400Regular } from '@expo-google-fonts/pacifico';
+
 import {
   Nunito_200ExtraLight,
   Nunito_300Light,
@@ -31,10 +27,7 @@ const AppNavigator = () => {
     Nunito_600SemiBold,
     Nunito_700Bold,
     Nunito_800ExtraBold,
-    DancingScript_400Regular,
-    DancingScript_500Medium,
-    DancingScript_600SemiBold,
-    DancingScript_700Bold,
+    Pacifico_400Regular,
   });
 
   useEffect(() => {
