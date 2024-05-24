@@ -1,8 +1,12 @@
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
+import { AuthActionTypes, useAuth } from '@/contexts/AuthContext';
+import { login } from '@/services/user';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import letralandiaLogo from '../../../assets/letralandiaLogo.png';
+import React, { useEffect, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import letralandiaLogo from '../../../../assets/logos/letralandiaLogo.png';
+
 import {
   Container,
   ImageContainer,
@@ -14,9 +18,6 @@ import {
   WrapperInputs,
 } from './style';
 
-import { AuthActionTypes, useAuth } from '@/contexts/AuthContext';
-import { login } from '@/services/user';
-
 export function Login() {
   const navigation = useNavigation();
   const { dispatch } = useAuth();
@@ -24,6 +25,21 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardOpen(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardOpen(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const handleRegister = () => {
     navigation.navigate('Register');
@@ -58,53 +74,58 @@ export function Login() {
     }
   };
 
-  // Validação de e-mail usando regex
   function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   }
 
-  // Validação de senha usando regex
   function validatePassword(password) {
     const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}$/;
     return re.test(password);
   }
 
   return (
-    <Container>
-      <WrapperBody>
-        <ImageContainer>
-          <LogoImage source={letralandiaLogo} resizeMode="contain" />
-        </ImageContainer>
-        <WrapperInputs>
-          <Input
-            variant={'login'}
-            iconInput="envelope"
-            label="E-mail"
-            iconSize={20}
-            error={emailError}
-            value={email}
-            onChange={setEmail}
-          />
-          <Input
-            variant={'password'}
-            iconInput="lock"
-            label="Senha"
-            iconSize={20}
-            error={passwordError}
-            value={password}
-            onChange={setPassword}
-          />
-        </WrapperInputs>
-        <WrapperButtons>
-          <Button variant="primary" size="large" label="Entrar" onClick={handleLogin} />
-          <Register onPress={handleRegister}>
-            <Text>Não possui conta?</Text>
-            <Text style={{ fontWeight: 'bold' }}> Cadastre-se</Text>
-            <Text>.</Text>
-          </Register>
-        </WrapperButtons>
-      </WrapperBody>
-    </Container>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Container>
+          <WrapperBody>
+            <ImageContainer>
+              <LogoImage source={letralandiaLogo} resizeMode="contain" />
+            </ImageContainer>
+            <WrapperInputs>
+              <Input
+                variant={'login'}
+                iconInput="envelope"
+                label="E-mail"
+                iconSize={20}
+                error={emailError}
+                value={email}
+                onChange={setEmail}
+              />
+              <Input
+                variant={'password'}
+                iconInput="lock"
+                label="Senha"
+                iconSize={20}
+                error={passwordError}
+                value={password}
+                onChange={setPassword}
+              />
+            </WrapperInputs>
+            <WrapperButtons>
+              <Button variant="primary" size="large" label="Entrar" onClick={handleLogin} />
+              <Register onPress={handleRegister}>
+                <Text>Não possui conta?</Text>
+                <Text style={{ fontWeight: 'bold' }}> Cadastre-se</Text>
+                <Text>.</Text>
+              </Register>
+            </WrapperButtons>
+          </WrapperBody>
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

@@ -9,7 +9,7 @@ export type RootStackParamList = {
   Tabs: { screen: keyof RootStackParamList; params?: any };
   Home: { profileId: number };
   ParentArea: { profileId: number };
-  Alphabet: undefined;
+  Alphabet: { profileGender: string };
   SelectPhaseFirstGame: undefined;
   SelectPhaseSecondGame: undefined;
   SelectPhaseThirdGame: undefined;

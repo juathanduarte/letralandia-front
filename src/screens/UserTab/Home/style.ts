@@ -8,7 +8,7 @@ const { width, height } = Dimensions.get('window');
 export const Container = styled.View`
   flex: 1;
   padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
-  gap: 32px;
+  /* gap: 32px; */
 `;
 
 export const WelcomeContainer = styled.View`
@@ -40,7 +40,7 @@ export const WelcomeDescription = styled.Text`
 
 export const ScrollViewContainer = styled.View`
   margin-top: 16px;
-  height: ${height * 0.7}px;
+  height: ${height * 0.75}px;
   width: 100%;
 `;
 

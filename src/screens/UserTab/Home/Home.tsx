@@ -8,11 +8,11 @@ import { logout } from '@/services/user';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { removeAsyncStorage } from '@/utils/AsyncStorage';
+import { playAudio } from '@/utils/playAudio';
 import { useNavigation } from '@react-navigation/native';
 import { Audio } from 'expo-av';
-import * as Speech from 'expo-speech';
 import React, { useEffect, useState } from 'react';
-import { Alert, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import {
   Container,
   ScrollViewContainer,
@@ -32,6 +32,7 @@ export function Home({ route }) {
   const { profileId } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const games = [
     {
@@ -74,34 +75,29 @@ export function Home({ route }) {
 
   const fetchProfileDetails = async () => {
     try {
+      setLoading(true);
       const data = await profileDetails(userId, profileId);
       setProfileData(data);
     } catch (error) {
       console.error('Failed to fetch profile details:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchProfileDetails();
-  }, [userId, profileId, route]);
+  }, [route]);
 
   useEffect(() => {
     Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
     if (profileData !== null) {
-      Speech.speak(
-        'Olá' + profileData?.name + '!, Bem-vindo ao LetraLandia! Vamos aprender brincando?',
-        {
-          language: 'pt-BR',
-        }
-      );
+      playAudio(profileData.gender, 'bem_vindo');
     }
   }, [profileData]);
 
-  const confirmDelete = () => {
-    Speech.speak('Tem certeza de que deseja excluir este perfil?', {
-      language: 'pt-BR',
-    });
-
+  const confirmDelete = async () => {
+    await playAudio(profileData.gender, 'excluindo_perfil');
     Alert.alert('Excluir Perfil', 'Tem certeza de que deseja excluir este perfil?', [
       {
         text: 'Não',
@@ -115,7 +111,7 @@ export function Home({ route }) {
     ]);
   };
 
-  const handleDeleteProfile = async (userId: any, profileId: any) => {
+  const handleDeleteProfile = async (userId, profileId) => {
     try {
       const data = await deleteProfile(userId, profileId);
       if (data !== null) navigation.navigate('SelectProfile', { reload: new Date().getTime() });
@@ -146,7 +142,7 @@ export function Home({ route }) {
         break;
       case 4:
         console.log('Alphabet');
-        navigation.navigate('Alphabet');
+        navigation.navigate('Alphabet', { profileGender: profileData.gender });
         break;
       case 5:
         console.log('Syllables');
@@ -166,55 +162,63 @@ export function Home({ route }) {
       <TouchableOpacity onPress={handleGoBack}>
         <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
       </TouchableOpacity>
-      {profileData === null && <Text>Carregando...</Text>}
-      <WelcomeContainer>
-        <ProfileModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          profileId={profileId}
-          fetchProfileDetails={fetchProfileDetails}
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.blue}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         />
-        <WelcomeTextContainer>
-          <WelcomeText>Olá, {profileData?.name}!</WelcomeText>
-          <WelcomeButtonsContainer>
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(true);
-              }}
-            >
-              <Icon icon="pencil" size={24} color={colors.title} lib="FontAwesome" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={confirmDelete}>
-              <Icon icon="trash" size={24} color={colors.title} lib="FontAwesome" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleLogout}>
-              <Icon icon="logout" size={24} color={colors.title} lib="AntDesign" />
-            </TouchableOpacity>
-          </WelcomeButtonsContainer>
-        </WelcomeTextContainer>
-        <WelcomeDescription>Vamos aprender brincando?</WelcomeDescription>
-        <ScrollViewContainer>
-          <WrapperCards>
-            <WrapperRow>
-              {games.map((game) => (
-                <CardGame
-                  key={game.id}
-                  id={game.id}
-                  backgroundColor={game.backgroundColor}
-                  title={game.title}
-                  emoji={game.emoji}
-                  emojiName={game.emojiName}
-                  emojiViewName={game.emojiViewName}
-                  emojiSyllabes={game.emojiSyllables}
-                  onPress={() => {
-                    handleSelectGame(game.id);
-                  }}
-                />
-              ))}
-            </WrapperRow>
-          </WrapperCards>
-        </ScrollViewContainer>
-      </WelcomeContainer>
+      ) : (
+        <WelcomeContainer>
+          <ProfileModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            profileId={profileId}
+            gender={profileData?.gender}
+            fetchProfileDetails={fetchProfileDetails}
+          />
+          <WelcomeTextContainer>
+            <WelcomeText>Olá, {profileData?.name}!</WelcomeText>
+            <WelcomeButtonsContainer>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(true);
+                }}
+              >
+                <Icon icon="pencil" size={24} color={colors.title} lib="FontAwesome" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={confirmDelete}>
+                <Icon icon="trash" size={24} color={colors.title} lib="FontAwesome" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleLogout}>
+                <Icon icon="logout" size={24} color={colors.title} lib="AntDesign" />
+              </TouchableOpacity>
+            </WelcomeButtonsContainer>
+          </WelcomeTextContainer>
+          <WelcomeDescription>Vamos aprender brincando?</WelcomeDescription>
+          <ScrollViewContainer>
+            <WrapperCards>
+              <WrapperRow>
+                {games.map((game) => (
+                  <CardGame
+                    key={game.id}
+                    id={game.id}
+                    backgroundColor={game.backgroundColor}
+                    title={game.title}
+                    emoji={game.emoji}
+                    emojiName={game.emojiName}
+                    emojiViewName={game.emojiViewName}
+                    emojiSyllabes={game.emojiSyllables}
+                    onPress={() => {
+                      handleSelectGame(game.id);
+                    }}
+                  />
+                ))}
+              </WrapperRow>
+            </WrapperCards>
+          </ScrollViewContainer>
+        </WelcomeContainer>
+      )}
     </Container>
   );
 }

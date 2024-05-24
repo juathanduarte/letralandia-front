@@ -1,8 +1,8 @@
-import letralandiaLogo from '@/assets/letralandiaLogo.png';
-import ufpelLogo from '@/assets/ufpelLogo.png';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
+import letralandiaLogo from '../../../assets/logos/letralandiaLogo.png';
+import ufpelLogo from '../../../assets/logos/ufpelLogo.png';
 import type { RootStackScreenProps } from '../../types/navigation';
 import { Container, ImageContainer, LogoImage } from './style';
 

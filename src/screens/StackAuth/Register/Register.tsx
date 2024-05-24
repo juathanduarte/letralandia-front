@@ -5,8 +5,15 @@ import { register } from '@/services/user';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { Alert, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { Container, Title, WrapperBody, WrapperInputs } from './style';
 
 export function Register() {
@@ -19,6 +26,21 @@ export function Register() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [password2Error, setPassword2Error] = useState('');
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardOpen(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardOpen(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const handleRegister = async () => {
     const isNameValid = validateName(name);
@@ -92,54 +114,59 @@ export function Register() {
   };
 
   return (
-    <Container>
-      <TouchableOpacity onPress={handleGoBack}>
-        <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-      </TouchableOpacity>
-      <Title>Cadastro</Title>
-      <WrapperBody>
-        <WrapperInputs>
-          <Input
-            variant={'login'}
-            iconInput="user"
-            label="Nome"
-            iconSize={20}
-            error={nameError}
-            value={name}
-            onChange={setName}
-          />
-          <Input
-            variant={'login'}
-            iconInput="envelope"
-            label="E-mail"
-            iconSize={20}
-            error={emailError}
-            value={email}
-            onChange={setEmail}
-          />
-
-          <Input
-            variant={'password'}
-            iconInput="lock"
-            label="Senha"
-            iconSize={20}
-            error={passwordError}
-            value={password}
-            onChange={setPassword}
-          />
-          <Input
-            variant={'password'}
-            iconInput="lock"
-            label="Confirme sua senha"
-            iconSize={20}
-            error={password2Error}
-            value={password2}
-            onChange={setPassword2}
-          />
-        </WrapperInputs>
-
-        <Button variant="primary" size="large" label="Cadastrar" onClick={handleRegister} />
-      </WrapperBody>
-    </Container>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Container>
+          <TouchableOpacity onPress={handleGoBack}>
+            <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+          </TouchableOpacity>
+          <Title>Cadastro</Title>
+          <WrapperBody>
+            <WrapperInputs>
+              <Input
+                variant={'login'}
+                iconInput="user"
+                label="Nome"
+                iconSize={20}
+                error={nameError}
+                value={name}
+                onChange={setName}
+              />
+              <Input
+                variant={'login'}
+                iconInput="envelope"
+                label="E-mail"
+                iconSize={20}
+                error={emailError}
+                value={email}
+                onChange={setEmail}
+              />
+              <Input
+                variant={'password'}
+                iconInput="lock"
+                label="Senha"
+                iconSize={20}
+                error={passwordError}
+                value={password}
+                onChange={setPassword}
+              />
+              <Input
+                variant={'password'}
+                iconInput="lock"
+                label="Confirme sua senha"
+                iconSize={20}
+                error={password2Error}
+                value={password2}
+                onChange={setPassword2}
+              />
+            </WrapperInputs>
+            <Button variant="primary" size="large" label="Cadastrar" onClick={handleRegister} />
+          </WrapperBody>
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

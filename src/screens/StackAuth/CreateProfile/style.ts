@@ -11,7 +11,21 @@ const { width, height } = Dimensions.get('window');
 export const Container = styled.View`
   flex: 1;
   padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
-  justify-content: space-between;
+  gap: 16px;
+`;
+
+export const HeaderWrapper = styled.View``;
+
+export const TitleWrapper = styled.View`
+  align-items: center;
+`;
+
+export const InfoWrapper = styled.View`
+  flex: 1;
+`;
+
+export const ButtonWrapper = styled.View`
+  margin-top: auto;
 `;
 
 export const LogoImage = styled.Image`
@@ -21,13 +35,13 @@ export const LogoImage = styled.Image`
   justify-content: center;
   width: 100%;
 `;
+
 export const Title = styled.Text`
+  margin-top: 16px;
   font-size: 32px;
   font-family: ${fonts.text_bold};
   text-align: center;
 `;
-
-export const WrapperInfo = styled.View``;
 
 export const GenderButtonWrapper = styled.View`
   flex-direction: row;

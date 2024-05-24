@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { updateProfile } from '@/services/profile';
-import React, { useState } from 'react';
+import { playAudio } from '@/utils/playAudio';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-native';
 import Button from '../../../../../components/Button/Button';
 import Input from '../../../../../components/Input/Input';
@@ -11,6 +12,7 @@ interface ProfileModalProps {
   setModalVisible: (visible: boolean) => void;
   profileId: string;
   fetchProfileDetails: () => void;
+  gender: string;
 }
 
 function ProfileModal({
@@ -18,11 +20,18 @@ function ProfileModal({
   setModalVisible,
   profileId,
   fetchProfileDetails,
+  gender,
 }: ProfileModalProps) {
   const [newName, setNewName] = useState('');
   const [errorName, setErrorName] = useState('');
   const { state } = useAuth();
   const userId = state.userId;
+
+  useEffect(() => {
+    if (modalVisible) {
+      playAudio(gender, 'editando_nome');
+    }
+  }, [modalVisible]);
 
   const validateName = (text) => {
     if (text.trim() === '') {
@@ -47,7 +56,6 @@ function ProfileModal({
   const handleSave = async () => {
     const isNameValid = validateName(newName);
     if (isNameValid) {
-      console.log('isNameValid', isNameValid);
       const data = await updateProfile(userId, profileId, { name: newName });
       if (data) {
         resetFields();

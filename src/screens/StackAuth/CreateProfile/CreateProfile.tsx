@@ -1,6 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 
 import Button from '@/components/Button/Button';
 import Icon from '@/components/Icon/Icon';
@@ -9,14 +15,17 @@ import { useAuth } from '@/contexts/AuthContext';
 import { createProfile } from '@/services/profile';
 import colors from '@/styles/colors';
 
-import vectorSelectProfile from '../../../assets/vectorSelectProfile.png';
+import vectorSelectProfile from '../../../../assets/vectors/vectorSelectProfile.png';
 import {
+  ButtonWrapper,
   Container,
   GenderButton,
   GenderButtonWrapper,
+  HeaderWrapper,
+  InfoWrapper,
   LogoImage,
   Title,
-  WrapperInfo,
+  TitleWrapper,
 } from './style';
 
 export function CreateProfile() {
@@ -26,6 +35,21 @@ export function CreateProfile() {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('male');
   const [error, setError] = useState('');
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardOpen(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardOpen(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const validateInput = () => {
     if (!name.trim()) {
@@ -72,36 +96,49 @@ export function CreateProfile() {
   };
 
   return (
-    <Container>
-      <TouchableOpacity onPress={handleGoBack}>
-        <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-      </TouchableOpacity>
-      <LogoImage source={vectorSelectProfile} resizeMode="contain" />
-      <Title>Qual é seu nome?</Title>
-      <WrapperInfo>
-        <Input
-          variant={'login'}
-          label="Digite o seu nome"
-          iconSize={20}
-          error={error}
-          value={name}
-          onChange={(text) => setName(text)}
-        />
-        <GenderButtonWrapper>
-          <GenderButton onPress={() => setGender('male')} color={getButtonColor('male')}>
-            <Icon icon="male" size={24} color="white" lib="IonIcons" />
-          </GenderButton>
-          <GenderButton onPress={() => setGender('female')} color={getButtonColor('female')}>
-            <Icon icon="female" size={24} color="white" lib="IonIcons" />
-          </GenderButton>
-        </GenderButtonWrapper>
-      </WrapperInfo>
-      <Button
-        variant="primary"
-        size="large"
-        label="Salvar e continuar"
-        onClick={handleCreateProfile}
-      />
-    </Container>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Container>
+          <HeaderWrapper>
+            <TouchableOpacity onPress={handleGoBack}>
+              <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+            </TouchableOpacity>
+          </HeaderWrapper>
+          <TitleWrapper>
+            <LogoImage source={vectorSelectProfile} resizeMode="contain" />
+            <Title>Qual é seu nome?</Title>
+          </TitleWrapper>
+          <InfoWrapper>
+            <Input
+              variant={'login'}
+              label="Digite o seu nome"
+              iconSize={20}
+              error={error}
+              value={name}
+              onChange={(text) => setName(text)}
+            />
+            <GenderButtonWrapper>
+              <GenderButton onPress={() => setGender('male')} color={getButtonColor('male')}>
+                <Icon icon="male" size={24} color="white" lib="IonIcons" />
+              </GenderButton>
+              <GenderButton onPress={() => setGender('female')} color={getButtonColor('female')}>
+                <Icon icon="female" size={24} color="white" lib="IonIcons" />
+              </GenderButton>
+            </GenderButtonWrapper>
+          </InfoWrapper>
+          <ButtonWrapper>
+            <Button
+              variant="primary"
+              size="large"
+              label="Salvar e continuar"
+              onClick={handleCreateProfile}
+            />
+          </ButtonWrapper>
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

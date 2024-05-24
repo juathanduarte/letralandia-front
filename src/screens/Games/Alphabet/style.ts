@@ -18,23 +18,24 @@ export const HeaderWrapper = styled.View`
   align-items: center;
 `;
 
-export const HeaderTitleWrapper = styled.View`
-  justify-content: center;
+export const HeaderTitleAuxWrapper = styled.View`
+  width: 100%;
   align-items: center;
+`;
+
+export const HeaderTitleWrapper = styled.View`
+  border-radius: 24px;
+  border: 1px solid ${colors.title};
+  width: 110px;
+  bottom: 30px;
+  background-color: ${colors.gray};
 `;
 
 export const HeaderTitle = styled.Text`
   font-size: 22px;
   font-family: ${fonts.text_semi_bold};
   color: ${colors.title};
-  background-color: ${colors.gray};
-  border-radius: 24px;
-  border: 1px solid ${colors.title};
-  bottom: 15px;
-  text-align: center;
-  justify-content: center;
-  width: 16%;
-  padding: 2px;
+  padding: 8px;
 `;
 
 export const VerticalCenteringWrapper = styled.View`
@@ -46,8 +47,7 @@ export const VerticalCenteringWrapper = styled.View`
 export const BodyWrapper = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
+  bottom: 15px;
 `;
 
 export const ButtonWrapper = styled.View`

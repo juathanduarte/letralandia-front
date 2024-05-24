@@ -20,7 +20,7 @@ import {
 } from './style';
 
 import colors from '@/styles/colors';
-import vectorSelectProfile from '../../../assets/vectorSelectProfile.png';
+import vectorSelectProfile from '../../../../assets/vectors/vectorSelectProfile.png';
 
 export function SelectProfile({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'SelectProfile'>['navigation']>();

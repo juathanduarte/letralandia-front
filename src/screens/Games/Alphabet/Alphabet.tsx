@@ -2,24 +2,30 @@ import Button from '@/components/Button/Button';
 import Icon from '@/components/Icon/Icon';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
+import { playAudio } from '@/utils/playAudio';
 import { useNavigation } from '@react-navigation/native';
-import * as Speech from 'expo-speech';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import {
   BodyWrapper,
   ButtonWrapper,
   Container,
   HeaderTitle,
+  HeaderTitleAuxWrapper,
   HeaderTitleWrapper,
   HeaderWrapper,
   VerticalCenteringWrapper,
 } from './style';
 
-export function Alphabet() {
+export function Alphabet({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'Alphabet'>['navigation']>();
+  const { profileGender } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [currentEmoji, setCurrentEmoji] = useState('');
+
+  useEffect(() => {
+    playAudio(profileGender, 'alfabeto');
+  }, [route]);
 
   const letterWords = {
     A: { word: 'Abelha', emoji: '🐝' },
@@ -29,11 +35,11 @@ export function Alphabet() {
     E: { word: 'Elefante', emoji: '🐘' },
     F: { word: 'Foca', emoji: '🦭' },
     G: { word: 'Gato', emoji: '🐈' },
-    H: { word: 'Hipopótamo', emoji: '🦛' },
+    H: { word: 'Hipopotamo', emoji: '🦛' },
     I: { word: 'Iguana', emoji: '🦎' },
-    J: { word: 'Jacaré', emoji: '🐊' },
+    J: { word: 'Jacare', emoji: '🐊' },
     K: { word: 'Kiwi', emoji: '🥝' },
-    L: { word: 'Leão', emoji: '🦁' },
+    L: { word: 'Leao', emoji: '🦁' },
     M: { word: 'Macaco', emoji: '🐒' },
     N: { word: 'Narval', emoji: '🐋' },
     O: { word: 'Ovelha', emoji: '🐑' },
@@ -45,16 +51,14 @@ export function Alphabet() {
     U: { word: 'Urso', emoji: '🐻' },
     V: { word: 'Vaca', emoji: '🐄' },
     W: { word: 'Wombat', emoji: '🐨' },
-    X: { word: 'Xícara', emoji: '☕' },
+    X: { word: 'Xicara', emoji: '☕' },
     Y: { word: 'Yak', emoji: '🦙' },
     Z: { word: 'Zebra', emoji: '🦓' },
   };
 
   const speakAndShowEmoji = (letter) => {
-    const fullDescription = `${letter} de ${letterWords[letter].word}`;
-    Speech.speak(fullDescription, {
-      language: 'pt-BR',
-    });
+    const audio_path = `${letter}_${letterWords[letter].word}`.toLowerCase();
+    playAudio(profileGender, audio_path);
     setCurrentEmoji(letterWords[letter].emoji);
     setModalVisible(true);
   };
@@ -70,9 +74,11 @@ export function Alphabet() {
           <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
         </TouchableOpacity>
       </HeaderWrapper>
-      <HeaderTitleWrapper>
-        <HeaderTitle>Alfabeto</HeaderTitle>
-      </HeaderTitleWrapper>
+      <HeaderTitleAuxWrapper>
+        <HeaderTitleWrapper>
+          <HeaderTitle>Alfabeto</HeaderTitle>
+        </HeaderTitleWrapper>
+      </HeaderTitleAuxWrapper>
       <VerticalCenteringWrapper>
         <BodyWrapper>
           {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter, index) => (

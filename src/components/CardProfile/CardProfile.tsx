@@ -2,14 +2,14 @@ import colors from '@/styles/colors';
 import React, { useEffect, useState } from 'react';
 import { Avatar, Card, Name } from './style';
 
-import avatarMenina1 from '../../assets/avatarMenina1.png';
-import avatarMenina2 from '../../assets/avatarMenina2.png';
-import avatarMenina3 from '../../assets/avatarMenina3.png';
-import avatarMenina4 from '../../assets/avatarMenina4.png';
-import avatarMenino1 from '../../assets/avatarMenino1.png';
-import avatarMenino2 from '../../assets/avatarMenino2.png';
-import avatarMenino3 from '../../assets/avatarMenino3.png';
-import avatarMenino4 from '../../assets/avatarMenino4.png';
+import firstBoyAvatar from '../../../assets/avatares/firstBoyAvatar.png';
+import firstGirlAvatar from '../../../assets/avatares/firstGirlAvatar.png';
+import fourthBoyAvatar from '../../../assets/avatares/fourthBoyAvatar.png';
+import fourthGirlAvatar from '../../../assets/avatares/fourthGirlAvatar.png';
+import secondBoyAvatar from '../../../assets/avatares/secondBoyAvatar.png';
+import secondGirlAvatar from '../../../assets/avatares/secondGirlAvatar.png';
+import thirdBoyAvatar from '../../../assets/avatares/thirdBoyAvatar.png';
+import thirdGirlAvatar from '../../../assets/avatares/thirdGirlAvatar.png';
 
 interface CardProps {
   name?: string;
@@ -18,8 +18,8 @@ interface CardProps {
   gender?: string;
 }
 
-const girlAvatars = [avatarMenina1, avatarMenina2, avatarMenina3, avatarMenina4];
-const boyAvatars = [avatarMenino1, avatarMenino2, avatarMenino3, avatarMenino4];
+const girlAvatars = [firstGirlAvatar, secondGirlAvatar, thirdGirlAvatar, fourthGirlAvatar];
+const boyAvatars = [firstBoyAvatar, secondBoyAvatar, thirdBoyAvatar, fourthBoyAvatar];
 
 const CardProfile: React.FC<CardProps> = ({ name, onClick, gender }) => {
   const [cardColor, setCardColor] = useState<string>('');
