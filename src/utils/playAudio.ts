@@ -5,6 +5,9 @@ const maleAudioFiles = {
   editando_nome: require('../../assets/audios/male/editando_nome.mp3'),
   excluindo_perfil: require('../../assets/audios/male/excluindo_perfil.mp3'),
   alfabeto: require('../../assets/audios/male/alfabeto.mp3'),
+  jogo_1_bem_vindo: require('../../assets/audios/male/jogo_1_bem_vindo.mp3'),
+  jogo_2_bem_vindo: require('../../assets/audios/male/jogo_2_bem_vindo.mp3'),
+  jogo_3_bem_vindo: require('../../assets/audios/male/jogo_3_bem_vindo.mp3'),
   // ALFABETO
   a_abelha: require('../../assets/audios/male/alphabet/a_abelha.mp3'),
   b_bola: require('../../assets/audios/male/alphabet/b_bola.mp3'),
@@ -32,7 +35,6 @@ const maleAudioFiles = {
   x_xicara: require('../../assets/audios/male/alphabet/x_xicara.mp3'),
   y_yak: require('../../assets/audios/male/alphabet/y_yak.mp3'),
   z_zebra: require('../../assets/audios/male/alphabet/z_zebra.mp3'),
-  // Adicione outros arquivos de áudio masculinos aqui
 };
 
 const femaleAudioFiles = {
@@ -40,6 +42,9 @@ const femaleAudioFiles = {
   editando_nome: require('../../assets/audios/female/editando_nome.mp3'),
   excluindo_perfil: require('../../assets/audios/female/excluindo_perfil.mp3'),
   alfabeto: require('../../assets/audios/female/alfabeto.mp3'),
+  jogo_1_bem_vindo: require('../../assets/audios/female/jogo_1_bem_vindo.mp3'),
+  jogo_2_bem_vindo: require('../../assets/audios/female/jogo_2_bem_vindo.mp3'),
+  jogo_3_bem_vindo: require('../../assets/audios/female/jogo_3_bem_vindo.mp3'),
   // ALFABETO
   a_abelha: require('../../assets/audios/female/alphabet/a_abelha.mp3'),
   b_bola: require('../../assets/audios/female/alphabet/b_bola.mp3'),
@@ -67,7 +72,6 @@ const femaleAudioFiles = {
   x_xicara: require('../../assets/audios/female/alphabet/x_xicara.mp3'),
   y_yak: require('../../assets/audios/female/alphabet/y_yak.mp3'),
   z_zebra: require('../../assets/audios/female/alphabet/z_zebra.mp3'),
-  // Adicione outros arquivos de áudio femininos aqui
 };
 
 export const playAudio = async (gender, filename) => {

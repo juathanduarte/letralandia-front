@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 
 interface CardProps {
   backgroundColor?: string;
+  borderColor?: string;
   width?: number;
   emoji?: string;
 }
@@ -13,6 +14,7 @@ export const Card = styled.TouchableOpacity<CardProps>`
   height: 120px;
   border-radius: 16px;
   background-color: ${(props) => props.backgroundColor};
+  border: ${(props) => (props.borderColor ? `10px solid ${props.borderColor}` : 'none')};
   padding: ${(props) => (props.emoji ? '20px' : '0')};
   flex-direction: ${(props) => (props.emoji ? 'row' : 'column')};
   justify-content: ${(props) => (props.emoji ? 'space-between' : 'center')};

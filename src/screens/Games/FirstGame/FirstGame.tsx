@@ -7,11 +7,11 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Alert, TouchableOpacity } from 'react-native';
 import {
-  BodyGame,
   Container,
-  Emoji,
+  GameWrapper,
   HeaderGame,
   HeaderWrapper,
+  ImageGame,
   Letter,
   LettersGame,
   LettersWrapper,
@@ -20,39 +20,54 @@ import {
   Separator,
 } from './style';
 
+import { gamePhase } from '@/services/phase';
+
 interface FirstGameProps {
   gameId: number;
 }
 
-const wordsData = [
-  { word: 'GATO', incomplete: 'G TO', emoji: '🐈' },
-  { word: 'CÃO', incomplete: 'C O', emoji: '🐕' },
-  { word: 'PEIXE', incomplete: 'PEI E', emoji: '🐟' },
-  { word: 'PÁSSARO', incomplete: 'PÁ SARO', emoji: '🐦' },
-  { word: 'COELHO', incomplete: 'COE HO', emoji: '🐇' },
-];
-
-//TODO: Integrar com o back-end:
-//TODO: - Chamar a rota localhost:3000/games/phase/1/words
-//TODO: -- A rota retorna um array de objetos com as palavras, incompletas e emojis
-//TODO: - Substituir o array wordsData pelo retorno da rota
-//TODO: - Substituir o currentWord pelo retorno da rota
-//TODO: - Substituir o currentIncomplete pelo retorno da rota
-//TODO: - Substituir o currentEmoji pelo retorno da rota
+interface WordData {
+  word: string;
+  incomplete: string;
+  image: string; //base64
+}
 
 export function FirstGame({ gameId }: FirstGameProps) {
   const navigation = useNavigation<RootStackScreenProps<'FirstGame'>['navigation']>();
   const { font, isUpperCase } = useFont();
-
+  const [gameData, setGameData] = useState<WordData[]>([]);
+  const [lettersView, setLettersView] = useState<string[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [lettersEmoji, setLettersEmoji] = useState(wordsData[0].incomplete.split(''));
-  const [errors, setErrors] = useState(0);
-  const [wrongWords, setWrongWords] = useState<{ word: string; count: number }[]>([]);
+  const [options, setOptions] = useState<string[]>([]);
 
-  const currentWordData = wordsData[currentWordIndex];
-  const currentWord = currentWordData.word;
-  const currentIncomplete = currentWordData.incomplete;
-  const currentEmoji = currentWordData.emoji;
+  const getGamePhase = async () => {
+    const words = await gamePhase('1', '1');
+    setGameData(words);
+  };
+
+  useEffect(() => {
+    getGamePhase();
+  }, []);
+
+  useEffect(() => {
+    if (gameData.length > 0) {
+      const currentWordData = gameData[currentWordIndex];
+      const { incomplete } = generateArrayWord(currentWordData.word);
+      setLettersView(incomplete);
+      setOptions(generateOptions(currentWordData.word));
+    }
+  }, [currentWordIndex, gameData]);
+
+  const generateArrayWord = (word: string) => {
+    const arrayWord = word.split('');
+    const incompleteWord = arrayWord.map((letter, index) => {
+      if (index === 0 || index === arrayWord.length - 1) {
+        return ' ';
+      }
+      return letter;
+    });
+    return { word: arrayWord, incomplete: incompleteWord };
+  };
 
   const generateOptions = (word: string) => {
     const uniqueLetters = Array.from(new Set(word.replace(/ /g, '')));
@@ -65,59 +80,42 @@ export function FirstGame({ gameId }: FirstGameProps) {
     return uniqueLetters.sort(() => Math.random() - 0.5);
   };
 
-  const [options, setOptions] = useState(generateOptions(currentWord));
-
-  useEffect(() => {
-    setOptions(generateOptions(currentWord));
-    setLettersEmoji(currentIncomplete.split(''));
-  }, [currentWordIndex]);
-
   const handleGoBack = () => {
     navigation.goBack();
-  };
-
-  const handleSelectOption = (option: string) => {
-    const newLettersEmoji = [...lettersEmoji];
-    const emptyIndex = newLettersEmoji.indexOf(' ');
-
-    if (emptyIndex !== -1) {
-      newLettersEmoji[emptyIndex] = option;
-      setLettersEmoji(newLettersEmoji);
-
-      const completedWord = newLettersEmoji.join('');
-      if (completedWord === currentWord) {
-        setTimeout(() => {
-          Alert.alert('Parabéns!', 'Você acertou!');
-          if (currentWordIndex < wordsData.length - 1) {
-            setCurrentWordIndex(currentWordIndex + 1);
-          } else {
-            Alert.alert('Parabéns!', 'Você completou todas as palavras!');
-          }
-        }, 200);
-      } else if (!newLettersEmoji.includes(' ')) {
-        setTimeout(() => {
-          Alert.alert('Ops!', 'Você errou!');
-          setErrors(errors + 1);
-          setLettersEmoji(currentIncomplete.split(''));
-
-          setWrongWords((prevWrongWords) => {
-            const existingWord = prevWrongWords.find((word) => word.word === currentWord);
-            if (existingWord) {
-              return prevWrongWords.map((word) =>
-                word.word === currentWord ? { ...word, count: word.count + 1 } : word
-              );
-            } else {
-              return [...prevWrongWords, { word: currentWord, count: 1 }];
-            }
-          });
-        }, 200);
-      }
-    }
   };
 
   const formatLetter = (letter: string) => {
     return isUpperCase ? letter.toUpperCase() : letter.toLowerCase();
   };
+
+  const handleSelectOption = (option: string) => {
+    const newlettersView = [...lettersView];
+    const emptyIndex = newlettersView.indexOf(' ');
+
+    if (emptyIndex !== -1) {
+      newlettersView[emptyIndex] = option;
+      setLettersView(newlettersView);
+
+      const completedWord = newlettersView.join('');
+      if (completedWord === gameData[currentWordIndex].word) {
+        setTimeout(() => {
+          Alert.alert('Parabéns!', 'Você acertou!');
+          if (currentWordIndex < gameData.length - 1) {
+            setCurrentWordIndex(currentWordIndex + 1);
+          } else {
+            Alert.alert('Parabéns!', 'Você completou todas as palavras!');
+          }
+        }, 200);
+      } else if (!newlettersView.includes(' ')) {
+        setTimeout(() => {
+          Alert.alert('Ops!', 'Você errou!');
+          setLettersView(generateArrayWord(gameData[currentWordIndex].word).incomplete);
+        }, 200);
+      }
+    }
+  };
+
+  const currentWordData = gameData[currentWordIndex] || { word: '', incomplete: '', image: '' };
 
   return (
     <Container>
@@ -127,20 +125,20 @@ export function FirstGame({ gameId }: FirstGameProps) {
         </TouchableOpacity>
         <FontSwap />
       </HeaderWrapper>
-      <HeaderGame>
-        <Emoji>{currentEmoji}</Emoji>
-        <LettersWrapper>
-          {lettersEmoji.map((letter, index) => (
-            <Options key={index} letter={letter} font={font}>
-              <Letter letter={letter} font={font}>
-                {formatLetter(letter)}
-              </Letter>
-            </Options>
-          ))}
-        </LettersWrapper>
-      </HeaderGame>
-      <Separator />
-      <BodyGame>
+      <GameWrapper>
+        <HeaderGame>
+          <ImageGame source={{ uri: `data:image/png;base64,${currentWordData.image}` }} />
+          <LettersWrapper>
+            {lettersView.map((letter, index) => (
+              <Options key={index} letter={letter} font={font}>
+                <Letter letter={letter} font={font}>
+                  {formatLetter(letter)}
+                </Letter>
+              </Options>
+            ))}
+          </LettersWrapper>
+        </HeaderGame>
+        <Separator />
         <LettersGame>
           {options.map((option, index) => (
             <OptionsSelect
@@ -155,7 +153,7 @@ export function FirstGame({ gameId }: FirstGameProps) {
             </OptionsSelect>
           ))}
         </LettersGame>
-      </BodyGame>
+      </GameWrapper>
     </Container>
   );
 }

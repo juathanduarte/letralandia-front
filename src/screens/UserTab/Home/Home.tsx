@@ -132,13 +132,13 @@ export function Home({ route }) {
     console.log('Selected game:', gameId);
     switch (gameId) {
       case 1:
-        navigation.navigate('SelectPhaseFirstGame');
+        navigation.navigate('SelectPhaseFirstGame', { profileGender: profileData.gender });
         break;
       case 2:
-        navigation.navigate('SelectPhaseSecondGame');
+        navigation.navigate('SelectPhaseSecondGame', { profileGender: profileData.gender });
         break;
       case 3:
-        navigation.navigate('SelectPhaseThirdGame');
+        navigation.navigate('SelectPhaseThirdGame', { profileGender: profileData.gender });
         break;
       case 4:
         console.log('Alphabet');

@@ -4,6 +4,7 @@ import { Body, Card, ContainerRectangle, Emoji, Letter, Rectangle, Title } from 
 interface CardGameProps {
   id: number;
   backgroundColor: string;
+  borderColor?: string;
   title: string;
   emoji?: string;
   rating?: number;
@@ -16,6 +17,7 @@ interface CardGameProps {
 const CardGame: React.FC<CardGameProps> = ({
   id,
   backgroundColor,
+  borderColor,
   title,
   rating,
   emoji,
@@ -36,7 +38,12 @@ const CardGame: React.FC<CardGameProps> = ({
   };
 
   return (
-    <Card backgroundColor={backgroundColor} onPress={onPress} emoji={emoji}>
+    <Card
+      backgroundColor={backgroundColor}
+      borderColor={borderColor}
+      onPress={onPress}
+      emoji={emoji}
+    >
       <Title>{title}</Title>
       <Title>{getRating(rating)}</Title>
       {emoji && (

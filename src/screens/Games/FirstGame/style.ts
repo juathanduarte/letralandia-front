@@ -21,20 +21,19 @@ export const HeaderWrapper = styled.View`
   align-items: center;
 `;
 
-export const BodyGame = styled.View`
+export const GameWrapper = styled.View`
   flex: 1;
-  justify-content: center;
+  padding: 0 0 16px 0;
 `;
 
 export const HeaderGame = styled.View`
   flex: 1;
-  align-items: center;
-  flex-direction: column;
-  padding: 16px;
+  padding: 0 16px 0 16px;
 `;
 
-export const Emoji = styled.Text`
-  font-size: 200px;
+export const ImageGame = styled.Image`
+  flex: 1;
+  border-radius: 8px;
 `;
 
 export const LettersWrapper = styled.View`
@@ -45,7 +44,6 @@ export const LettersWrapper = styled.View`
 
 export const Options = styled.View<LetterProps>`
   flex: 1;
-  height: 100px;
   background-color: ${(props) => (props.letter === ' ' ? colors.yellow : colors.yellowLight)};
   border-radius: 8px;
   justify-content: ${(props) => (props.font === 'Pacifico_400Regular' ? '' : 'center')};
@@ -60,25 +58,23 @@ export const Letter = styled.Text<LetterProps>`
 `;
 
 export const OptionsSelect = styled.TouchableOpacity<LetterProps>`
-  height: 100px;
   width: 30%;
   background-color: ${colors.yellowLight};
   border-radius: 8px;
   justify-content: center;
-  margin-bottom: 8px;
 `;
 
 export const Separator = styled.View`
   width: 100%;
   height: 1px;
+  margin: 16px 0;
   background-color: ${colors.white};
 `;
 
 export const LettersGame = styled.View`
-  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
-  gap: 8px;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 8px;
 `;
