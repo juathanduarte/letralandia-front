@@ -10,10 +10,10 @@ export type RootStackParamList = {
   Home: { profileId: number };
   ParentArea: { profileId: number };
   Alphabet: { profileGender: string };
-  SelectPhaseFirstGame: { profileGender: string };
+  SelectPhaseFirstGame: { profileGender: string; gameId: number };
   SelectPhaseSecondGame: { profileGender: string };
   SelectPhaseThirdGame: { profileGender: string };
-  FirstGame: { gameId: number };
+  FirstGame: { gameId: number; phaseId: number; profileGender: string };
   SecondGame: undefined;
   ThirdGame: undefined;
 };

@@ -5,7 +5,7 @@ import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Alert, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import {
   Container,
   GameWrapper,
@@ -21,63 +21,87 @@ import {
 } from './style';
 
 import { gamePhase } from '@/services/phase';
+import { playAudio } from '@/utils/playAudio';
 
 interface FirstGameProps {
   gameId: number;
+  phaseId: number;
 }
 
 interface WordData {
   word: string;
-  incomplete: string;
-  image: string; //base64
+  syllabes: string;
+  size: number;
+  image: string;
 }
 
-export function FirstGame({ gameId }: FirstGameProps) {
+export function FirstGame({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'FirstGame'>['navigation']>();
+  const { gameId, phaseId, profileGender } = route.params;
   const { font, isUpperCase } = useFont();
   const [gameData, setGameData] = useState<WordData[]>([]);
   const [lettersView, setLettersView] = useState<string[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [options, setOptions] = useState<string[]>([]);
-
-  const getGamePhase = async () => {
-    const words = await gamePhase('1', '1');
-    setGameData(words);
-  };
+  const [loading, setLoading] = useState(true);
+  const [fixedLetters, setFixedLetters] = useState<string[]>([]);
 
   useEffect(() => {
-    getGamePhase();
-  }, []);
+    const fetchGamePhase = async () => {
+      setLoading(true);
+      try {
+        const words = await gamePhase(gameId, phaseId);
+        setGameData(words);
+      } catch (error) {
+        console.error('Failed to fetch game phase:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGamePhase();
+  }, [gameId, phaseId]);
 
   useEffect(() => {
     if (gameData.length > 0) {
-      const currentWordData = gameData[currentWordIndex];
-      const { incomplete } = generateArrayWord(currentWordData.word);
+      const { word } = gameData[currentWordIndex];
+      const incomplete = generateArrayWord(word);
+      setFixedLetters(incomplete);
       setLettersView(incomplete);
-      setOptions(generateOptions(currentWordData.word));
+      setOptions(generateOptions(word));
     }
   }, [currentWordIndex, gameData]);
 
   const generateArrayWord = (word: string) => {
     const arrayWord = word.split('');
-    const incompleteWord = arrayWord.map((letter, index) => {
-      if (index === 0 || index === arrayWord.length - 1) {
-        return ' ';
+    const incompleteWord = arrayWord.map(() => ' ');
+    const indicesToShow = [];
+
+    while (indicesToShow.length < 2) {
+      const randomIndex = Math.floor(Math.random() * arrayWord.length);
+      if (!indicesToShow.includes(randomIndex)) {
+        indicesToShow.push(randomIndex);
       }
-      return letter;
+    }
+
+    indicesToShow.forEach((index) => {
+      incompleteWord[index] = arrayWord[index];
     });
-    return { word: arrayWord, incomplete: incompleteWord };
+
+    return incompleteWord;
   };
 
   const generateOptions = (word: string) => {
     const uniqueLetters = Array.from(new Set(word.replace(/ /g, '')));
-    while (uniqueLetters.length < 9) {
+    const allLetters = [...uniqueLetters];
+
+    while (allLetters.length < 9) {
       const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-      if (!uniqueLetters.includes(randomLetter)) {
-        uniqueLetters.push(randomLetter);
+      if (!allLetters.includes(randomLetter)) {
+        allLetters.push(randomLetter);
       }
     }
-    return uniqueLetters.sort(() => Math.random() - 0.5);
+
+    return allLetters.sort(() => Math.random() - 0.5);
   };
 
   const handleGoBack = () => {
@@ -89,27 +113,29 @@ export function FirstGame({ gameId }: FirstGameProps) {
   };
 
   const handleSelectOption = (option: string) => {
-    const newlettersView = [...lettersView];
-    const emptyIndex = newlettersView.indexOf(' ');
+    const newLettersView = [...lettersView];
+    const emptyIndex = newLettersView.indexOf(' ');
 
     if (emptyIndex !== -1) {
-      newlettersView[emptyIndex] = option;
-      setLettersView(newlettersView);
+      newLettersView[emptyIndex] = option;
+      setLettersView(newLettersView);
 
-      const completedWord = newlettersView.join('');
-      if (completedWord === gameData[currentWordIndex].word) {
+      if (!newLettersView.includes(' ')) {
+        const completedWord = newLettersView.join('');
+        const completedWordLowerCase = completedWord.toLowerCase();
+        const gameDataLowerCase = gameData[currentWordIndex].word.toLowerCase();
         setTimeout(() => {
-          Alert.alert('Parabéns!', 'Você acertou!');
-          if (currentWordIndex < gameData.length - 1) {
-            setCurrentWordIndex(currentWordIndex + 1);
+          if (completedWordLowerCase === gameDataLowerCase) {
+            playAudio(profileGender, 'parabens_acertou');
+            Alert.alert('Parabéns!', 'Você acertou!');
+            setCurrentWordIndex((prevIndex) =>
+              prevIndex < gameData.length - 1 ? prevIndex + 1 : prevIndex
+            );
           } else {
-            Alert.alert('Parabéns!', 'Você completou todas as palavras!');
+            playAudio(profileGender, 'ops_errou');
+            Alert.alert('Ops!', 'Você errou!');
+            setLettersView(fixedLetters);
           }
-        }, 200);
-      } else if (!newlettersView.includes(' ')) {
-        setTimeout(() => {
-          Alert.alert('Ops!', 'Você errou!');
-          setLettersView(generateArrayWord(gameData[currentWordIndex].word).incomplete);
         }, 200);
       }
     }
@@ -125,35 +151,43 @@ export function FirstGame({ gameId }: FirstGameProps) {
         </TouchableOpacity>
         <FontSwap />
       </HeaderWrapper>
-      <GameWrapper>
-        <HeaderGame>
-          <ImageGame source={{ uri: `data:image/png;base64,${currentWordData.image}` }} />
-          <LettersWrapper>
-            {lettersView.map((letter, index) => (
-              <Options key={index} letter={letter} font={font}>
-                <Letter letter={letter} font={font}>
-                  {formatLetter(letter)}
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.title}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        />
+      ) : (
+        <GameWrapper>
+          <HeaderGame>
+            <ImageGame source={{ uri: `data:image/png;base64,${currentWordData.image}` }} />
+            <LettersWrapper>
+              {lettersView.map((letter, index) => (
+                <Options key={index} letter={letter} font={font}>
+                  <Letter letter={letter} font={font}>
+                    {formatLetter(letter)}
+                  </Letter>
+                </Options>
+              ))}
+            </LettersWrapper>
+          </HeaderGame>
+          <Separator />
+          <LettersGame>
+            {options.map((option, index) => (
+              <OptionsSelect
+                key={index}
+                letter={option}
+                font={font}
+                onPress={() => handleSelectOption(option)}
+              >
+                <Letter letter={option} font={font}>
+                  {formatLetter(option)}
                 </Letter>
-              </Options>
+              </OptionsSelect>
             ))}
-          </LettersWrapper>
-        </HeaderGame>
-        <Separator />
-        <LettersGame>
-          {options.map((option, index) => (
-            <OptionsSelect
-              key={index}
-              letter={option}
-              font={font}
-              onPress={() => handleSelectOption(option)}
-            >
-              <Letter letter={option} font={font}>
-                {formatLetter(option)}
-              </Letter>
-            </OptionsSelect>
-          ))}
-        </LettersGame>
-      </GameWrapper>
+          </LettersGame>
+        </GameWrapper>
+      )}
     </Container>
   );
 }

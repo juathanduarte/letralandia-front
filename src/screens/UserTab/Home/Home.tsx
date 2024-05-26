@@ -129,10 +129,12 @@ export function Home({ route }) {
   };
 
   const handleSelectGame = (gameId: number) => {
-    console.log('Selected game:', gameId);
     switch (gameId) {
       case 1:
-        navigation.navigate('SelectPhaseFirstGame', { profileGender: profileData.gender });
+        navigation.navigate('SelectPhaseFirstGame', {
+          profileGender: profileData.gender,
+          gameId: 1,
+        });
         break;
       case 2:
         navigation.navigate('SelectPhaseSecondGame', { profileGender: profileData.gender });
@@ -141,7 +143,6 @@ export function Home({ route }) {
         navigation.navigate('SelectPhaseThirdGame', { profileGender: profileData.gender });
         break;
       case 4:
-        console.log('Alphabet');
         navigation.navigate('Alphabet', { profileGender: profileData.gender });
         break;
       case 5:
@@ -165,7 +166,7 @@ export function Home({ route }) {
       {loading ? (
         <ActivityIndicator
           size="large"
-          color={colors.blue}
+          color={colors.title}
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         />
       ) : (

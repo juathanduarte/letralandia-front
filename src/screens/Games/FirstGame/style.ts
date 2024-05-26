@@ -23,12 +23,11 @@ export const HeaderWrapper = styled.View`
 
 export const GameWrapper = styled.View`
   flex: 1;
-  padding: 0 0 16px 0;
+  padding: 0 16px 16px;
 `;
 
 export const HeaderGame = styled.View`
   flex: 1;
-  padding: 0 16px 0 16px;
 `;
 
 export const ImageGame = styled.Image`
@@ -44,6 +43,7 @@ export const LettersWrapper = styled.View`
 
 export const Options = styled.View<LetterProps>`
   flex: 1;
+  height: 75px;
   background-color: ${(props) => (props.letter === ' ' ? colors.yellow : colors.yellowLight)};
   border-radius: 8px;
   justify-content: ${(props) => (props.font === 'Pacifico_400Regular' ? '' : 'center')};
@@ -51,17 +51,10 @@ export const Options = styled.View<LetterProps>`
 
 export const Letter = styled.Text<LetterProps>`
   width: 100%;
-  font-size: ${(props) => (props.font === 'Pacifico_400Regular' ? '42px' : '58px')};
+  font-size: ${(props) => (props.font === 'Pacifico_400Regular' ? '40px' : '58px')};
   color: ${colors.title};
   font-family: ${(props) => props.font};
   text-align: center;
-`;
-
-export const OptionsSelect = styled.TouchableOpacity<LetterProps>`
-  width: 30%;
-  background-color: ${colors.yellowLight};
-  border-radius: 8px;
-  justify-content: center;
 `;
 
 export const Separator = styled.View`
@@ -74,7 +67,14 @@ export const Separator = styled.View`
 export const LettersGame = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  /* align-items: center; */
-  justify-content: center;
   gap: 8px;
+`;
+
+export const OptionsSelect = styled.TouchableOpacity<LetterProps>`
+  flex: 1;
+  flex-basis: 30%;
+  height: 80px;
+  background-color: ${colors.yellowLight};
+  border-radius: 8px;
+  justify-content: center;
 `;
