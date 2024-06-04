@@ -10,7 +10,7 @@ export type RootStackParamList = {
   Home: { profileId: number };
   ParentArea: { profileId: number };
   Alphabet: { profileGender: string };
-  SelectPhaseFirstGame: { profileGender: string; gameId: number };
+  SelectPhaseFirstGame: { profileGender: string; gameId: number; returnData?: boolean };
   SelectPhaseSecondGame: { profileGender: string };
   SelectPhaseThirdGame: { profileGender: string };
   FirstGame: { gameId: number; phaseId: number; profileGender: string };

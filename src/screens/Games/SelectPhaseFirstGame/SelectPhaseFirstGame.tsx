@@ -27,7 +27,7 @@ export function SelectPhaseFirstGame({ route }) {
   const [phases, setPhases] = useState<PhasesProps[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const { profileGender, gameId } = route.params;
+  const { profileGender, gameId, returnData } = route.params;
 
   useEffect(() => {
     async function fetchPhases() {
@@ -42,7 +42,7 @@ export function SelectPhaseFirstGame({ route }) {
     }
 
     fetchPhases();
-    playAudio(profileGender, 'jogo_1_bem_vindo');
+    if (!returnData) playAudio(profileGender, 'jogo_1_bem_vindo');
   }, [route]);
 
   const handleGoBack = () => {

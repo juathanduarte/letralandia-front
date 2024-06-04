@@ -51,7 +51,7 @@ export const Options = styled.View<LetterProps>`
 
 export const Letter = styled.Text<LetterProps>`
   width: 100%;
-  font-size: ${(props) => (props.font === 'Pacifico_400Regular' ? '40px' : '58px')};
+  font-size: ${(props) => (props.font === 'Pacifico_400Regular' ? '40px' : '48px')};
   color: ${colors.title};
   font-family: ${(props) => props.font};
   text-align: center;
@@ -73,7 +73,7 @@ export const LettersGame = styled.View`
 export const OptionsSelect = styled.TouchableOpacity<LetterProps>`
   flex: 1;
   flex-basis: 30%;
-  height: 80px;
+  height: 70px;
   background-color: ${colors.yellowLight};
   border-radius: 8px;
   justify-content: center;
