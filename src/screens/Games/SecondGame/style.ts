@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon/Icon';
 import colors from '@/styles/colors';
 import { Platform } from 'react-native';
 import styled from 'styled-components/native';
@@ -30,9 +31,19 @@ export const HeaderGame = styled.View`
   flex: 1;
 `;
 
-export const ImageGame = styled.Image`
+export const ImageGame = styled.ImageBackground`
   flex: 1;
   border-radius: 8px;
+  overflow: hidden;
+  justify-content: flex-end;
+  align-items: flex-end;
+`;
+export const PlayButton = styled.TouchableOpacity`
+  margin: 8px;
+`;
+
+export const PlayIcon = styled(Icon)`
+  color: ${colors.white};
 `;
 
 export const LettersWrapper = styled.View`

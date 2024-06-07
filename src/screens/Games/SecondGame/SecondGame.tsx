@@ -21,6 +21,8 @@ import {
   LettersWrapper,
   Options,
   OptionsSelect,
+  PlayButton,
+  PlayIcon,
   Separator,
 } from './style';
 
@@ -31,6 +33,11 @@ interface WordData {
   image: string;
   audioMale: string;
   audioFemale: string;
+}
+
+interface ErrorData {
+  word: string;
+  count: number;
 }
 
 export function SecondGame({ route }) {
@@ -45,8 +52,8 @@ export function SecondGame({ route }) {
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [typeModal, setTypeModal] = useState<string>('');
-
-  console.log('lettersView', lettersView);
+  const [startTime, setStartTime] = useState<number>(0);
+  const [errors, setErrors] = useState<ErrorData[]>([]);
 
   useEffect(() => {
     const fetchGamePhase = async () => {
@@ -54,6 +61,7 @@ export function SecondGame({ route }) {
       try {
         const words = await gamePhase(gameId, phaseId);
         setGameData(words);
+        setStartTime(Date.now());
 
         if (profileGender === 'male' && words[0]?.audioMale) {
           await playAudio('male', words[0].audioMale);
@@ -117,7 +125,6 @@ export function SecondGame({ route }) {
       if (!newLettersView.includes(' ')) {
         const completedWord = newLettersView.join('').toLowerCase();
         const gameDataWord = gameData[currentWordIndex].word.toLowerCase();
-        console.log(completedWord, gameDataWord);
 
         if (completedWord === gameDataWord) {
           if (currentWordIndex < gameData.length - 1) {
@@ -128,6 +135,10 @@ export function SecondGame({ route }) {
               setCurrentWordIndex((prevIndex) => prevIndex + 1);
             }, 3500);
           } else {
+            const endTime = Date.now();
+            const timeTaken = (endTime - startTime) / 1000;
+            console.log(`Tempo total: ${timeTaken} segundos`);
+            console.log('Palavras erradas:', errors);
             setTypeModal('success_end');
             setOpenModalInfo(true);
             setShowConfetti(true);
@@ -141,10 +152,31 @@ export function SecondGame({ route }) {
             }, 3500);
           }
         } else {
+          setTypeModal('error');
+          setOpenModalInfo(true);
           playAudio(profileGender, 'ops_errou');
+          const word = gameData[currentWordIndex].word;
+          setErrors((prevErrors) => {
+            const errorIndex = prevErrors.findIndex((error) => error.word === word);
+            if (errorIndex === -1) {
+              return [...prevErrors, { word, count: 1 }];
+            } else {
+              const newErrors = [...prevErrors];
+              newErrors[errorIndex].count += 1;
+              return newErrors;
+            }
+          });
           setLettersView(new Array(gameDataWord.length).fill(' '));
         }
       }
+    }
+  };
+
+  const handlePlayAudio = () => {
+    if (profileGender === 'male' && currentWordData.audioMale) {
+      playAudio('male', currentWordData.audioMale);
+    } else if (profileGender === 'female' && currentWordData.audioFemale) {
+      playAudio('female', currentWordData.audioFemale);
     }
   };
 
@@ -175,7 +207,12 @@ export function SecondGame({ route }) {
       ) : (
         <GameWrapper>
           <HeaderGame>
-            <ImageGame source={{ uri: `data:image/png;base64,${currentWordData.image}` }} />
+            <ImageGame source={{ uri: `data:image/png;base64,${currentWordData.image}` }}>
+              <PlayButton onPress={handlePlayAudio}>
+                <PlayIcon icon="play-circle" size={32} color={colors.title} lib="FontAwesome" />
+              </PlayButton>
+            </ImageGame>
+
             <LettersWrapper>
               {lettersView.map((letter, index) => (
                 <Options key={index} letter={letter} font={font}>
