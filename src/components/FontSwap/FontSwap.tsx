@@ -4,10 +4,24 @@ import { Button, Container, CustomText } from './style';
 
 type FontType = 'Nunito_700Bold' | 'Pacifico_400Regular';
 
-export function FontSwap() {
+interface FontSwapProps {
+  color: string;
+}
+
+const getColorScheme = (color) => {
+  const colorSchemes = {
+    yellow: { main: 'yellow', light: 'yellowLight' },
+    blue: { main: 'blue', light: 'blueLight' },
+    pink: { main: 'pink', light: 'pinkLight' },
+  };
+  return colorSchemes[color] || { main: 'yellow', light: 'yellowLight' };
+};
+
+export function FontSwap({ color }: FontSwapProps) {
   const { setFont, setIsUpperCase } = useFont();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const texts = ['B', 'b', 'B', 'b'];
+  const { main, light } = getColorScheme(color);
 
   const handleFontChange = (index: number) => {
     const font: FontType = index < 2 ? 'Nunito_700Bold' : 'Pacifico_400Regular';
@@ -24,6 +38,8 @@ export function FontSwap() {
           key={index}
           onPress={() => handleFontChange(index)}
           isSelected={index === selectedIndex}
+          mainColor={main}
+          lightColor={light}
         >
           <CustomText isLastTwo={index >= texts.length - 2}>{text}</CustomText>
         </Button>

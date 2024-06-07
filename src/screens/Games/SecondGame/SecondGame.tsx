@@ -1,25 +1,209 @@
+import { FontSwap } from '@/components/FontSwap/FontSwap';
 import Icon from '@/components/Icon/Icon';
+import ModalInfo from '@/components/ModalInfo/ModalInfo';
+import { useFont } from '@/contexts/FontContext';
+import { gamePhase } from '@/services/phase';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { Container, HeaderWrapper } from './style';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
+import ConfettiCannon from 'react-native-confetti-cannon';
+import { playAudio } from '../../../utils/playAudio';
+import {
+  Container,
+  GameWrapper,
+  HeaderGame,
+  HeaderWrapper,
+  ImageGame,
+  Letter,
+  LettersGame,
+  LettersWrapper,
+  Options,
+  OptionsSelect,
+  Separator,
+} from './style';
 
-export function SecondGame() {
+interface WordData {
+  word: string;
+  syllabes: string;
+  size: number;
+  image: string;
+  audioMale: string;
+  audioFemale: string;
+}
+
+export function SecondGame({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'SecondGame'>['navigation']>();
+  const { gameId, phaseId, profileGender } = route.params;
+  const { font, isUpperCase } = useFont();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [gameData, setGameData] = useState<WordData[]>([]);
+  const [lettersView, setLettersView] = useState<string[]>([]);
+  const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
+  const [options, setOptions] = useState<string[]>([]);
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
+  const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
+  const [typeModal, setTypeModal] = useState<string>('');
+
+  console.log('lettersView', lettersView);
+
+  useEffect(() => {
+    const fetchGamePhase = async () => {
+      setLoading(true);
+      try {
+        const words = await gamePhase(gameId, phaseId);
+        setGameData(words);
+
+        if (profileGender === 'male' && words[0]?.audioMale) {
+          await playAudio('male', words[0].audioMale);
+        } else if (profileGender === 'female' && words[0]?.audioFemale) {
+          await playAudio('female', words[0].audioFemale);
+        }
+      } catch (error) {
+        console.error('Failed to fetch game phase:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGamePhase();
+  }, [gameId, phaseId, profileGender]);
+
+  useEffect(() => {
+    if (gameData.length > 0) {
+      const { word } = gameData[currentWordIndex];
+      setLettersView(new Array(word.length).fill(' '));
+      setOptions(generateOptions(word));
+
+      if (profileGender === 'male' && gameData[currentWordIndex]?.audioMale) {
+        playAudio('male', gameData[currentWordIndex].audioMale);
+      } else if (profileGender === 'female' && gameData[currentWordIndex]?.audioFemale) {
+        playAudio('female', gameData[currentWordIndex].audioFemale);
+      }
+    }
+  }, [currentWordIndex, gameData]);
+
+  const generateOptions = (word: string) => {
+    const uniqueLetters = Array.from(new Set(word.split('')));
+    const allLetters = [...uniqueLetters];
+
+    while (allLetters.length < 9) {
+      const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+      if (!allLetters.includes(randomLetter)) {
+        allLetters.push(randomLetter);
+      }
+    }
+
+    return allLetters.sort(() => Math.random() - 0.5);
+  };
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
+  const formatLetter = (letter: string) => {
+    return isUpperCase ? letter.toUpperCase() : letter.toLowerCase();
+  };
+
+  const handleSelectOption = (option: string) => {
+    const newLettersView = [...lettersView];
+    const emptyIndex = newLettersView.indexOf(' ');
+
+    if (emptyIndex !== -1) {
+      newLettersView[emptyIndex] = option;
+      setLettersView(newLettersView);
+
+      if (!newLettersView.includes(' ')) {
+        const completedWord = newLettersView.join('').toLowerCase();
+        const gameDataWord = gameData[currentWordIndex].word.toLowerCase();
+        console.log(completedWord, gameDataWord);
+
+        if (completedWord === gameDataWord) {
+          if (currentWordIndex < gameData.length - 1) {
+            setTypeModal('success');
+            setOpenModalInfo(true);
+            playAudio(profileGender, 'parabens_acertou');
+            setTimeout(() => {
+              setCurrentWordIndex((prevIndex) => prevIndex + 1);
+            }, 3500);
+          } else {
+            setTypeModal('success_end');
+            setOpenModalInfo(true);
+            setShowConfetti(true);
+            playAudio(profileGender, 'parabens_completou');
+            setTimeout(() => {
+              navigation.navigate('SelectPhaseSecondGame', {
+                profileGender,
+                gameId,
+                returnData: true,
+              });
+            }, 3500);
+          }
+        } else {
+          playAudio(profileGender, 'ops_errou');
+          setLettersView(new Array(gameDataWord.length).fill(' '));
+        }
+      }
+    }
+  };
+
+  const currentWordData = gameData[currentWordIndex] || {
+    word: '',
+    syllabes: '',
+    size: 0,
+    image: '',
+    audioMale: '',
+    audioFemale: '',
+  };
+
   return (
     <Container>
+      <ModalInfo type={typeModal} modalVisible={openModalInfo} setModalVisible={setOpenModalInfo} />
       <HeaderWrapper>
         <TouchableOpacity onPress={handleGoBack}>
           <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
         </TouchableOpacity>
+        <FontSwap color="blue" />
       </HeaderWrapper>
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.title}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        />
+      ) : (
+        <GameWrapper>
+          <HeaderGame>
+            <ImageGame source={{ uri: `data:image/png;base64,${currentWordData.image}` }} />
+            <LettersWrapper>
+              {lettersView.map((letter, index) => (
+                <Options key={index} letter={letter} font={font}>
+                  <Letter letter={letter} font={font}>
+                    {formatLetter(letter)}
+                  </Letter>
+                </Options>
+              ))}
+            </LettersWrapper>
+          </HeaderGame>
+          <Separator />
+          <LettersGame>
+            {options.map((option, index) => (
+              <OptionsSelect
+                key={index}
+                letter={option}
+                font={font}
+                onPress={() => handleSelectOption(option)}
+              >
+                <Letter letter={option} font={font}>
+                  {formatLetter(option)}
+                </Letter>
+              </OptionsSelect>
+            ))}
+          </LettersGame>
+        </GameWrapper>
+      )}
+      {showConfetti && <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} />}
     </Container>
   );
 }

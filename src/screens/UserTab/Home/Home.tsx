@@ -137,10 +137,16 @@ export function Home({ route }) {
         });
         break;
       case 2:
-        navigation.navigate('SelectPhaseSecondGame', { profileGender: profileData.gender });
+        navigation.navigate('SelectPhaseSecondGame', {
+          profileGender: profileData.gender,
+          gameId: 2,
+        });
         break;
       case 3:
-        navigation.navigate('SelectPhaseThirdGame', { profileGender: profileData.gender });
+        navigation.navigate('SelectPhaseThirdGame', {
+          profileGender: profileData.gender,
+          gameId: 3,
+        });
         break;
       case 4:
         navigation.navigate('Alphabet', { profileGender: profileData.gender });

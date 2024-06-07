@@ -11,11 +11,11 @@ export type RootStackParamList = {
   ParentArea: { profileId: number };
   Alphabet: { profileGender: string };
   SelectPhaseFirstGame: { profileGender: string; gameId: number; returnData?: boolean };
-  SelectPhaseSecondGame: { profileGender: string };
-  SelectPhaseThirdGame: { profileGender: string };
+  SelectPhaseSecondGame: { profileGender: string; gameId: number; returnData?: boolean };
+  SelectPhaseThirdGame: { profileGender: string; gameId: number; returnData?: boolean };
   FirstGame: { gameId: number; phaseId: number; profileGender: string };
-  SecondGame: undefined;
-  ThirdGame: undefined;
+  SecondGame: { gameId: number; phaseId: number; profileGender: string };
+  ThirdGame: { gameId: number; phaseId: number; profileGender: string };
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<

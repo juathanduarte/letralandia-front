@@ -207,7 +207,7 @@ export function FirstGame({ route }) {
         <TouchableOpacity onPress={handleGoBack}>
           <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
         </TouchableOpacity>
-        <FontSwap />
+        <FontSwap color="yellow" />
       </HeaderWrapper>
       {loading ? (
         <ActivityIndicator

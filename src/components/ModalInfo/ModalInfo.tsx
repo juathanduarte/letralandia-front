@@ -24,7 +24,7 @@ function InfoModal({ type, modalVisible, setModalVisible }: InfoModalProps) {
 
   useEffect(() => {
     if (modalVisible) {
-      const timeout = type !== 'success_end' ? 1000 : 3000;
+      const timeout = type !== 'success_end' ? 3500 : 4000;
       const timer = setTimeout(() => {
         setModalVisible(false);
       }, timeout);

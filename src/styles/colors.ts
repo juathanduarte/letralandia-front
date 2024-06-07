@@ -6,6 +6,7 @@ export default {
   pinkLight: '#FFA3B7',
   blue: '#57D1CA',
   blueLight: '#ace5e1',
+  blueBackground: '#b5d7d5',
   green: '#055816',
   greenLight: '#76BF4C',
   red: '#C81912',

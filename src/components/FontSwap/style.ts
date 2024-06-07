@@ -4,6 +4,8 @@ import styled from 'styled-components/native';
 
 interface ButtonProps {
   isSelected: boolean;
+  mainColor: string;
+  lightColor: string;
 }
 
 interface CustomTextProps {
@@ -16,8 +18,9 @@ export const Container = styled.View`
 `;
 
 export const Button = styled.TouchableOpacity<ButtonProps>`
-  background-color: ${({ isSelected }) => (isSelected ? colors.yellowLight : '#f0f0f0')};
-  border: 3px solid ${colors.yellow};
+  background-color: ${({ isSelected, lightColor }) =>
+    isSelected ? colors[lightColor] : '#f0f0f0'};
+  border: 3px solid ${({ mainColor }) => colors[mainColor]};
   width: 45px;
   height: 45px;
   border-radius: 16px;
