@@ -32,7 +32,7 @@ interface FirstGameProps {
 
 interface WordData {
   word: string;
-  syllabes: string;
+  syllables: string;
   size: number;
   image: string;
 }

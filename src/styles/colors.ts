@@ -4,6 +4,7 @@ export default {
   yellowBackground: '#e1d8c4',
   pink: '#F87692',
   pinkLight: '#FFA3B7',
+  pinkBackground: '#ffc1cf',
   blue: '#57D1CA',
   blueLight: '#ace5e1',
   blueBackground: '#b5d7d5',

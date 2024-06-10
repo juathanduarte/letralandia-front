@@ -1,11 +1,12 @@
 import { CardGame } from '@/components/CardGame/CardGame';
 import Icon from '@/components/Icon/Icon';
+import { getPhases } from '@/services/game';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { playAudio } from '@/utils/playAudio';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import {
   BodyWrapper,
   Container,
@@ -15,17 +16,43 @@ import {
   HeaderWrapper,
 } from './style';
 
+interface PhasesProps {
+  id: number;
+  name: string;
+}
+
 export function SelectPhaseThirdGame({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'SelectPhaseThirdGame'>['navigation']>();
-
-  const { profileGender } = route.params;
+  const [phases, setPhases] = useState<PhasesProps[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { profileGender, gameId, returnData } = route.params;
 
   useEffect(() => {
-    playAudio(profileGender, 'jogo_3_bem_vindo');
+    async function fetchPhases() {
+      try {
+        const data = await getPhases(gameId);
+        setPhases(data);
+      } catch (error) {
+        console.error('Erro ao buscar fases', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPhases();
+    if (!returnData) playAudio(profileGender, 'jogo_3_bem_vindo');
   }, [route]);
 
   const handleGoBack = () => {
     navigation.goBack();
+  };
+
+  const handleSelectGame = (gameId: number, phaseId: number) => {
+    navigation.navigate('ThirdGame', {
+      gameId: gameId,
+      phaseId: phaseId,
+      profileGender: profileGender,
+    });
   };
 
   return (
@@ -40,21 +67,30 @@ export function SelectPhaseThirdGame({ route }) {
           <HeaderTitle>Jogo 3</HeaderTitle>
         </HeaderTitleWrapper>
       </HeaderTitleAuxWrapper>
-      <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
-        <BodyWrapper>
-          {[1, 2, 3, 4, 5].map((gameId) => (
-            <CardGame
-              id={gameId}
-              key={gameId}
-              onPress={() => console.log('Selected game:', gameId)}
-              backgroundColor={colors.pink}
-              borderColor={colors.pinkLight}
-              title={`Fase ${gameId}`}
-              rating={Math.floor(Math.random() * 3) + 1}
-            />
-          ))}
-        </BodyWrapper>
-      </ScrollView>
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.title}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        />
+      ) : (
+        <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+          <BodyWrapper>
+            {phases.map((phase) => (
+              <CardGame
+                id={phase.id}
+                key={phase.id}
+                onPress={() => handleSelectGame(gameId, phase.id)}
+                backgroundColor={colors.pink}
+                borderColor={colors.pinkLight}
+                title={phase.name}
+                // TODO: implementar a lógica do rating [pegar do backend]
+                rating={Math.floor(Math.random() * 3) + 1}
+              />
+            ))}
+          </BodyWrapper>
+        </ScrollView>
+      )}
     </Container>
   );
 }
