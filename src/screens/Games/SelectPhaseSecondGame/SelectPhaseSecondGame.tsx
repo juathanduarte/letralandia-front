@@ -1,6 +1,7 @@
 import { CardGame } from '@/components/CardGame/CardGame';
 import Icon from '@/components/Icon/Icon';
 import { getPhases } from '@/services/game';
+import { getInfoGame } from '@/services/profile-game-info';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { playAudio } from '@/utils/playAudio';
@@ -19,23 +20,43 @@ import {
 interface PhasesProps {
   id: number;
   name: string;
+  rating?: number;
 }
 
 export function SelectPhaseSecondGame({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'SelectPhaseSecondGame'>['navigation']>();
   const [phases, setPhases] = useState<PhasesProps[]>([]);
   const [loading, setLoading] = useState(true);
-  const { profileGender, gameId, returnData } = route.params;
+  const { profileGender, gameId, returnData, profileId } = route.params;
+
+  console.log('phases', phases);
 
   useEffect(() => {
     async function fetchPhases() {
       try {
         const data = await getPhases(gameId);
         setPhases(data);
+        await fetchInfoGame(data);
       } catch (error) {
         console.error('Erro ao buscar fases', error);
       } finally {
         setLoading(false);
+      }
+    }
+
+    async function fetchInfoGame(phases: PhasesProps[]) {
+      try {
+        const data = await getInfoGame({ profileId, gameId });
+        const updatedPhases = phases.map((phase) => {
+          const phaseData = data.find((item) => item.phaseId === phase.id);
+          if (phaseData) {
+            return { ...phase, rating: phaseData.rating };
+          }
+          return { ...phase, rating: 0 };
+        });
+        setPhases(updatedPhases);
+      } catch (error) {
+        console.error('Erro ao buscar informações do jogo', error);
       }
     }
 
@@ -52,6 +73,7 @@ export function SelectPhaseSecondGame({ route }) {
       gameId: gameId,
       phaseId: phaseId,
       profileGender: profileGender,
+      profileId,
     });
   };
 
@@ -64,7 +86,7 @@ export function SelectPhaseSecondGame({ route }) {
       </HeaderWrapper>
       <HeaderTitleAuxWrapper>
         <HeaderTitleWrapper>
-          <HeaderTitle>Jogo 1</HeaderTitle>
+          <HeaderTitle>Jogo 2</HeaderTitle>
         </HeaderTitleWrapper>
       </HeaderTitleAuxWrapper>
       {loading ? (
@@ -84,8 +106,7 @@ export function SelectPhaseSecondGame({ route }) {
                 backgroundColor={colors.blue}
                 borderColor={colors.blueLight}
                 title={phase.name}
-                // TODO: implementar a lógica do rating [pegar do backend]
-                rating={Math.floor(Math.random() * 3) + 1}
+                rating={phase.rating ?? 0}
               />
             ))}
           </BodyWrapper>

@@ -25,6 +25,7 @@ import {
   PlayIcon,
   Separator,
 } from './style';
+import { postInfoGame } from '@/services/profile-game-info';
 
 interface WordData {
   word: string;
@@ -42,7 +43,7 @@ interface ErrorData {
 
 export function SecondGame({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'SecondGame'>['navigation']>();
-  const { gameId, phaseId, profileGender } = route.params;
+  const { gameId, phaseId, profileGender, profileId } = route.params;
   const { font, isUpperCase } = useFont();
   const [loading, setLoading] = useState<boolean>(true);
   const [gameData, setGameData] = useState<WordData[]>([]);
@@ -114,7 +115,7 @@ export function SecondGame({ route }) {
     return isUpperCase ? letter.toUpperCase() : letter.toLowerCase();
   };
 
-  const handleSelectOption = (option: string) => {
+  const handleSelectOption = async (option: string) => {
     const newLettersView = [...lettersView];
     const emptyIndex = newLettersView.indexOf(' ');
 
@@ -136,7 +137,23 @@ export function SecondGame({ route }) {
             }, 3500);
           } else {
             const endTime = Date.now();
-            const timeTaken = (endTime - startTime) / 1000;
+            const timeTaken = Math.round((endTime - startTime) / 1000);
+
+            const gameInfo = {
+              profileId,
+              gameId,
+              phaseId,
+              wordsInfo: errors,
+              completionTime: timeTaken,
+            };
+
+            try {
+              await postInfoGame(gameInfo);
+              console.log('Game info posted successfully');
+            } catch (error) {
+              console.error('Error posting game info:', error);
+            }
+
             console.log(`Tempo total: ${timeTaken} segundos`);
             console.log('Palavras erradas:', errors);
             setTypeModal('success_end');
@@ -148,6 +165,7 @@ export function SecondGame({ route }) {
                 profileGender,
                 gameId,
                 returnData: true,
+                profileId,
               });
             }, 3500);
           }

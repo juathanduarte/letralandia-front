@@ -23,6 +23,7 @@ import {
 
 import ModalInfo from '@/components/ModalInfo/ModalInfo';
 import { gamePhase } from '@/services/phase';
+import { postInfoGame } from '@/services/profile-game-info';
 import { playAudio } from '@/utils/playAudio';
 
 interface WordData {
@@ -134,7 +135,7 @@ const commonSyllables = [
 
 export function ThirdGame({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'ThirdGame'>['navigation']>();
-  const { gameId, phaseId, profileGender } = route.params;
+  const { gameId, phaseId, profileGender, profileId } = route.params;
   const { font, isUpperCase } = useFont();
   const [gameData, setGameData] = useState<WordData[]>([]);
   const [syllablesView, setSyllablesToView] = useState<string[]>([]);
@@ -243,7 +244,7 @@ export function ThirdGame({ route }) {
         const completedWord = newLettersView.join('');
         const completedWordLowerCase = completedWord.toLowerCase();
         const gameDataLowerCase = gameData[currentWordIndex].word.toLowerCase();
-        setTimeout(() => {
+        setTimeout(async () => {
           if (completedWordLowerCase === gameDataLowerCase) {
             if (currentWordIndex < gameData.length - 1) {
               setTypeModal('success');
@@ -252,7 +253,23 @@ export function ThirdGame({ route }) {
               setCurrentWordIndex((prevIndex) => prevIndex + 1);
             } else {
               const endTime = Date.now();
-              const timeTaken = (endTime - startTime) / 1000;
+              const timeTaken = Math.round((endTime - startTime) / 1000);
+
+              const gameInfo = {
+                profileId,
+                gameId,
+                phaseId,
+                wordsInfo: errors,
+                completionTime: timeTaken,
+              };
+
+              try {
+                await postInfoGame(gameInfo);
+                console.log('Game info posted successfully');
+              } catch (error) {
+                console.error('Error posting game info:', error);
+              }
+
               console.log('Time taken:', timeTaken);
               setTypeModal('success_end');
               console.log('setTypeModal', 'success_end');
@@ -266,6 +283,7 @@ export function ThirdGame({ route }) {
                   profileGender,
                   gameId,
                   returnData: true,
+                  profileId,
                 });
               }, 3500);
             }
