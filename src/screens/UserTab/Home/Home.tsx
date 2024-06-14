@@ -134,18 +134,21 @@ export function Home({ route }) {
         navigation.navigate('SelectPhaseFirstGame', {
           profileGender: profileData.gender,
           gameId: 1,
+          profileId,
         });
         break;
       case 2:
         navigation.navigate('SelectPhaseSecondGame', {
           profileGender: profileData.gender,
           gameId: 2,
+          profileId,
         });
         break;
       case 3:
         navigation.navigate('SelectPhaseThirdGame', {
           profileGender: profileData.gender,
           gameId: 3,
+          profileId,
         });
         break;
       case 4:

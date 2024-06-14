@@ -33,7 +33,6 @@ const CardGame: React.FC<CardGameProps> = ({
   const lettersArray = Array.from(emojiViewName);
 
   const getRating = (rating: number) => {
-    // se for 1, retorne 1 emoji de estrela, se for 2, retorne 2, se for 3, retorne 3
     return Array.from({ length: rating }).map((_, index) => '⭐️');
   };
 
@@ -45,7 +44,7 @@ const CardGame: React.FC<CardGameProps> = ({
       emoji={emoji}
     >
       <Title>{title}</Title>
-      <Title>{getRating(rating)}</Title>
+      {rating !== 0 && <Title>{getRating(rating)}</Title>}
       {emoji && (
         <Body>
           <Emoji>{emoji}</Emoji>

@@ -1,5 +1,5 @@
 import { useFont } from '@/contexts/FontContext';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container, CustomText } from './style';
 
 type FontType = 'Nunito_700Bold' | 'Pacifico_400Regular';
@@ -30,6 +30,12 @@ export function FontSwap({ color }: FontSwapProps) {
     setIsUpperCase(isUpperCase);
     setSelectedIndex(index);
   };
+
+  useEffect(() => {
+    setFont('Nunito_700Bold');
+    setIsUpperCase(true);
+    setSelectedIndex(0);
+  }, [setFont, setIsUpperCase]);
 
   return (
     <Container>

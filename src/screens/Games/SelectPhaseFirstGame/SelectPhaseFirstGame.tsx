@@ -16,10 +16,12 @@ import {
 } from './style';
 
 import { getPhases } from '@/services/game';
+import { getInfoGame } from '@/services/profile-game-info';
 
 interface PhasesProps {
   id: number;
   name: string;
+  rating: number;
 }
 
 export function SelectPhaseFirstGame({ route }) {
@@ -27,7 +29,7 @@ export function SelectPhaseFirstGame({ route }) {
   const [phases, setPhases] = useState<PhasesProps[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const { profileGender, gameId, returnData } = route.params;
+  const { profileGender, gameId, returnData, profileId } = route.params;
 
   useEffect(() => {
     async function fetchPhases() {
@@ -41,7 +43,25 @@ export function SelectPhaseFirstGame({ route }) {
       }
     }
 
+    async function fetchInfoGame() {
+      try {
+        const data = await getInfoGame({ profileId, gameId });
+        setPhases((phases) =>
+          phases.map((phase) => {
+            const phaseData = data.find((item) => item.id === phase.id);
+            if (phaseData) {
+              return { ...phase, rating: phaseData.rating };
+            }
+            return { ...phase, rating: 0 };
+          })
+        );
+      } catch (error) {
+        console.error('Erro ao buscar informações do jogo', error);
+      }
+    }
+
     fetchPhases();
+    fetchInfoGame();
     if (!returnData) playAudio(profileGender, 'jogo_1_bem_vindo');
   }, [route]);
 
@@ -54,6 +74,7 @@ export function SelectPhaseFirstGame({ route }) {
       gameId: gameId,
       phaseId: phaseId,
       profileGender: profileGender,
+      profileId,
     });
   };
 
@@ -86,8 +107,7 @@ export function SelectPhaseFirstGame({ route }) {
                 backgroundColor={colors.yellow}
                 borderColor={colors.yellowLight}
                 title={phase.name}
-                // TODO: implementar a lógica do rating [pegar do backend]
-                rating={Math.floor(Math.random() * 3) + 1}
+                rating={phase.rating}
               />
             ))}
           </BodyWrapper>

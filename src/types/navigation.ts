@@ -10,12 +10,27 @@ export type RootStackParamList = {
   Home: { profileId: number };
   ParentArea: { profileId: number };
   Alphabet: { profileGender: string };
-  SelectPhaseFirstGame: { profileGender: string; gameId: number; returnData?: boolean };
-  SelectPhaseSecondGame: { profileGender: string; gameId: number; returnData?: boolean };
-  SelectPhaseThirdGame: { profileGender: string; gameId: number; returnData?: boolean };
-  FirstGame: { gameId: number; phaseId: number; profileGender: string };
-  SecondGame: { gameId: number; phaseId: number; profileGender: string };
-  ThirdGame: { gameId: number; phaseId: number; profileGender: string };
+  SelectPhaseFirstGame: {
+    profileGender: string;
+    gameId: number;
+    profileId: number;
+    returnData?: boolean;
+  };
+  SelectPhaseSecondGame: {
+    profileGender: string;
+    gameId: number;
+    profileId: number;
+    returnData?: boolean;
+  };
+  SelectPhaseThirdGame: {
+    profileGender: string;
+    gameId: number;
+    profileId: number;
+    returnData?: boolean;
+  };
+  FirstGame: { profileId: number; gameId: number; phaseId: number; profileGender: string };
+  SecondGame: { profileId: number; gameId: number; phaseId: number; profileGender: string };
+  ThirdGame: { profileId: number; gameId: number; phaseId: number; profileGender: string };
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<

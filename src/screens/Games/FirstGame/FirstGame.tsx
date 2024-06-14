@@ -23,6 +23,7 @@ import {
 
 import ModalInfo from '@/components/ModalInfo/ModalInfo';
 import { gamePhase } from '@/services/phase';
+import { postInfoGame } from '@/services/profile-game-info';
 import { playAudio } from '@/utils/playAudio';
 
 interface FirstGameProps {
@@ -44,7 +45,7 @@ interface ErrorData {
 
 export function FirstGame({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'FirstGame'>['navigation']>();
-  const { gameId, phaseId, profileGender } = route.params;
+  const { gameId, phaseId, profileGender, profileId } = route.params;
   const { font, isUpperCase } = useFont();
   const [gameData, setGameData] = useState<WordData[]>([]);
   const [lettersView, setLettersView] = useState<string[]>([]);
@@ -57,6 +58,10 @@ export function FirstGame({ route }) {
   const [errors, setErrors] = useState<ErrorData[]>([]);
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [typeModal, setTypeModal] = useState<string>('');
+
+  // console.log('profileId', profileId);
+
+  // console.log('errors', errors);
 
   useEffect(() => {
     const fetchGamePhase = async () => {
@@ -154,7 +159,7 @@ export function FirstGame({ route }) {
         const completedWord = newLettersView.join('');
         const completedWordLowerCase = completedWord.toLowerCase();
         const gameDataLowerCase = gameData[currentWordIndex].word.toLowerCase();
-        setTimeout(() => {
+        setTimeout(async () => {
           if (completedWordLowerCase === gameDataLowerCase) {
             if (currentWordIndex < gameData.length - 1) {
               setTypeModal('success');
@@ -163,7 +168,23 @@ export function FirstGame({ route }) {
               setCurrentWordIndex((prevIndex) => prevIndex + 1);
             } else {
               const endTime = Date.now();
-              const timeTaken = (endTime - startTime) / 1000;
+              const timeTaken = Math.round((endTime - startTime) / 1000);
+
+              const gameInfo = {
+                profileId,
+                gameId,
+                phaseId,
+                wordsInfo: errors,
+                completionTime: timeTaken,
+              };
+
+              try {
+                await postInfoGame(gameInfo);
+                console.log('Game info posted successfully');
+              } catch (error) {
+                console.error('Error posting game info:', error);
+              }
+
               setTypeModal('success_end');
               setOpenModalInfo(true);
               playAudio(profileGender, 'parabens_completou');
@@ -173,6 +194,7 @@ export function FirstGame({ route }) {
                   profileGender,
                   gameId,
                   returnData: true,
+                  profileId,
                 });
               }, 3500);
             }
