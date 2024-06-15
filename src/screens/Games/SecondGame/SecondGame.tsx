@@ -3,6 +3,7 @@ import Icon from '@/components/Icon/Icon';
 import ModalInfo from '@/components/ModalInfo/ModalInfo';
 import { useFont } from '@/contexts/FontContext';
 import { gamePhase } from '@/services/phase';
+import { postInfoGame } from '@/services/profile-game-info';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
@@ -25,7 +26,6 @@ import {
   PlayIcon,
   Separator,
 } from './style';
-import { postInfoGame } from '@/services/profile-game-info';
 
 interface WordData {
   word: string;
@@ -227,7 +227,7 @@ export function SecondGame({ route }) {
           <HeaderGame>
             <ImageGame source={{ uri: `data:image/png;base64,${currentWordData.image}` }}>
               <PlayButton onPress={handlePlayAudio}>
-                <PlayIcon icon="play-circle" size={32} color={colors.title} lib="FontAwesome" />
+                <PlayIcon icon="play-circle" size={48} color={colors.white} lib="FontAwesome" />
               </PlayButton>
             </ImageGame>
 

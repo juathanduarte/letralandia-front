@@ -1,5 +1,6 @@
 import { AuthProvider } from '@/contexts/AuthContext';
 import { FontProvider } from '@/contexts/FontContext';
+import { UserProvider } from '@/contexts/UserContext';
 import { Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 
 import {
@@ -61,7 +62,9 @@ const AppNavigator = () => {
   return (
     <AuthProvider>
       <FontProvider>
-        <Routes />
+        <UserProvider>
+          <Routes />
+        </UserProvider>
       </FontProvider>
     </AuthProvider>
   );

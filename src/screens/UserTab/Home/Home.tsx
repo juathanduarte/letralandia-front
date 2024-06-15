@@ -1,6 +1,7 @@
 import { CardGame } from '@/components/CardGame/CardGame';
 import Icon from '@/components/Icon/Icon';
 import { useAuth } from '@/contexts/AuthContext';
+import { useUser } from '@/contexts/UserContext';
 import ProfileModal from '@/screens/UserTab/Home/Components/ModalProfile/ModalProfile';
 import { profileDetails } from '@/services/profile';
 import { deleteProfile } from '@/services/profile/deleteProfile';
@@ -29,7 +30,9 @@ export function Home({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'Home'>['navigation']>();
   const { state } = useAuth();
   const userId = state.userId;
-  const { profileId } = route.params;
+  const { profileId, returnToParentArea } = route.params;
+  const { setProfileId } = useUser();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -73,6 +76,10 @@ export function Home({ route }) {
     },
   ];
 
+  useEffect(() => {
+    setProfileId(profileId);
+  }, [profileId, setProfileId]);
+
   const fetchProfileDetails = async () => {
     try {
       setLoading(true);
@@ -91,7 +98,7 @@ export function Home({ route }) {
 
   useEffect(() => {
     Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
-    if (profileData !== null) {
+    if (profileData !== null && !returnToParentArea) {
       playAudio(profileData.gender, 'bem_vindo');
     }
   }, [profileData]);

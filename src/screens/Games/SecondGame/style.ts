@@ -38,8 +38,15 @@ export const ImageGame = styled.ImageBackground`
   justify-content: flex-end;
   align-items: flex-end;
 `;
+
 export const PlayButton = styled.TouchableOpacity`
+  width: 60px;
+  height: 60px;
   margin: 8px;
+  border-radius: 8px;
+  background-color: ${colors.title};
+  align-items: center;
+  justify-content: center;
 `;
 
 export const PlayIcon = styled(Icon)`
