@@ -7,7 +7,7 @@ import { RootStackScreenProps } from '@/types/navigation';
 import { removeAsyncStorage } from '@/utils/AsyncStorage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import {
   Container,
   LogoImage,
@@ -80,30 +80,45 @@ export function SelectProfile({ route }) {
         </TouchableOpacity>
         <LogoImage source={vectorSelectProfile} resizeMode="contain" />
       </WrapperHeader>
-      {profiles.length === 0 && <Text>Nenhum perfil registrado, crie um! 😀</Text>}
-      {profiles.length > 0 && (
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.title}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        />
+      ) : (
         <>
-          <Title>Quem é você?</Title>
-          <ScrollViewContainer>
-            <WrapperCards>
-              <WrapperRow>
-                {error && <Text>{error}</Text>}
-                {profiles.map((profile) => (
-                  <CardProfile
-                    key={profile.id}
-                    name={profile.name}
-                    gender={profile.gender}
-                    onClick={() => {
-                      handleSelectProfile(profile.id);
-                    }}
-                  />
-                ))}
-              </WrapperRow>
-            </WrapperCards>
-          </ScrollViewContainer>
+          {profiles.length === 0 && <Text>Nenhum perfil registrado, crie um! 😀</Text>}
+          {profiles.length > 0 && (
+            <>
+              <Title>Quem é você?</Title>
+              <ScrollViewContainer>
+                <WrapperCards>
+                  <WrapperRow>
+                    {error && <Text>{error}</Text>}
+                    {profiles.map((profile) => (
+                      <CardProfile
+                        key={profile.id}
+                        name={profile.name}
+                        gender={profile.gender}
+                        onClick={() => {
+                          handleSelectProfile(profile.id);
+                        }}
+                      />
+                    ))}
+                  </WrapperRow>
+                </WrapperCards>
+              </ScrollViewContainer>
+            </>
+          )}
+          <Button
+            variant="primary"
+            size="large"
+            label="Novo perfil"
+            onClick={handleCreateProfile}
+          />
         </>
       )}
-      <Button variant="primary" size="large" label="Novo perfil" onClick={handleCreateProfile} />
     </Container>
   );
 }

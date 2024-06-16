@@ -21,7 +21,7 @@ import { getInfoGame } from '@/services/profile-game-info';
 interface PhasesProps {
   id: number;
   name: string;
-  rating: number;
+  rating?: number;
 }
 
 export function SelectPhaseFirstGame({ route }) {
@@ -36,6 +36,7 @@ export function SelectPhaseFirstGame({ route }) {
       try {
         const data = await getPhases(gameId);
         setPhases(data);
+        await fetchInfoGame(data);
       } catch (error) {
         console.error('Erro ao buscar fases', error);
       } finally {
@@ -43,25 +44,23 @@ export function SelectPhaseFirstGame({ route }) {
       }
     }
 
-    async function fetchInfoGame() {
+    async function fetchInfoGame(phases: PhasesProps[]) {
       try {
         const data = await getInfoGame({ profileId, gameId });
-        setPhases((phases) =>
-          phases.map((phase) => {
-            const phaseData = data.find((item) => item.id === phase.id);
-            if (phaseData) {
-              return { ...phase, rating: phaseData.rating };
-            }
-            return { ...phase, rating: 0 };
-          })
-        );
+        const updatedPhases = phases.map((phase) => {
+          const phaseData = data.find((item) => item.phaseId === phase.id);
+          if (phaseData) {
+            return { ...phase, rating: phaseData.rating };
+          }
+          return { ...phase, rating: 0 };
+        });
+        setPhases(updatedPhases);
       } catch (error) {
         console.error('Erro ao buscar informações do jogo', error);
       }
     }
 
     fetchPhases();
-    fetchInfoGame();
     if (!returnData) playAudio(profileGender, 'jogo_1_bem_vindo');
   }, [route]);
 
@@ -107,7 +106,7 @@ export function SelectPhaseFirstGame({ route }) {
                 backgroundColor={colors.yellow}
                 borderColor={colors.yellowLight}
                 title={phase.name}
-                rating={phase.rating}
+                rating={phase.rating ?? 0}
               />
             ))}
           </BodyWrapper>

@@ -8,18 +8,37 @@ import { Text, TouchableOpacity } from 'react-native';
 import AuthModalParentArea from '../../../components/ModalAuthParentArea/ModalAuthParentArea';
 import { Container } from './style';
 
+const generateRandomQuestionAndAnswer = () => {
+  const operations = [
+    { op: 'x', func: (a, b) => a * b, needsSecondOperand: true },
+    { op: '²', func: (a) => a * a, needsSecondOperand: false },
+  ];
+
+  const randomOperation = operations[Math.floor(Math.random() * operations.length)];
+  const a = Math.floor(Math.random() * 10) + 1;
+  const b = randomOperation.needsSecondOperand ? Math.floor(Math.random() * 10) + 1 : a;
+
+  const question = randomOperation.needsSecondOperand
+    ? `Quanto é \n${a} ${randomOperation.op} ${b}?`
+    : `Quanto é \n${a}${randomOperation.op}?`;
+  const answer = randomOperation.func(a, b).toString();
+
+  return { question, answer };
+};
+
 export function ParentArea() {
   const navigation = useNavigation<RootStackScreenProps<'ParentArea'>['navigation']>();
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [question, setQuestion] = useState('Quanto é 9x7?');
-  const [answer, setAnswer] = useState('63');
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
   const { profileId } = useUser();
 
   useFocusEffect(
     useCallback(() => {
-      setQuestion('Quanto é\n9x7?');
-      setAnswer('63');
+      const { question, answer } = generateRandomQuestionAndAnswer();
+      setQuestion(question);
+      setAnswer(answer);
       setModalVisible(true);
 
       return () => {

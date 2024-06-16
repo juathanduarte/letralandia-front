@@ -16,7 +16,7 @@ export const ModalContainer = styled.View`
   border-radius: 16px;
   padding: 20px 30px;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
 `;
 
 export const ModalText = styled.Text`
