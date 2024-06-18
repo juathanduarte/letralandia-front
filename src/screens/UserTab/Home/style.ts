@@ -8,7 +8,6 @@ const { width, height } = Dimensions.get('window');
 export const Container = styled.View`
   flex: 1;
   padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
-  /* gap: 32px; */
 `;
 
 export const WelcomeContainer = styled.View`
@@ -19,6 +18,7 @@ export const WelcomeText = styled.Text`
   font-size: 32px;
   color: ${colors.title};
   font-family: ${fonts.text_bold};
+  flex: 1;
 `;
 
 export const WelcomeTextContainer = styled.View`

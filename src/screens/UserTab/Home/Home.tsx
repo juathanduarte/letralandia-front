@@ -5,7 +5,6 @@ import { useUser } from '@/contexts/UserContext';
 import ProfileModal from '@/screens/UserTab/Home/Components/ModalProfile/ModalProfile';
 import { profileDetails } from '@/services/profile';
 import { deleteProfile } from '@/services/profile/deleteProfile';
-import { logout } from '@/services/user';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { removeAsyncStorage } from '@/utils/AsyncStorage';
@@ -68,12 +67,6 @@ export function Home({ route }) {
       title: 'Alfabeto',
       emoji: '🆎',
     },
-    {
-      id: 5,
-      backgroundColor: colors.gray,
-      title: 'Sílabas',
-      emoji: '🆎',
-    },
   ];
 
   useEffect(() => {
@@ -127,12 +120,9 @@ export function Home({ route }) {
     }
   };
 
-  const handleLogout = () => {
-    const data = logout();
-    if (data !== null) {
-      removeAsyncStorage({ key: 'accessToken' });
-      navigation.navigate('Login');
-    }
+  const handleLogout = async () => {
+    await removeAsyncStorage({ key: 'accessToken' });
+    navigation.navigate('Login');
   };
 
   const handleSelectGame = (gameId: number) => {
@@ -160,10 +150,6 @@ export function Home({ route }) {
         break;
       case 4:
         navigation.navigate('Alphabet', { profileGender: profileData.gender });
-        break;
-      case 5:
-        console.log('Syllables');
-        // navigation.navigate('Syllables', { profileId });
         break;
       default:
         break;
@@ -195,7 +181,7 @@ export function Home({ route }) {
             fetchProfileDetails={fetchProfileDetails}
           />
           <WelcomeTextContainer>
-            <WelcomeText>Olá, {profileData?.name}!</WelcomeText>
+            <WelcomeText numberOfLines={1}>Olá, {profileData?.name}!</WelcomeText>
             <WelcomeButtonsContainer>
               <TouchableOpacity
                 onPress={() => {

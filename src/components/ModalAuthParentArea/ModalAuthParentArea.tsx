@@ -10,7 +10,7 @@ interface AuthModalParentAreaProps {
   question: string;
   answer: string;
   modalVisible: boolean;
-  setModalVisible: (visible: boolean) => void;
+  setModalVisible: (authorized: boolean) => void;
 }
 
 function AuthModalParentArea({
@@ -43,7 +43,7 @@ function AuthModalParentArea({
         if (userAnswer === answer) {
           setBorderColor(colors.greenLight);
           setTimeout(() => {
-            setModalVisible(false);
+            setModalVisible(true);
           }, 1000);
         } else {
           setBorderColor(colors.redLight);

@@ -59,10 +59,6 @@ export function FirstGame({ route }) {
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [typeModal, setTypeModal] = useState<string>('');
 
-  // console.log('profileId', profileId);
-
-  // console.log('errors', errors);
-
   useEffect(() => {
     const fetchGamePhase = async () => {
       setLoading(true);

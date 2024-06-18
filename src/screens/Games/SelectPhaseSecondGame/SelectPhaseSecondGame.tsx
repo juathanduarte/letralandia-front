@@ -29,8 +29,6 @@ export function SelectPhaseSecondGame({ route }) {
   const [loading, setLoading] = useState(true);
   const { profileGender, gameId, returnData, profileId } = route.params;
 
-  console.log('phases', phases);
-
   useEffect(() => {
     async function fetchPhases() {
       try {

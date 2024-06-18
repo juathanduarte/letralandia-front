@@ -153,9 +153,6 @@ export function SecondGame({ route }) {
             } catch (error) {
               console.error('Error posting game info:', error);
             }
-
-            console.log(`Tempo total: ${timeTaken} segundos`);
-            console.log('Palavras erradas:', errors);
             setTypeModal('success_end');
             setOpenModalInfo(true);
             setShowConfetti(true);

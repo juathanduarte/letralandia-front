@@ -1,7 +1,6 @@
 import { Platform } from 'react-native';
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URl || '192.168.0.115:3000';
-// console.log('apiUrl', apiUrl);
 // const apiUrl = 'http://192.168.0.101:3000'; - JUATHAN PC
 // const apiUrl = 'http://192.168.0.115:3000'; - JUATHAN NOTE
 
@@ -11,7 +10,6 @@ const apiUrl = process.env.EXPO_PUBLIC_API_URl || '192.168.0.115:3000';
  * @return {*}  {string}
  */
 function transformAPIUrl(apiUrl: string): string {
-  // console.log('Platform.OS', Platform.OS);
   if (Platform.OS === 'android') return apiUrl.replace('localhost', '192.168.0.115');
   if (Platform.OS === 'ios') return apiUrl.replace('localhost', '192.168.0.115');
 
@@ -19,5 +17,4 @@ function transformAPIUrl(apiUrl: string): string {
 }
 
 const API_URL: string = transformAPIUrl(apiUrl as string);
-// console.log('API_URL', API_URL);
 export { API_URL };

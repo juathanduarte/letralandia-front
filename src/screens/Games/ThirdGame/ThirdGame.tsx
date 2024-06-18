@@ -270,13 +270,9 @@ export function ThirdGame({ route }) {
                 console.error('Error posting game info:', error);
               }
 
-              console.log('Time taken:', timeTaken);
               setTypeModal('success_end');
-              console.log('setTypeModal', 'success_end');
               setOpenModalInfo(true);
-              console.log('setOpenModalInfo', true);
               playAudio(profileGender, 'parabens_completou');
-              console.log('playAudio', 'parabens_completou');
               setShowConfetti(true);
               setTimeout(() => {
                 navigation.navigate('SelectPhaseThirdGame', {
