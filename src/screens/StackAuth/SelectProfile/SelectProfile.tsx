@@ -4,7 +4,6 @@ import Icon from '@/components/Icon/Icon';
 import { useAuth } from '@/contexts/AuthContext';
 import { getProfiles } from '@/services/user';
 import { RootStackScreenProps } from '@/types/navigation';
-import { removeAsyncStorage } from '@/utils/AsyncStorage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
@@ -61,15 +60,7 @@ export function SelectProfile({ route }) {
   };
 
   const handleGoBack = () => {
-    navigation.goBack();
-  };
-
-  const logout = () => {
-    const data = logout();
-    if (data !== null) {
-      removeAsyncStorage({ key: 'accessToken' });
-      navigation.navigate('Login');
-    }
+    navigation.navigate('Login');
   };
 
   return (
