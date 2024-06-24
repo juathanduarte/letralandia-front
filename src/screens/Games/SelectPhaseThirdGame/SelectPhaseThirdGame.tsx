@@ -85,7 +85,7 @@ export function SelectPhaseThirdGame({ route }) {
       </HeaderWrapper>
       <HeaderTitleAuxWrapper>
         <HeaderTitleWrapper>
-          <HeaderTitle>Jogo 3</HeaderTitle>
+          <HeaderTitle>Organize as sílabas</HeaderTitle>
         </HeaderTitleWrapper>
       </HeaderTitleAuxWrapper>
       {loading ? (

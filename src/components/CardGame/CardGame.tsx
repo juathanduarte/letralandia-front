@@ -43,7 +43,7 @@ const CardGame: React.FC<CardGameProps> = ({
       onPress={onPress}
       emoji={emoji}
     >
-      <Title>{title}</Title>
+      <Title numberOfLines={2}>{title}</Title>
       {rating !== 0 && <Title>{getRating(rating)}</Title>}
       {emoji && (
         <Body>

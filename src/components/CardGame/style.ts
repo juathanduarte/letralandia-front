@@ -27,6 +27,8 @@ export const Title = styled.Text`
   font-size: 32px;
   color: ${colors.title};
   max-width: 50%;
+  text-align: center;
+  line-height: 36px;
 `;
 
 export const Emoji = styled.Text`

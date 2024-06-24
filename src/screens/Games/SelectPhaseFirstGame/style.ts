@@ -27,10 +27,8 @@ export const HeaderTitleAuxWrapper = styled.View`
 export const HeaderTitleWrapper = styled.View`
   border-radius: 24px;
   border: 1px solid ${colors.title};
-  width: 110px;
   bottom: 30px;
   background-color: ${colors.yellow};
-  align-items: center;
 `;
 
 export const HeaderTitle = styled.Text`

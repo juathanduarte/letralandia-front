@@ -86,7 +86,7 @@ export function SelectPhaseFirstGame({ route }) {
       </HeaderWrapper>
       <HeaderTitleAuxWrapper>
         <HeaderTitleWrapper>
-          <HeaderTitle>Jogo 1</HeaderTitle>
+          <HeaderTitle>Complete a palavra</HeaderTitle>
         </HeaderTitleWrapper>
       </HeaderTitleAuxWrapper>
       {loading ? (
