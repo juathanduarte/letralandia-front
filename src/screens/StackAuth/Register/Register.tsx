@@ -51,10 +51,17 @@ export function Register() {
     const user = { name, email, password };
 
     if (isNameValid && isEmailValid && isPasswordValid && isPassword2Valid) {
-      const data = await register(user);
-      if (data) {
-        Alert.alert('Cadastro realizado com sucesso!');
-        navigation.navigate('Login');
+      try {
+        const data = await register(user);
+        if (data) {
+          Alert.alert('Cadastro realizado com sucesso!');
+          navigation.navigate('Login');
+        }
+      } catch (error) {
+        Alert.alert(
+          'Erro no cadastro',
+          error.response?.data?.message || 'Ocorreu um erro inesperado.'
+        );
       }
     }
   };
@@ -92,7 +99,7 @@ export function Register() {
       setPasswordError('A senha não pode ser vazia.');
       return false;
     } else if (!data) {
-      setPassword2Error('Senha inválida.');
+      setPasswordError('Senha inválida.');
       return false;
     } else {
       setPasswordError('');
@@ -110,6 +117,36 @@ export function Register() {
     } else {
       setPassword2Error('');
       return true;
+    }
+  };
+
+  const handleNameChange = (text: string) => {
+    setName(text);
+    if (text.trim() !== '') {
+      setNameError('');
+    }
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    const re = /\S+@\S+\.\S+/;
+    if (re.test(text)) {
+      setEmailError('');
+    }
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+    const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}$/;
+    if (re.test(text)) {
+      setPasswordError('');
+    }
+  };
+
+  const handlePassword2Change = (text: string) => {
+    setPassword2(text);
+    if (text === password) {
+      setPassword2Error('');
     }
   };
 
@@ -133,7 +170,7 @@ export function Register() {
                 iconSize={20}
                 error={nameError}
                 value={name}
-                onChange={setName}
+                onChange={handleNameChange}
               />
               <Input
                 variant={'login'}
@@ -142,7 +179,7 @@ export function Register() {
                 iconSize={20}
                 error={emailError}
                 value={email}
-                onChange={setEmail}
+                onChange={handleEmailChange}
               />
               <Input
                 variant={'password'}
@@ -151,7 +188,7 @@ export function Register() {
                 iconSize={20}
                 error={passwordError}
                 value={password}
-                onChange={setPassword}
+                onChange={handlePasswordChange}
               />
               <Input
                 variant={'password'}
@@ -160,7 +197,7 @@ export function Register() {
                 iconSize={20}
                 error={password2Error}
                 value={password2}
-                onChange={setPassword2}
+                onChange={handlePassword2Change}
               />
             </WrapperInputs>
             <Button variant="primary" size="large" label="Cadastrar" onClick={handleRegister} />
