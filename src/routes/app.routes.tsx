@@ -16,32 +16,45 @@ import Icon from '../components/Icon/Icon';
 import { CreateProfile, Login, Register } from '../screens/StackAuth';
 import { Welcome } from '../screens/Welcome/Welcome';
 
+import colors from '@/styles/colors';
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function TabScreens() {
   return (
-    <Tab.Navigator backBehavior="history">
+    <Tab.Navigator
+      backBehavior="history"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          let iconLib: 'FontAwesome' = 'FontAwesome';
+
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'ParentArea') {
+            iconName = 'list-alt';
+          }
+
+          return <Icon icon={iconName} color={color} size={size} lib={iconLib} />;
+        },
+        tabBarActiveTintColor: colors.title,
+        tabBarInactiveTintColor: colors.gray,
+        headerShown: false,
+      })}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
-          headerShown: false,
           tabBarLabel: () => null,
-          tabBarIcon: ({ color, size }) => (
-            <Icon icon="home" color={color} size={size} lib="FontAwesome" />
-          ),
         }}
       />
       <Tab.Screen
         name="ParentArea"
         component={ParentArea}
         options={{
-          headerShown: false,
           tabBarLabel: () => null,
-          tabBarIcon: ({ color, size }) => (
-            <Icon icon="list-alt" color={color} size={size} lib="FontAwesome" />
-          ),
         }}
       />
     </Tab.Navigator>
