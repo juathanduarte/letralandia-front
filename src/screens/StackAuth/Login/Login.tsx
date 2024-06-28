@@ -74,7 +74,6 @@ export function Login() {
         navigation.navigate('SelectProfile');
       }
     } catch (error) {
-      console.log(error.response?.data.message);
       if (error.response?.data.message === 'E-mail não encontrado.') {
         setEmailError('E-mail não encontrado.');
       } else if (error.response?.data.message === 'Senha incorreta.') {

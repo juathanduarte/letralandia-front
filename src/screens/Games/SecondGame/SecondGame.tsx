@@ -134,7 +134,6 @@ export function SecondGame({ route }) {
 
     try {
       await postInfoGame(gameInfo);
-      console.log('Game info posted successfully');
     } catch (error) {
       console.error('Error posting game info:', error);
     }

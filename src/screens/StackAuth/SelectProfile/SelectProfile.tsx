@@ -20,6 +20,7 @@ import {
 
 import colors from '@/styles/colors';
 import vectorSelectProfile from '../../../../assets/vectors/vectorSelectProfile.png';
+import { removeAsyncStorage } from '@/utils/AsyncStorage';
 
 export function SelectProfile({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'SelectProfile'>['navigation']>();
@@ -59,7 +60,8 @@ export function SelectProfile({ route }) {
     });
   };
 
-  const handleGoBack = () => {
+  const handleGoBack = async () => {
+    await removeAsyncStorage({ key: 'accessToken' });
     navigation.navigate('Login');
   };
 
