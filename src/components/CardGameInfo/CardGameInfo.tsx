@@ -59,6 +59,7 @@ const CardGameInfo: React.FC<CardGameInfoProps> = ({ gameInfo }) => {
 
   const screenWidth = Dimensions.get('window').width;
   const chartSize = screenWidth * 0.3;
+  const paddingLeft = screenWidth > 600 ? '53' : '29';
 
   const getCardColors = (gameId: number) => {
     switch (gameId) {
@@ -117,7 +118,7 @@ const CardGameInfo: React.FC<CardGameInfoProps> = ({ gameInfo }) => {
                   }}
                   accessor="population"
                   backgroundColor="transparent"
-                  paddingLeft="29"
+                  paddingLeft={paddingLeft}
                   hasLegend={false}
                 />
               </ChartWrapper>

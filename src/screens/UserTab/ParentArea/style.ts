@@ -16,4 +16,12 @@ export const WelcomeText = styled.Text`
   font-family: ${fonts.text_bold};
 `;
 
-export const BodyWrapper = styled.ScrollView``;
+export const BodyWrapper = styled.ScrollView`
+  flex: 1;
+`;
+
+export const LoadingContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;

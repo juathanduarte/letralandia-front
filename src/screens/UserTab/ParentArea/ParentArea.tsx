@@ -5,10 +5,16 @@ import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import CardGameInfo from '../../../components/CardGameInfo/CardGameInfo';
 import AuthModalParentArea from '../../../components/ModalAuthParentArea/ModalAuthParentArea';
-import { BodyWrapper, Container, WelcomeText, WelcomeTextContainer } from './style';
+import {
+  BodyWrapper,
+  Container,
+  LoadingContainer,
+  WelcomeText,
+  WelcomeTextContainer,
+} from './style';
 
 type GameErrors = {
   [key: string]: number;
@@ -35,13 +41,17 @@ export function ParentArea() {
   const { profileId } = useUser();
   const [gamesInfos, setGamesInfos] = useState<GameSummary[]>([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchInfoGameProfile = async () => {
     try {
+      setLoading(true);
       const data: GamesSummaryResponse = await getInfoGameProfile({ profileId });
       setGamesInfos(data.gamesSummary);
     } catch (error) {
       console.error('Failed to get game info:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,10 +121,18 @@ export function ParentArea() {
       <WelcomeTextContainer>
         <WelcomeText>{getGreeting()}, bem-vindo à área dos pais/educadores!</WelcomeText>
       </WelcomeTextContainer>
-      <BodyWrapper>
-        {isAuthorized &&
-          gamesInfos.map((gameInfo) => <CardGameInfo key={gameInfo.gameId} gameInfo={gameInfo} />)}
-      </BodyWrapper>
+      {loading ? (
+        <LoadingContainer>
+          <ActivityIndicator size="large" color={colors.title} />
+        </LoadingContainer>
+      ) : (
+        <BodyWrapper>
+          {isAuthorized &&
+            gamesInfos.map((gameInfo) => (
+              <CardGameInfo key={gameInfo.gameId} gameInfo={gameInfo} />
+            ))}
+        </BodyWrapper>
+      )}
       <AuthModalParentArea
         question={question}
         answer={answer}
