@@ -10,6 +10,8 @@ import {
   CardTitleWrapper,
   ChartWrapper,
   Container,
+  ErrorText,
+  ErrorTextWrapper,
   InfoText,
   InfoTextWrapper,
   TitleInfo,
@@ -36,8 +38,11 @@ const CardGameInfo: React.FC<CardGameInfoProps> = ({ gameInfo }) => {
   const formatTime = (timeInSeconds?: number) => {
     if (timeInSeconds === undefined) return 'false';
     const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+    const seconds = (timeInSeconds % 60).toFixed(2);
+    if (minutes > 0 && parseFloat(seconds) === 0) {
+      return `${minutes}m`;
+    }
+    return minutes > 0 ? `${minutes}m ${parseFloat(seconds)}s` : `${parseFloat(seconds)}s`;
   };
 
   const totalWords = gameInfo.totalWords || 0;
@@ -130,7 +135,7 @@ const CardGameInfo: React.FC<CardGameInfoProps> = ({ gameInfo }) => {
                 <TitleInfo>Erros</TitleInfo>
               </CardTitleWrapper>
               <View>
-                {gameInfo.errors ? (
+                {gameInfo.errors && Object.entries(gameInfo.errors).length > 0 ? (
                   Object.entries(gameInfo.errors).map(([error, count], index) => (
                     <InfoTextWrapper key={index}>
                       <InfoText>
@@ -140,9 +145,9 @@ const CardGameInfo: React.FC<CardGameInfoProps> = ({ gameInfo }) => {
                     </InfoTextWrapper>
                   ))
                 ) : (
-                  <InfoTextWrapper>
-                    <InfoText>Sem erros ✅</InfoText>
-                  </InfoTextWrapper>
+                  <ErrorTextWrapper>
+                    <ErrorText>Sem erros ✅</ErrorText>
+                  </ErrorTextWrapper>
                 )}
               </View>
             </CardInfo>

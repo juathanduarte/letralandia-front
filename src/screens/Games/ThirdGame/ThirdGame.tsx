@@ -4,7 +4,7 @@ import { useFont } from '@/contexts/FontContext';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import {
@@ -168,23 +168,20 @@ export function ThirdGame({ route }) {
   useEffect(() => {
     if (gameData.length > 0) {
       const { syllables } = gameData[currentWordIndex];
-      generateOptions(syllables);
+      const generatedOptions = generateOptions(syllables);
       const incomplete = generateArraySyllables(syllables);
       setFixedSyllables(incomplete);
       setSyllablesToView(incomplete);
-      const generatedOptions = generateOptions(syllables);
       setOptions(generatedOptions);
     }
   }, [currentWordIndex, gameData]);
 
-  const generateArraySyllables = (syllables: string) => {
+  const generateArraySyllables = useCallback((syllables: string) => {
     const arraySyllables = syllables.split('-');
-    const emptyArray = arraySyllables.map(() => ' ');
+    return arraySyllables.map(() => ' ');
+  }, []);
 
-    return emptyArray;
-  };
-
-  const generateOptions = (syllables: string): string[] => {
+  const generateOptions = useCallback((syllables: string): string[] => {
     const uniqueSyllables = Array.from(new Set(syllables.split('-')));
     const allSyllables: string[] = [...uniqueSyllables];
 
@@ -222,7 +219,7 @@ export function ThirdGame({ route }) {
     }
 
     return allSyllables.sort(() => Math.random() - 0.5);
-  };
+  }, []);
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -232,57 +229,64 @@ export function ThirdGame({ route }) {
     return isUpperCase ? letter.toUpperCase() : letter.toLowerCase();
   };
 
-  const handleSelectOption = (option: string) => {
-    const newLettersView = [...syllablesView];
-    const emptyIndex = newLettersView.indexOf(' ');
+  const finalizeGame = useCallback(async () => {
+    const endTime = Date.now();
+    const timeTaken = Math.round((endTime - startTime) / 1000);
 
-    if (emptyIndex !== -1) {
-      newLettersView[emptyIndex] = option;
-      setSyllablesToView(newLettersView);
+    const gameInfo = {
+      profileId,
+      gameId,
+      phaseId,
+      wordsInfo: errors,
+      completionTime: timeTaken,
+    };
 
-      if (!newLettersView.includes(' ')) {
-        const completedWord = newLettersView.join('');
-        const completedWordLowerCase = completedWord.toLowerCase();
-        const gameDataLowerCase = gameData[currentWordIndex].word.toLowerCase();
-        setTimeout(async () => {
+    try {
+      await postInfoGame(gameInfo);
+      console.log('Game info posted successfully');
+    } catch (error) {
+      console.error('Error posting game info:', error);
+    }
+
+    setTypeModal('success_end');
+    setOpenModalInfo(true);
+    playAudio(profileGender, 'parabens_completou');
+    setShowConfetti(true);
+    setTimeout(() => {
+      navigation.navigate('SelectPhaseThirdGame', {
+        profileGender,
+        gameId,
+        returnData: true,
+        profileId,
+      });
+    }, 3500);
+  }, [errors, startTime, profileId, gameId, phaseId, profileGender, navigation]);
+
+  const handleSelectOption = useCallback(
+    (option: string) => {
+      const newLettersView = [...syllablesView];
+      const emptyIndex = newLettersView.indexOf(' ');
+
+      if (emptyIndex !== -1) {
+        newLettersView[emptyIndex] = option;
+        setSyllablesToView(newLettersView);
+
+        if (!newLettersView.includes(' ')) {
+          const completedWord = newLettersView.join('');
+          const completedWordLowerCase = completedWord.toLowerCase();
+          const gameDataLowerCase = gameData[currentWordIndex].word.toLowerCase();
+
           if (completedWordLowerCase === gameDataLowerCase) {
-            if (currentWordIndex < gameData.length - 1) {
-              setTypeModal('success');
-              setOpenModalInfo(true);
-              playAudio(profileGender, 'parabens_acertou');
-              setCurrentWordIndex((prevIndex) => prevIndex + 1);
-            } else {
-              const endTime = Date.now();
-              const timeTaken = Math.round((endTime - startTime) / 1000);
-
-              const gameInfo = {
-                profileId,
-                gameId,
-                phaseId,
-                wordsInfo: errors,
-                completionTime: timeTaken,
-              };
-
-              try {
-                await postInfoGame(gameInfo);
-                console.log('Game info posted successfully');
-              } catch (error) {
-                console.error('Error posting game info:', error);
+            setTimeout(() => {
+              if (currentWordIndex < gameData.length - 1) {
+                setTypeModal('success');
+                setOpenModalInfo(true);
+                playAudio(profileGender, 'parabens_acertou');
+                setCurrentWordIndex((prevIndex) => prevIndex + 1);
+              } else {
+                finalizeGame();
               }
-
-              setTypeModal('success_end');
-              setOpenModalInfo(true);
-              playAudio(profileGender, 'parabens_completou');
-              setShowConfetti(true);
-              setTimeout(() => {
-                navigation.navigate('SelectPhaseThirdGame', {
-                  profileGender,
-                  gameId,
-                  returnData: true,
-                  profileId,
-                });
-              }, 3500);
-            }
+            }, 200);
           } else {
             setTypeModal('error');
             setOpenModalInfo(true);
@@ -300,10 +304,19 @@ export function ThirdGame({ route }) {
             });
             setSyllablesToView(fixedSyllables);
           }
-        }, 200);
+        }
       }
-    }
-  };
+    },
+    [
+      syllablesView,
+      gameData,
+      currentWordIndex,
+      profileGender,
+      finalizeGame,
+      fixedSyllables,
+      navigation,
+    ]
+  );
 
   const currentWordData = gameData[currentWordIndex] || { word: '', incomplete: '', image: '' };
 

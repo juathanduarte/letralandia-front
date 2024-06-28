@@ -7,7 +7,7 @@ import { postInfoGame } from '@/services/profile-game-info';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { playAudio } from '../../../utils/playAudio';
@@ -64,10 +64,10 @@ export function SecondGame({ route }) {
         setGameData(words);
         setStartTime(Date.now());
 
-        if (profileGender === 'male' && words[0]?.audioMale) {
-          await playAudio('male', words[0].audioMale);
-        } else if (profileGender === 'female' && words[0]?.audioFemale) {
-          await playAudio('female', words[0].audioFemale);
+        const firstWordAudio =
+          profileGender === 'male' ? words[0]?.audioMale : words[0]?.audioFemale;
+        if (firstWordAudio) {
+          await playAudio(profileGender, firstWordAudio);
         }
       } catch (error) {
         console.error('Failed to fetch game phase:', error);
@@ -85,15 +85,17 @@ export function SecondGame({ route }) {
       setLettersView(new Array(word.length).fill(' '));
       setOptions(generateOptions(word));
 
-      if (profileGender === 'male' && gameData[currentWordIndex]?.audioMale) {
-        playAudio('male', gameData[currentWordIndex].audioMale);
-      } else if (profileGender === 'female' && gameData[currentWordIndex]?.audioFemale) {
-        playAudio('female', gameData[currentWordIndex].audioFemale);
+      const wordAudio =
+        profileGender === 'male'
+          ? gameData[currentWordIndex]?.audioMale
+          : gameData[currentWordIndex]?.audioFemale;
+      if (wordAudio) {
+        playAudio(profileGender, wordAudio);
       }
     }
-  }, [currentWordIndex, gameData]);
+  }, [currentWordIndex, gameData, profileGender]);
 
-  const generateOptions = (word: string) => {
+  const generateOptions = useCallback((word: string) => {
     const uniqueLetters = Array.from(new Set(word.split('')));
     const allLetters = [...uniqueLetters];
 
@@ -105,93 +107,104 @@ export function SecondGame({ route }) {
     }
 
     return allLetters.sort(() => Math.random() - 0.5);
-  };
+  }, []);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const formatLetter = (letter: string) => {
-    return isUpperCase ? letter.toUpperCase() : letter.toLowerCase();
-  };
+  const formatLetter = useCallback(
+    (letter: string) => {
+      return isUpperCase ? letter.toUpperCase() : letter.toLowerCase();
+    },
+    [isUpperCase]
+  );
 
-  const handleSelectOption = async (option: string) => {
-    const newLettersView = [...lettersView];
-    const emptyIndex = newLettersView.indexOf(' ');
+  const finalizeGame = useCallback(async () => {
+    const endTime = Date.now();
+    const timeTaken = Math.round((endTime - startTime) / 1000);
 
-    if (emptyIndex !== -1) {
-      newLettersView[emptyIndex] = option;
-      setLettersView(newLettersView);
+    const gameInfo = {
+      profileId,
+      gameId,
+      phaseId,
+      wordsInfo: errors,
+      completionTime: timeTaken,
+    };
 
-      if (!newLettersView.includes(' ')) {
-        const completedWord = newLettersView.join('').toLowerCase();
-        const gameDataWord = gameData[currentWordIndex].word.toLowerCase();
+    try {
+      await postInfoGame(gameInfo);
+      console.log('Game info posted successfully');
+    } catch (error) {
+      console.error('Error posting game info:', error);
+    }
 
-        if (completedWord === gameDataWord) {
-          if (currentWordIndex < gameData.length - 1) {
-            setTypeModal('success');
-            setOpenModalInfo(true);
-            playAudio(profileGender, 'parabens_acertou');
-            setTimeout(() => {
-              setCurrentWordIndex((prevIndex) => prevIndex + 1);
-            }, 3500);
-          } else {
-            const endTime = Date.now();
-            const timeTaken = Math.round((endTime - startTime) / 1000);
+    setTypeModal('success_end');
+    setOpenModalInfo(true);
+    playAudio(profileGender, 'parabens_completou');
+    setShowConfetti(true);
+    setTimeout(() => {
+      navigation.navigate('SelectPhaseSecondGame', {
+        profileGender,
+        gameId,
+        returnData: true,
+        profileId,
+      });
+    }, 3500);
+  }, [errors, startTime, profileId, gameId, phaseId, profileGender, navigation]);
 
-            const gameInfo = {
-              profileId,
-              gameId,
-              phaseId,
-              wordsInfo: errors,
-              completionTime: timeTaken,
-            };
+  const handleSelectOption = useCallback(
+    async (option: string) => {
+      const newLettersView = [...lettersView];
+      const emptyIndex = newLettersView.indexOf(' ');
 
-            try {
-              await postInfoGame(gameInfo);
-              console.log('Game info posted successfully');
-            } catch (error) {
-              console.error('Error posting game info:', error);
-            }
-            setTypeModal('success_end');
-            setOpenModalInfo(true);
-            setShowConfetti(true);
-            playAudio(profileGender, 'parabens_completou');
-            setTimeout(() => {
-              navigation.navigate('SelectPhaseSecondGame', {
-                profileGender,
-                gameId,
-                returnData: true,
-                profileId,
-              });
-            }, 3500);
-          }
-        } else {
-          setTypeModal('error');
-          setOpenModalInfo(true);
-          playAudio(profileGender, 'ops_errou');
-          const word = gameData[currentWordIndex].word;
-          setErrors((prevErrors) => {
-            const errorIndex = prevErrors.findIndex((error) => error.word === word);
-            if (errorIndex === -1) {
-              return [...prevErrors, { word, count: 1 }];
+      if (emptyIndex !== -1) {
+        newLettersView[emptyIndex] = option;
+        setLettersView(newLettersView);
+
+        if (!newLettersView.includes(' ')) {
+          const completedWord = newLettersView.join('').toLowerCase();
+          const gameDataWord = gameData[currentWordIndex].word.toLowerCase();
+
+          if (completedWord === gameDataWord) {
+            if (currentWordIndex < gameData.length - 1) {
+              setTypeModal('success');
+              setOpenModalInfo(true);
+              playAudio(profileGender, 'parabens_acertou');
+              setTimeout(() => {
+                setCurrentWordIndex((prevIndex) => prevIndex + 1);
+              }, 3500);
             } else {
-              const newErrors = [...prevErrors];
-              newErrors[errorIndex].count += 1;
-              return newErrors;
+              finalizeGame();
             }
-          });
-          setLettersView(new Array(gameDataWord.length).fill(' '));
+          } else {
+            setTypeModal('error');
+            setOpenModalInfo(true);
+            playAudio(profileGender, 'ops_errou');
+            const word = gameData[currentWordIndex].word;
+            setErrors((prevErrors) => {
+              const errorIndex = prevErrors.findIndex((error) => error.word === word);
+              if (errorIndex === -1) {
+                return [...prevErrors, { word, count: 1 }];
+              } else {
+                const newErrors = [...prevErrors];
+                newErrors[errorIndex].count += 1;
+                return newErrors;
+              }
+            });
+            setLettersView(new Array(gameDataWord.length).fill(' '));
+          }
         }
       }
-    }
-  };
+    },
+    [lettersView, gameData, currentWordIndex, profileGender, finalizeGame]
+  );
 
   const handlePlayAudio = () => {
-    if (profileGender === 'male' && currentWordData.audioMale) {
-      playAudio('male', currentWordData.audioMale);
-    } else if (profileGender === 'female' && currentWordData.audioFemale) {
-      playAudio('female', currentWordData.audioFemale);
+    const wordAudio =
+      profileGender === 'male' ? currentWordData.audioMale : currentWordData.audioFemale;
+    if (wordAudio) {
+      playAudio(profileGender, wordAudio);
     }
   };
 

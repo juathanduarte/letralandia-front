@@ -74,3 +74,15 @@ export const CardInfoNoInfo = styled.View`
   justify-content: center;
   align-items: center;
 `;
+
+export const ErrorTextWrapper = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ErrorText = styled.Text`
+  color: ${colors.title};
+  font-family: ${fonts.text_semi_bold};
+  font-size: 16px;
+`;

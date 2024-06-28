@@ -4,7 +4,7 @@ import { useFont } from '@/contexts/FontContext';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import {
@@ -25,11 +25,6 @@ import ModalInfo from '@/components/ModalInfo/ModalInfo';
 import { gamePhase } from '@/services/phase';
 import { postInfoGame } from '@/services/profile-game-info';
 import { playAudio } from '@/utils/playAudio';
-
-interface FirstGameProps {
-  gameId: number;
-  phaseId: number;
-}
 
 interface WordData {
   word: string;
@@ -83,9 +78,9 @@ export function FirstGame({ route }) {
       setLettersView(incomplete);
       setOptions(generateOptions(word));
     }
-  }, [currentWordIndex, gameData]);
+  }, [currentWordIndex, gameData, phaseId]);
 
-  const generateArrayWord = (word: string, phaseId: number) => {
+  const generateArrayWord = useCallback((word: string, phaseId: number) => {
     const arrayWord = word.split('');
     const incompleteWord = arrayWord.map(() => ' ');
     const arrayWordLength = arrayWord.length;
@@ -105,13 +100,10 @@ export function FirstGame({ route }) {
       lettersToHide = 2;
     }
 
-    const indicesToShow = [];
+    const indicesToShow = new Set<number>();
 
-    while (indicesToShow.length < arrayWord.length - lettersToHide) {
-      const randomIndex = Math.floor(Math.random() * arrayWord.length);
-      if (!indicesToShow.includes(randomIndex)) {
-        indicesToShow.push(randomIndex);
-      }
+    while (indicesToShow.size < arrayWord.length - lettersToHide) {
+      indicesToShow.add(Math.floor(Math.random() * arrayWord.length));
     }
 
     indicesToShow.forEach((index) => {
@@ -119,9 +111,9 @@ export function FirstGame({ route }) {
     });
 
     return incompleteWord;
-  };
+  }, []);
 
-  const generateOptions = (word: string) => {
+  const generateOptions = useCallback((word: string) => {
     const uniqueLetters = Array.from(new Set(word.replace(/ /g, '')));
     const allLetters = [...uniqueLetters];
 
@@ -133,29 +125,66 @@ export function FirstGame({ route }) {
     }
 
     return allLetters.sort(() => Math.random() - 0.5);
-  };
+  }, []);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const formatLetter = (letter: string) => {
-    return isUpperCase ? letter.toUpperCase() : letter.toLowerCase();
-  };
+  const formatLetter = useCallback(
+    (letter: string) => {
+      return isUpperCase ? letter.toUpperCase() : letter.toLowerCase();
+    },
+    [isUpperCase]
+  );
 
-  const handleSelectOption = (option: string) => {
-    const newLettersView = [...lettersView];
-    const emptyIndex = newLettersView.indexOf(' ');
+  const finalizeGame = useCallback(async () => {
+    const endTime = Date.now();
+    const timeTaken = Math.round((endTime - startTime) / 1000);
 
-    if (emptyIndex !== -1) {
-      newLettersView[emptyIndex] = option;
-      setLettersView(newLettersView);
+    const gameInfo = {
+      profileId,
+      gameId,
+      phaseId,
+      wordsInfo: errors,
+      completionTime: timeTaken,
+    };
 
-      if (!newLettersView.includes(' ')) {
-        const completedWord = newLettersView.join('');
-        const completedWordLowerCase = completedWord.toLowerCase();
-        const gameDataLowerCase = gameData[currentWordIndex].word.toLowerCase();
-        setTimeout(async () => {
+    try {
+      await postInfoGame(gameInfo);
+      console.log('Game info posted successfully');
+    } catch (error) {
+      console.error('Error posting game info:', error);
+    }
+
+    setTypeModal('success_end');
+    setOpenModalInfo(true);
+    playAudio(profileGender, 'parabens_completou');
+    setShowConfetti(true);
+    setTimeout(() => {
+      navigation.navigate('SelectPhaseFirstGame', {
+        profileGender,
+        gameId,
+        returnData: true,
+        profileId,
+      });
+    }, 3500);
+  }, [errors, startTime, profileId, gameId, phaseId, profileGender, navigation]);
+
+  const handleSelectOption = useCallback(
+    (option: string) => {
+      const newLettersView = [...lettersView];
+      const emptyIndex = newLettersView.indexOf(' ');
+
+      if (emptyIndex !== -1) {
+        newLettersView[emptyIndex] = option;
+        setLettersView(newLettersView);
+
+        if (!newLettersView.includes(' ')) {
+          const completedWord = newLettersView.join('');
+          const completedWordLowerCase = completedWord.toLowerCase();
+          const gameDataLowerCase = gameData[currentWordIndex].word.toLowerCase();
+
           if (completedWordLowerCase === gameDataLowerCase) {
             if (currentWordIndex < gameData.length - 1) {
               setTypeModal('success');
@@ -163,36 +192,7 @@ export function FirstGame({ route }) {
               playAudio(profileGender, 'parabens_acertou');
               setCurrentWordIndex((prevIndex) => prevIndex + 1);
             } else {
-              const endTime = Date.now();
-              const timeTaken = Math.round((endTime - startTime) / 1000);
-
-              const gameInfo = {
-                profileId,
-                gameId,
-                phaseId,
-                wordsInfo: errors,
-                completionTime: timeTaken,
-              };
-
-              try {
-                await postInfoGame(gameInfo);
-                console.log('Game info posted successfully');
-              } catch (error) {
-                console.error('Error posting game info:', error);
-              }
-
-              setTypeModal('success_end');
-              setOpenModalInfo(true);
-              playAudio(profileGender, 'parabens_completou');
-              setShowConfetti(true);
-              setTimeout(() => {
-                navigation.navigate('SelectPhaseFirstGame', {
-                  profileGender,
-                  gameId,
-                  returnData: true,
-                  profileId,
-                });
-              }, 3500);
+              finalizeGame();
             }
           } else {
             setTypeModal('error');
@@ -211,10 +211,11 @@ export function FirstGame({ route }) {
             });
             setLettersView(fixedLetters);
           }
-        }, 200);
+        }
       }
-    }
-  };
+    },
+    [lettersView, gameData, currentWordIndex, profileGender, finalizeGame, fixedLetters]
+  );
 
   const currentWordData = gameData[currentWordIndex] || { word: '', incomplete: '', image: '' };
 
