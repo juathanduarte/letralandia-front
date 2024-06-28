@@ -71,6 +71,9 @@ export function Login() {
           },
         });
 
+        setEmailError('');
+        setPasswordError('');
+
         navigation.navigate('SelectProfile');
       }
     } catch (error) {
