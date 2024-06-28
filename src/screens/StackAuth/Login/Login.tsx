@@ -4,7 +4,7 @@ import { AuthActionTypes, useAuth } from '@/contexts/AuthContext';
 import { login } from '@/services/user';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import letralandiaLogo from '../../../../assets/logos/letralandiaLogo.png';
 
 import {
@@ -59,18 +59,29 @@ export function Login() {
 
     const user = { email, password };
 
-    const data = await login(user);
+    try {
+      const data = await login(user);
 
-    if (data.access_token && data.userId) {
-      dispatch({
-        type: AuthActionTypes.LOGIN_SUCCESS,
-        payload: {
-          accessToken: data.access_token,
-          userId: data.userId,
-        },
-      });
+      if (data.access_token && data.userId) {
+        dispatch({
+          type: AuthActionTypes.LOGIN_SUCCESS,
+          payload: {
+            accessToken: data.access_token,
+            userId: data.userId,
+          },
+        });
 
-      navigation.navigate('SelectProfile');
+        navigation.navigate('SelectProfile');
+      }
+    } catch (error) {
+      console.log(error.response?.data.message);
+      if (error.response?.data.message === 'E-mail não encontrado.') {
+        setEmailError('E-mail não encontrado.');
+      } else if (error.response?.data.message === 'Senha incorreta.') {
+        setPasswordError('Senha incorreta.');
+      } else {
+        Alert.alert('Erro de autenticação', 'Ocorreu um erro inesperado. Tente novamente.');
+      }
     }
   };
 
