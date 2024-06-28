@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 
 interface WrapperProps {
   error?: string;
+  errorPassword?: string;
 }
 
 export const Wrapper = styled.View`
@@ -17,6 +18,7 @@ export const WrapperInput = styled.View<WrapperProps>`
   width: 100%;
   height: 50px;
   border: 1px solid ${(props) => (props.error ? colors.redLight : colors.gray)};
+  margin-bottom: ${(props) => (props.errorPassword ? '28px' : '0')};
   border-radius: 16px;
   padding: 0 16px;
 `;
@@ -46,7 +48,6 @@ export const TextInput = styled.TextInput`
 
 export const ErrorText = styled.Text`
   margin-top: 2px;
-  margin-bottom: 2px;
   color: ${colors.redLight};
   font-size: 12px;
 `;

@@ -13,6 +13,7 @@ interface InputProps {
   onChange?: (value: string) => void;
   value?: string;
   error?: string;
+  errorPassword?: string;
   onblur?: () => void;
   defaultValue?: string;
   inputNumber?: boolean;
@@ -28,6 +29,7 @@ export default function Input({
   onChange,
   value,
   error,
+  errorPassword,
   onblur,
   defaultValue,
   inputNumber,
@@ -42,7 +44,7 @@ export default function Input({
 
   return (
     <Wrapper>
-      <WrapperInput error={error}>
+      <WrapperInput error={error} errorPassword={errorPassword}>
         {iconInput && (
           <WrapperIcon>
             <Icon icon={iconInput} size={iconSize} color={colors.title} lib="FontAwesome" />
@@ -69,7 +71,6 @@ export default function Input({
                 />
               </TouchableOpacity>
             )}
-            {/* {error && <ErrorText>{error}</ErrorText>} */}
           </WrapperIcon>
         )}
 

@@ -99,7 +99,9 @@ export function Register() {
       setPasswordError('A senha não pode ser vazia.');
       return false;
     } else if (!data) {
-      setPasswordError('Senha inválida.');
+      setPasswordError(
+        'A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial.'
+      );
       return false;
     } else {
       setPasswordError('');
@@ -187,6 +189,11 @@ export function Register() {
                 label="Senha"
                 iconSize={20}
                 error={passwordError}
+                errorPassword={
+                  passwordError ===
+                    'A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial.' &&
+                  passwordError
+                }
                 value={password}
                 onChange={handlePasswordChange}
               />
