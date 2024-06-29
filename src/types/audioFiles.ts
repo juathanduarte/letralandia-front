@@ -36,7 +36,7 @@ const maleAudioFiles = {
   v_vaca: require('../../assets/audios/male/alphabet/v_vaca.mp3'),
   w_william: require('../../assets/audios/male/alphabet/w_william.mp3'),
   x_xicara: require('../../assets/audios/male/alphabet/x_xicara.mp3'),
-  y_yak: require('../../assets/audios/male/alphabet/y_yak.mp3'),
+  y_yakisoba: require('../../assets/audios/male/alphabet/y_yakisoba.mp3'),
   z_zebra: require('../../assets/audios/male/alphabet/z_zebra.mp3'),
 };
 
@@ -78,7 +78,7 @@ const femaleAudioFiles = {
   v_vaca: require('../../assets/audios/female/alphabet/v_vaca.mp3'),
   w_william: require('../../assets/audios/female/alphabet/w_william.mp3'),
   x_xicara: require('../../assets/audios/female/alphabet/x_xicara.mp3'),
-  y_yak: require('../../assets/audios/female/alphabet/y_yak.mp3'),
+  y_yakisoba: require('../../assets/audios/female/alphabet/y_yakisoba.mp3'),
   z_zebra: require('../../assets/audios/female/alphabet/z_zebra.mp3'),
 };
 

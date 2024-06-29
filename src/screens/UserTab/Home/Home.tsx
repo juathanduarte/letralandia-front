@@ -65,7 +65,7 @@ export function Home({ route }) {
     },
     {
       id: 4,
-      backgroundColor: colors.gray,
+      backgroundColor: colors.greenGame,
       title: 'Alfabeto',
       emoji: '🆎',
     },

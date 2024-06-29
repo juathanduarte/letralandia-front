@@ -15,7 +15,7 @@ export const HeaderWrapper = styled.View`
   flex-direction: row;
   background-color: ${colors.yellow};
   width: 100%;
-  height: ${Platform.OS === 'ios' ? '65px' : '105px'};
+  height: ${Platform.OS === 'ios' ? '65px' : '85px'};
   border-radius: 0 0 16px 16px;
   padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
   justify-content: space-between;

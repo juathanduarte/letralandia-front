@@ -8,14 +8,15 @@ export const Container = styled.SafeAreaView`
 `;
 
 export const ContainerWrapper = styled.View`
-  padding: ${Platform.OS === 'ios' ? '0px' : '24px 0px'};
+  flex: 1;
+  padding: ${Platform.OS === 'ios' ? '0px' : '24px 0px 0px 0px'};
 `;
 
 export const HeaderWrapper = styled.View`
   flex-direction: row;
-  background-color: ${colors.gray};
+  background-color: ${colors.greenGame};
   width: 100%;
-  height: ${Platform.OS === 'ios' ? '65px' : '105px'};
+  height: ${Platform.OS === 'ios' ? '65px' : '85px'};
   border-radius: 0 0 16px 16px;
   padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
   justify-content: space-between;
@@ -32,7 +33,7 @@ export const HeaderTitleWrapper = styled.View`
   border-radius: 24px;
   border: 1px solid ${colors.title};
   bottom: 30px;
-  background-color: ${colors.gray};
+  background-color: ${colors.greenGame};
 `;
 
 export const HeaderTitle = styled.Text`
@@ -43,15 +44,16 @@ export const HeaderTitle = styled.Text`
 `;
 
 export const BodyWrapper = styled.View`
+  flex: 1;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  bottom: 25px;
 `;
 
 export const ButtonWrapper = styled.View`
-  flex-basis: 30%;
+  flex: 1 1 30%;
   margin: 5px;
+  height: 100px;
 `;
 
 export const CenteredView = styled.TouchableOpacity`
@@ -71,4 +73,18 @@ export const ModalView = styled.View`
 
 export const ModalText = styled.Text`
   font-size: 48px;
+`;
+
+export const ButtonLetter = styled.TouchableOpacity`
+  background-color: ${colors.greenGameButton};
+  border-radius: 16px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const TextLetter = styled.Text`
+  font-size: 24px;
+  font-family: ${fonts.text_semi_bold};
+  color: ${colors.white};
 `;

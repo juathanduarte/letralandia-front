@@ -1,13 +1,13 @@
-import Button from '@/components/Button/Button';
 import Icon from '@/components/Icon/Icon';
 import colors from '@/styles/colors';
 import { RootStackScreenProps } from '@/types/navigation';
 import { playAudio } from '@/utils/playAudio';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Modal, TouchableOpacity } from 'react-native';
+import { Modal, ScrollView, TouchableOpacity } from 'react-native';
 import {
   BodyWrapper,
+  ButtonLetter,
   ButtonWrapper,
   CenteredView,
   Container,
@@ -18,6 +18,7 @@ import {
   HeaderWrapper,
   ModalText,
   ModalView,
+  TextLetter,
 } from './style';
 
 export function Alphabet({ route }) {
@@ -55,7 +56,7 @@ export function Alphabet({ route }) {
     V: { word: 'Vaca', emoji: '🐄' },
     W: { word: 'William', emoji: '👦' },
     X: { word: 'Xicara', emoji: '☕' },
-    Y: { word: 'Yak', emoji: '🦙' },
+    Y: { word: 'Yakisoba', emoji: '🍜' },
     Z: { word: 'Zebra', emoji: '🦓' },
   };
 
@@ -83,13 +84,17 @@ export function Alphabet({ route }) {
             <HeaderTitle>Alfabeto</HeaderTitle>
           </HeaderTitleWrapper>
         </HeaderTitleAuxWrapper>
-        <BodyWrapper>
-          {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter, index) => (
-            <ButtonWrapper key={index}>
-              <Button label={letter} onClick={() => speakAndShowEmoji(letter)} variant="primary" />
-            </ButtonWrapper>
-          ))}
-        </BodyWrapper>
+        <ScrollView>
+          <BodyWrapper>
+            {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter, index) => (
+              <ButtonWrapper key={index}>
+                <ButtonLetter onPress={() => speakAndShowEmoji(letter)}>
+                  <TextLetter>{letter}</TextLetter>
+                </ButtonLetter>
+              </ButtonWrapper>
+            ))}
+          </BodyWrapper>
+        </ScrollView>
         <Modal
           animationType="fade"
           transparent={true}

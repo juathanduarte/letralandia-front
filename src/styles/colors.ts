@@ -10,6 +10,8 @@ export default {
   blueBackground: '#b5d7d5',
   green: '#055816',
   greenLight: '#76BF4C',
+  greenGame: '#adf086',
+  greenGameButton: '#77a859',
   red: '#C81912',
   redLight: '#F64B3C',
   title: '#3E3E3E',
