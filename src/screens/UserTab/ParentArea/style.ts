@@ -3,9 +3,12 @@ import fonts from '@/styles/fonts';
 import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
   flex: 1;
-  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
+`;
+
+export const ContainerWrapper = styled.View`
+  padding: ${Platform.OS === 'ios' ? '0px 16px' : '24px 16px'};
 `;
 
 export const WelcomeTextContainer = styled.View``;
@@ -16,9 +19,7 @@ export const WelcomeText = styled.Text`
   font-family: ${fonts.text_bold};
 `;
 
-export const BodyWrapper = styled.ScrollView`
-  flex: 1;
-`;
+export const BodyWrapper = styled.ScrollView``;
 
 export const LoadingContainer = styled.View`
   flex: 1;

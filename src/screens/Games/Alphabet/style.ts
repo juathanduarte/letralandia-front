@@ -3,7 +3,7 @@ import fonts from '@/styles/fonts';
 import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
@@ -11,9 +11,9 @@ export const HeaderWrapper = styled.View`
   flex-direction: row;
   background-color: ${colors.gray};
   width: 100%;
-  height: 80px;
+  height: 65px;
   border-radius: 0 0 16px 16px;
-  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
+  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
   justify-content: space-between;
   align-items: center;
 `;

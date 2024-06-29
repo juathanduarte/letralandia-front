@@ -11,6 +11,7 @@ import AuthModalParentArea from '../../../components/ModalAuthParentArea/ModalAu
 import {
   BodyWrapper,
   Container,
+  ContainerWrapper,
   LoadingContainer,
   WelcomeText,
   WelcomeTextContainer,
@@ -115,30 +116,32 @@ export function ParentArea() {
 
   return (
     <Container>
-      <TouchableOpacity onPress={handleGoBack}>
-        <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-      </TouchableOpacity>
-      <WelcomeTextContainer>
-        <WelcomeText>{getGreeting()}, bem-vindo à área dos pais/educadores!</WelcomeText>
-      </WelcomeTextContainer>
-      {loading ? (
-        <LoadingContainer>
-          <ActivityIndicator size="large" color={colors.title} />
-        </LoadingContainer>
-      ) : (
-        <BodyWrapper>
-          {isAuthorized &&
-            gamesInfos.map((gameInfo) => (
-              <CardGameInfo key={gameInfo.gameId} gameInfo={gameInfo} />
-            ))}
-        </BodyWrapper>
-      )}
-      <AuthModalParentArea
-        question={question}
-        answer={answer}
-        modalVisible={modalVisible}
-        setModalVisible={handleModalClose}
-      />
+      <ContainerWrapper>
+        <TouchableOpacity onPress={handleGoBack}>
+          <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+        </TouchableOpacity>
+        <WelcomeTextContainer>
+          <WelcomeText>{getGreeting()}, bem-vindo à área dos pais/educadores!</WelcomeText>
+        </WelcomeTextContainer>
+        {loading ? (
+          <LoadingContainer>
+            <ActivityIndicator size="large" color={colors.title} />
+          </LoadingContainer>
+        ) : (
+          <BodyWrapper>
+            {isAuthorized &&
+              gamesInfos.map((gameInfo) => (
+                <CardGameInfo key={gameInfo.gameId} gameInfo={gameInfo} />
+              ))}
+          </BodyWrapper>
+        )}
+        <AuthModalParentArea
+          question={question}
+          answer={answer}
+          modalVisible={modalVisible}
+          setModalVisible={handleModalClose}
+        />
+      </ContainerWrapper>
     </Container>
   );
 }

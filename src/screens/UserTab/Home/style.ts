@@ -5,9 +5,13 @@ import styled from 'styled-components/native';
 
 const { width, height } = Dimensions.get('window');
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
   flex: 1;
-  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
+  justify-content: space-between;
+`;
+
+export const ContainerWrapper = styled.View`
+  padding: ${Platform.OS === 'ios' ? '0px 16px' : '24px 16px'};
 `;
 
 export const WelcomeContainer = styled.View`

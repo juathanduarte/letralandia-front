@@ -1,10 +1,16 @@
 import colors from '@/styles/colors';
 import fonts from '@/styles/fonts';
+import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
   flex: 1;
-  padding: 32px 16px;
+  gap: 16px;
+`;
+
+export const ContainerWrapper = styled.View`
+  flex: 1;
+  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
 `;
 
 export const Title = styled.Text`

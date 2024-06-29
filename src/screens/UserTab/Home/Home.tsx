@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import {
   Container,
+  ContainerWrapper,
   ScrollViewContainer,
   WelcomeButtonsContainer,
   WelcomeContainer,
@@ -162,66 +163,68 @@ export function Home({ route }) {
 
   return (
     <Container>
-      <TouchableOpacity onPress={handleGoBack}>
-        <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-      </TouchableOpacity>
-      {loading ? (
-        <ActivityIndicator
-          size="large"
-          color={colors.title}
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        />
-      ) : (
-        <WelcomeContainer>
-          <ProfileModal
-            modalVisible={modalVisible}
-            setModalVisible={setModalVisible}
-            profileId={profileId}
-            gender={profileData?.gender}
-            fetchProfileDetails={fetchProfileDetails}
+      <ContainerWrapper>
+        <TouchableOpacity onPress={handleGoBack}>
+          <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+        </TouchableOpacity>
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.title}
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           />
-          <WelcomeTextContainer>
-            <WelcomeText numberOfLines={1}>Olá, {profileData?.name}!</WelcomeText>
-            <WelcomeButtonsContainer>
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(true);
-                }}
-              >
-                <Icon icon="pencil" size={24} color={colors.title} lib="FontAwesome" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={confirmDelete}>
-                <Icon icon="trash" size={24} color={colors.title} lib="FontAwesome" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleLogout}>
-                <Icon icon="logout" size={24} color={colors.title} lib="AntDesign" />
-              </TouchableOpacity>
-            </WelcomeButtonsContainer>
-          </WelcomeTextContainer>
-          <WelcomeDescription>Vamos aprender brincando?</WelcomeDescription>
-          <ScrollViewContainer>
-            <WrapperCards>
-              <WrapperRow>
-                {games.map((game) => (
-                  <CardGame
-                    key={game.id}
-                    id={game.id}
-                    backgroundColor={game.backgroundColor}
-                    title={game.title}
-                    emoji={game.emoji}
-                    emojiName={game.emojiName}
-                    emojiViewName={game.emojiViewName}
-                    emojiSyllabes={game.emojiSyllables}
-                    onPress={() => {
-                      handleSelectGame(game.id);
-                    }}
-                  />
-                ))}
-              </WrapperRow>
-            </WrapperCards>
-          </ScrollViewContainer>
-        </WelcomeContainer>
-      )}
+        ) : (
+          <WelcomeContainer>
+            <ProfileModal
+              modalVisible={modalVisible}
+              setModalVisible={setModalVisible}
+              profileId={profileId}
+              gender={profileData?.gender}
+              fetchProfileDetails={fetchProfileDetails}
+            />
+            <WelcomeTextContainer>
+              <WelcomeText numberOfLines={1}>Olá, {profileData?.name}!</WelcomeText>
+              <WelcomeButtonsContainer>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(true);
+                  }}
+                >
+                  <Icon icon="pencil" size={24} color={colors.title} lib="FontAwesome" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={confirmDelete}>
+                  <Icon icon="trash" size={24} color={colors.title} lib="FontAwesome" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleLogout}>
+                  <Icon icon="logout" size={24} color={colors.title} lib="AntDesign" />
+                </TouchableOpacity>
+              </WelcomeButtonsContainer>
+            </WelcomeTextContainer>
+            <WelcomeDescription>Vamos aprender brincando?</WelcomeDescription>
+            <ScrollViewContainer>
+              <WrapperCards>
+                <WrapperRow>
+                  {games.map((game) => (
+                    <CardGame
+                      key={game.id}
+                      id={game.id}
+                      backgroundColor={game.backgroundColor}
+                      title={game.title}
+                      emoji={game.emoji}
+                      emojiName={game.emojiName}
+                      emojiViewName={game.emojiViewName}
+                      emojiSyllabes={game.emojiSyllables}
+                      onPress={() => {
+                        handleSelectGame(game.id);
+                      }}
+                    />
+                  ))}
+                </WrapperRow>
+              </WrapperCards>
+            </ScrollViewContainer>
+          </WelcomeContainer>
+        )}
+      </ContainerWrapper>
     </Container>
   );
 }

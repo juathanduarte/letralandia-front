@@ -19,6 +19,7 @@ import vectorSelectProfile from '../../../../assets/vectors/vectorSelectProfile.
 import {
   ButtonWrapper,
   Container,
+  ContainerWrapper,
   GenderButton,
   GenderButtonWrapper,
   HeaderWrapper,
@@ -102,41 +103,43 @@ export function CreateProfile() {
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Container>
-          <HeaderWrapper>
-            <TouchableOpacity onPress={handleGoBack}>
-              <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-            </TouchableOpacity>
-          </HeaderWrapper>
-          <TitleWrapper>
-            <LogoImage source={vectorSelectProfile} resizeMode="contain" />
-            <Title>Qual é seu nome?</Title>
-          </TitleWrapper>
-          <InfoWrapper>
-            <Input
-              variant={'login'}
-              label="Digite o seu nome"
-              iconSize={20}
-              error={error}
-              value={name}
-              onChange={(text) => setName(text)}
-            />
-            <GenderButtonWrapper>
-              <GenderButton onPress={() => setGender('male')} color={getButtonColor('male')}>
-                <Icon icon="male" size={24} color="white" lib="IonIcons" />
-              </GenderButton>
-              <GenderButton onPress={() => setGender('female')} color={getButtonColor('female')}>
-                <Icon icon="female" size={24} color="white" lib="IonIcons" />
-              </GenderButton>
-            </GenderButtonWrapper>
-          </InfoWrapper>
-          <ButtonWrapper>
-            <Button
-              variant="primary"
-              size="large"
-              label="Salvar e continuar"
-              onClick={handleCreateProfile}
-            />
-          </ButtonWrapper>
+          <ContainerWrapper>
+            <HeaderWrapper>
+              <TouchableOpacity onPress={handleGoBack}>
+                <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+              </TouchableOpacity>
+            </HeaderWrapper>
+            <TitleWrapper>
+              <LogoImage source={vectorSelectProfile} resizeMode="contain" />
+              <Title>Qual é seu nome?</Title>
+            </TitleWrapper>
+            <InfoWrapper>
+              <Input
+                variant={'login'}
+                label="Digite o seu nome"
+                iconSize={20}
+                error={error}
+                value={name}
+                onChange={(text) => setName(text)}
+              />
+              <GenderButtonWrapper>
+                <GenderButton onPress={() => setGender('male')} color={getButtonColor('male')}>
+                  <Icon icon="male" size={24} color="white" lib="IonIcons" />
+                </GenderButton>
+                <GenderButton onPress={() => setGender('female')} color={getButtonColor('female')}>
+                  <Icon icon="female" size={24} color="white" lib="IonIcons" />
+                </GenderButton>
+              </GenderButtonWrapper>
+            </InfoWrapper>
+            <ButtonWrapper>
+              <Button
+                variant="primary"
+                size="large"
+                label="Salvar e continuar"
+                onClick={handleCreateProfile}
+              />
+            </ButtonWrapper>
+          </ContainerWrapper>
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>

@@ -8,10 +8,14 @@ interface TextProps {
 
 const { width, height } = Dimensions.get('window');
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
   flex: 1;
-  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
   gap: 16px;
+`;
+
+export const ContainerWrapper = styled.View`
+  flex: 1;
+  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
 `;
 
 export const HeaderWrapper = styled.View``;

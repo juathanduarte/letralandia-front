@@ -8,7 +8,7 @@ interface LetterProps {
   font: string;
 }
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${colors.blueBackground};
 `;
@@ -17,7 +17,7 @@ export const HeaderWrapper = styled.View`
   flex-direction: row;
   width: 100%;
   border-radius: 0 0 16px 16px;
-  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
+  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
   justify-content: space-between;
   align-items: center;
 `;

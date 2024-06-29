@@ -8,7 +8,9 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import {
+  ActivityIndicatorContainer,
   Container,
+  ContainerWrapper,
   LogoImage,
   ScrollViewContainer,
   Text,
@@ -19,8 +21,8 @@ import {
 } from './style';
 
 import colors from '@/styles/colors';
-import vectorSelectProfile from '../../../../assets/vectors/vectorSelectProfile.png';
 import { removeAsyncStorage } from '@/utils/AsyncStorage';
+import vectorSelectProfile from '../../../../assets/vectors/vectorSelectProfile.png';
 
 export function SelectProfile({ route }) {
   const navigation = useNavigation<RootStackScreenProps<'SelectProfile'>['navigation']>();
@@ -67,51 +69,51 @@ export function SelectProfile({ route }) {
 
   return (
     <Container>
-      <WrapperHeader>
-        <TouchableOpacity onPress={handleGoBack}>
-          <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-        </TouchableOpacity>
-        <LogoImage source={vectorSelectProfile} resizeMode="contain" />
-      </WrapperHeader>
-      {loading ? (
-        <ActivityIndicator
-          size="large"
-          color={colors.title}
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        />
-      ) : (
-        <>
-          {profiles.length === 0 && <Text>Nenhum perfil registrado, crie um! 😀</Text>}
-          {profiles.length > 0 && (
-            <>
-              <Title>Quem é você?</Title>
-              <ScrollViewContainer>
-                <WrapperCards>
-                  <WrapperRow>
-                    {error && <Text>{error}</Text>}
-                    {profiles.map((profile) => (
-                      <CardProfile
-                        key={profile.id}
-                        name={profile.name}
-                        gender={profile.gender}
-                        onClick={() => {
-                          handleSelectProfile(profile.id);
-                        }}
-                      />
-                    ))}
-                  </WrapperRow>
-                </WrapperCards>
-              </ScrollViewContainer>
-            </>
-          )}
-          <Button
-            variant="primary"
-            size="large"
-            label="Novo perfil"
-            onClick={handleCreateProfile}
-          />
-        </>
-      )}
+      <ContainerWrapper>
+        <WrapperHeader>
+          <TouchableOpacity onPress={handleGoBack}>
+            <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+          </TouchableOpacity>
+          <LogoImage source={vectorSelectProfile} resizeMode="contain" />
+        </WrapperHeader>
+        {loading ? (
+          <ActivityIndicatorContainer>
+            <ActivityIndicator size="large" color={colors.title} />
+          </ActivityIndicatorContainer>
+        ) : (
+          <>
+            {profiles.length === 0 && <Text>Nenhum perfil registrado, crie um! 😀</Text>}
+            {profiles.length > 0 && (
+              <>
+                <Title>Quem é você?</Title>
+                <ScrollViewContainer>
+                  <WrapperCards>
+                    <WrapperRow>
+                      {error && <Text>{error}</Text>}
+                      {profiles.map((profile) => (
+                        <CardProfile
+                          key={profile.id}
+                          name={profile.name}
+                          gender={profile.gender}
+                          onClick={() => {
+                            handleSelectProfile(profile.id);
+                          }}
+                        />
+                      ))}
+                    </WrapperRow>
+                  </WrapperCards>
+                </ScrollViewContainer>
+              </>
+            )}
+            <Button
+              variant="primary"
+              size="large"
+              label="Novo perfil"
+              onClick={handleCreateProfile}
+            />
+          </>
+        )}
+      </ContainerWrapper>
     </Container>
   );
 }

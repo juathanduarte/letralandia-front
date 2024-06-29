@@ -51,9 +51,7 @@ export function Login() {
       return;
     }
     if (!validatePassword(password)) {
-      setPasswordError(
-        'A senha deve conter pelo menos um número, uma letra maiúscula, uma minúscula, um caractere especial e ter no mínimo 8 caracteres.'
-      );
+      setPasswordError('Senha inválida.');
       return;
     }
 

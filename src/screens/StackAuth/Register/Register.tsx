@@ -14,7 +14,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { Container, Title, WrapperBody, WrapperInputs } from './style';
+import { Container, ContainerWrapper, Title, WrapperBody, WrapperInputs } from './style';
 
 export function Register() {
   const navigation = useNavigation<RootStackScreenProps<'Register'>['navigation']>();
@@ -159,56 +159,58 @@ export function Register() {
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Container>
-          <TouchableOpacity onPress={handleGoBack}>
-            <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-          </TouchableOpacity>
-          <Title>Cadastro</Title>
-          <WrapperBody>
-            <WrapperInputs>
-              <Input
-                variant={'login'}
-                iconInput="user"
-                label="Nome"
-                iconSize={20}
-                error={nameError}
-                value={name}
-                onChange={handleNameChange}
-              />
-              <Input
-                variant={'login'}
-                iconInput="envelope"
-                label="E-mail"
-                iconSize={20}
-                error={emailError}
-                value={email}
-                onChange={handleEmailChange}
-              />
-              <Input
-                variant={'password'}
-                iconInput="lock"
-                label="Senha"
-                iconSize={20}
-                error={passwordError}
-                errorPassword={
-                  passwordError ===
-                    'A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial.' &&
-                  passwordError
-                }
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              <Input
-                variant={'password'}
-                iconInput="lock"
-                label="Confirme sua senha"
-                iconSize={20}
-                error={password2Error}
-                value={password2}
-                onChange={handlePassword2Change}
-              />
-            </WrapperInputs>
-            <Button variant="primary" size="large" label="Cadastrar" onClick={handleRegister} />
-          </WrapperBody>
+          <ContainerWrapper>
+            <TouchableOpacity onPress={handleGoBack}>
+              <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+            </TouchableOpacity>
+            <Title>Cadastro</Title>
+            <WrapperBody>
+              <WrapperInputs>
+                <Input
+                  variant={'login'}
+                  iconInput="user"
+                  label="Nome"
+                  iconSize={20}
+                  error={nameError}
+                  value={name}
+                  onChange={handleNameChange}
+                />
+                <Input
+                  variant={'login'}
+                  iconInput="envelope"
+                  label="E-mail"
+                  iconSize={20}
+                  error={emailError}
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+                <Input
+                  variant={'password'}
+                  iconInput="lock"
+                  label="Senha"
+                  iconSize={20}
+                  error={passwordError}
+                  errorPassword={
+                    passwordError ===
+                      'A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial.' &&
+                    passwordError
+                  }
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+                <Input
+                  variant={'password'}
+                  iconInput="lock"
+                  label="Confirme sua senha"
+                  iconSize={20}
+                  error={password2Error}
+                  value={password2}
+                  onChange={handlePassword2Change}
+                />
+              </WrapperInputs>
+              <Button variant="primary" size="large" label="Cadastrar" onClick={handleRegister} />
+            </WrapperBody>
+          </ContainerWrapper>
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>
