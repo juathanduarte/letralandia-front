@@ -7,6 +7,10 @@ export const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
+export const ContainerWrapper = styled.View`
+  padding: ${Platform.OS === 'ios' ? '0px' : '24px 0px'};
+`;
+
 export const HeaderWrapper = styled.View`
   flex-direction: row;
   background-color: ${colors.yellow};

@@ -11,6 +11,7 @@ import { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import {
   BodyWrapper,
   Container,
+  ContainerWrapper,
   HeaderTitle,
   HeaderTitleAuxWrapper,
   HeaderTitleWrapper,
@@ -78,39 +79,41 @@ export function SelectPhaseThirdGame({ route }) {
 
   return (
     <Container>
-      <HeaderWrapper>
-        <TouchableOpacity onPress={handleGoBack}>
-          <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-        </TouchableOpacity>
-      </HeaderWrapper>
-      <HeaderTitleAuxWrapper>
-        <HeaderTitleWrapper>
-          <HeaderTitle>Organize as sílabas</HeaderTitle>
-        </HeaderTitleWrapper>
-      </HeaderTitleAuxWrapper>
-      {loading ? (
-        <ActivityIndicator
-          size="large"
-          color={colors.title}
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        />
-      ) : (
-        <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
-          <BodyWrapper>
-            {phases.map((phase) => (
-              <CardGame
-                id={phase.id}
-                key={phase.id}
-                onPress={() => handleSelectGame(gameId, phase.id)}
-                backgroundColor={colors.pink}
-                borderColor={colors.pinkLight}
-                title={phase.name}
-                rating={phase.rating ?? 0}
-              />
-            ))}
-          </BodyWrapper>
-        </ScrollView>
-      )}
+      <ContainerWrapper>
+        <HeaderWrapper>
+          <TouchableOpacity onPress={handleGoBack}>
+            <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+          </TouchableOpacity>
+        </HeaderWrapper>
+        <HeaderTitleAuxWrapper>
+          <HeaderTitleWrapper>
+            <HeaderTitle>Organize as sílabas</HeaderTitle>
+          </HeaderTitleWrapper>
+        </HeaderTitleAuxWrapper>
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.title}
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          />
+        ) : (
+          <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+            <BodyWrapper>
+              {phases.map((phase) => (
+                <CardGame
+                  id={phase.id}
+                  key={phase.id}
+                  onPress={() => handleSelectGame(gameId, phase.id)}
+                  backgroundColor={colors.pink}
+                  borderColor={colors.pinkLight}
+                  title={phase.name}
+                  rating={phase.rating ?? 0}
+                />
+              ))}
+            </BodyWrapper>
+          </ScrollView>
+        )}
+      </ContainerWrapper>
     </Container>
   );
 }

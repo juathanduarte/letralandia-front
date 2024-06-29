@@ -1,3 +1,4 @@
+import { MarginBottom } from '@/components/CardGameInfo/style';
 import Icon from '@/components/Icon/Icon';
 import { useUser } from '@/contexts/UserContext';
 import { getInfoGameProfile } from '@/services/profile-game-info';
@@ -133,6 +134,7 @@ export function ParentArea() {
               gamesInfos.map((gameInfo) => (
                 <CardGameInfo key={gameInfo.gameId} gameInfo={gameInfo} />
               ))}
+            <MarginBottom />
           </BodyWrapper>
         )}
         <AuthModalParentArea

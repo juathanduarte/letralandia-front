@@ -10,7 +10,7 @@ export const Container = styled.SafeAreaView`
 
 export const ContainerWrapper = styled.View`
   flex: 1;
-  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
+  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '36px 16px'};
 `;
 
 export const Title = styled.Text`

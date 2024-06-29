@@ -16,7 +16,7 @@ export const HeaderWrapper = styled.View`
   flex-direction: row;
   width: 100%;
   border-radius: 0 0 16px 16px;
-  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
+  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '32px 16px 16px 16px'};
   justify-content: space-between;
   align-items: center;
 `;
@@ -43,10 +43,12 @@ export const LettersWrapper = styled.View`
 
 export const Options = styled.View<LetterProps>`
   flex: 1;
+  min-width: 75px;
   height: 75px;
   background-color: ${(props) => (props.letter === ' ' ? colors.pink : colors.pinkLight)};
   border-radius: 8px;
-  justify-content: ${(props) => (props.font === 'Pacifico_400Regular' ? '' : 'center')};
+  justify-content: center;
+  align-items: center;
 `;
 
 export const LetterContainer = styled.View`
@@ -57,7 +59,7 @@ export const LetterContainer = styled.View`
 `;
 
 export const Letter = styled.Text<LetterProps>`
-  font-size: ${(props) => (props.font === 'Pacifico_400Regular' ? '40px' : '48px')};
+  font-size: 40px;
   color: ${colors.title};
   font-family: ${(props) => props.font};
   text-align: center;
@@ -89,4 +91,5 @@ export const OptionsSelect = styled.TouchableOpacity<LetterProps>`
   background-color: ${colors.pinkLight};
   border-radius: 8px;
   justify-content: center;
+  align-items: center;
 `;
