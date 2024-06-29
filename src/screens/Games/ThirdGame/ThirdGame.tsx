@@ -14,10 +14,12 @@ import {
   HeaderWrapper,
   ImageGame,
   Letter,
+  LetterContainer,
   LettersGame,
   LettersWrapper,
   Options,
   OptionsSelect,
+  PencilIcon,
   Separator,
 } from './style';
 
@@ -148,6 +150,7 @@ export function ThirdGame({ route }) {
   const [errors, setErrors] = useState<ErrorData[]>([]);
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [typeModal, setTypeModal] = useState<string>('');
+  const [editableIndices, setEditableIndices] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const fetchGamePhase = async () => {
@@ -173,6 +176,7 @@ export function ThirdGame({ route }) {
       setFixedSyllables(incomplete);
       setSyllablesToView(incomplete);
       setOptions(generatedOptions);
+      setEditableIndices(new Set(incomplete.map((_, index) => index)));
     }
   }, [currentWordIndex, gameData]);
 
@@ -293,7 +297,11 @@ export function ThirdGame({ route }) {
           } else {
             setTypeModal('error');
             setOpenModalInfo(true);
-            playAudio(profileGender, 'som_erro');
+            if (currentWordIndex === 0) {
+              playAudio(profileGender, 'ops_errou');
+            } else {
+              playAudio(profileGender, 'som_erro');
+            }
             const word = gameData[currentWordIndex].word;
             setErrors((prevErrors) => {
               const errorIndex = prevErrors.findIndex((error) => error.word === word);
@@ -321,6 +329,15 @@ export function ThirdGame({ route }) {
     ]
   );
 
+  const handleEditSyllable = useCallback(
+    (index: number) => {
+      const newSyllablesView = [...syllablesView];
+      newSyllablesView[index] = ' ';
+      setSyllablesToView(newSyllablesView);
+    },
+    [syllablesView]
+  );
+
   const currentWordData = gameData[currentWordIndex] || { word: '', incomplete: '', image: '' };
 
   return (
@@ -345,9 +362,24 @@ export function ThirdGame({ route }) {
             <LettersWrapper>
               {syllablesView.map((letter, index) => (
                 <Options key={index} letter={letter} font={font}>
-                  <Letter letter={letter} font={font}>
-                    {formatLetter(letter)}
-                  </Letter>
+                  <LetterContainer>
+                    <Letter
+                      letter={letter}
+                      font={font}
+                      onPress={() => {
+                        if (editableIndices.has(index)) {
+                          handleEditSyllable(index);
+                        }
+                      }}
+                    >
+                      {formatLetter(letter)}
+                    </Letter>
+                    {editableIndices.has(index) && letter !== ' ' && (
+                      <PencilIcon>
+                        <Icon icon="pencil" size={16} color={colors.title} lib="FontAwesome" />
+                      </PencilIcon>
+                    )}
+                  </LetterContainer>
                 </Options>
               ))}
             </LettersWrapper>

@@ -14,10 +14,12 @@ import {
   HeaderWrapper,
   ImageGame,
   Letter,
+  LetterContainer,
   LettersGame,
   LettersWrapper,
   Options,
   OptionsSelect,
+  PencilIcon,
   Separator,
 } from './style';
 
@@ -53,6 +55,7 @@ export function FirstGame({ route }) {
   const [errors, setErrors] = useState<ErrorData[]>([]);
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [typeModal, setTypeModal] = useState<string>('');
+  const [editableIndices, setEditableIndices] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const fetchGamePhase = async () => {
@@ -73,9 +76,10 @@ export function FirstGame({ route }) {
   useEffect(() => {
     if (gameData.length > 0) {
       const { word } = gameData[currentWordIndex];
-      const incomplete = generateArrayWord(word, phaseId);
-      setFixedLetters(incomplete);
-      setLettersView(incomplete);
+      const { incompleteWord, editableIndices } = generateArrayWord(word, phaseId);
+      setFixedLetters(incompleteWord);
+      setLettersView(incompleteWord);
+      setEditableIndices(editableIndices);
       setOptions(generateOptions(word));
     }
   }, [currentWordIndex, gameData, phaseId]);
@@ -110,7 +114,13 @@ export function FirstGame({ route }) {
       incompleteWord[index] = arrayWord[index];
     });
 
-    return incompleteWord;
+    const editableIndices = new Set<number>(
+      arrayWord
+        .map((_, index) => (incompleteWord[index] === ' ' ? index : -1))
+        .filter((index) => index !== -1)
+    );
+
+    return { incompleteWord, editableIndices };
   }, []);
 
   const generateOptions = useCallback((word: string) => {
@@ -200,7 +210,11 @@ export function FirstGame({ route }) {
           } else {
             setTypeModal('error');
             setOpenModalInfo(true);
-            playAudio(profileGender, 'som_erro');
+            if (currentWordIndex === 0) {
+              playAudio(profileGender, 'ops_errou');
+            } else {
+              playAudio(profileGender, 'som_erro');
+            }
             const word = gameData[currentWordIndex].word;
             setErrors((prevErrors) => {
               const errorIndex = prevErrors.findIndex((error) => error.word === word);
@@ -218,6 +232,15 @@ export function FirstGame({ route }) {
       }
     },
     [lettersView, gameData, currentWordIndex, profileGender, finalizeGame, fixedLetters]
+  );
+
+  const handleEditLetter = useCallback(
+    (index: number) => {
+      const newLettersView = [...lettersView];
+      newLettersView[index] = ' ';
+      setLettersView(newLettersView);
+    },
+    [lettersView]
   );
 
   const currentWordData = gameData[currentWordIndex] || { word: '', incomplete: '', image: '' };
@@ -244,9 +267,24 @@ export function FirstGame({ route }) {
             <LettersWrapper>
               {lettersView.map((letter, index) => (
                 <Options key={index} letter={letter} font={font}>
-                  <Letter letter={letter} font={font}>
-                    {formatLetter(letter)}
-                  </Letter>
+                  <LetterContainer>
+                    <Letter
+                      letter={letter}
+                      font={font}
+                      onPress={() => {
+                        if (editableIndices.has(index)) {
+                          handleEditLetter(index);
+                        }
+                      }}
+                    >
+                      {formatLetter(letter)}
+                    </Letter>
+                    {editableIndices.has(index) && letter !== ' ' && (
+                      <PencilIcon>
+                        <Icon icon="pencil" size={16} color={colors.title} lib="FontAwesome" />
+                      </PencilIcon>
+                    )}
+                  </LetterContainer>
                 </Options>
               ))}
             </LettersWrapper>

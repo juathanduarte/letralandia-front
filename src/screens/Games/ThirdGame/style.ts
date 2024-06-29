@@ -49,12 +49,24 @@ export const Options = styled.View<LetterProps>`
   justify-content: ${(props) => (props.font === 'Pacifico_400Regular' ? '' : 'center')};
 `;
 
+export const LetterContainer = styled.View`
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+`;
+
 export const Letter = styled.Text<LetterProps>`
-  width: 100%;
   font-size: ${(props) => (props.font === 'Pacifico_400Regular' ? '40px' : '48px')};
   color: ${colors.title};
   font-family: ${(props) => props.font};
   text-align: center;
+`;
+
+export const PencilIcon = styled.View`
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 `;
 
 export const Separator = styled.View`

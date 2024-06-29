@@ -18,10 +18,12 @@ import {
   HeaderWrapper,
   ImageGame,
   Letter,
+  LetterContainer,
   LettersGame,
   LettersWrapper,
   Options,
   OptionsSelect,
+  PencilIcon,
   PlayButton,
   PlayIcon,
   Separator,
@@ -55,6 +57,7 @@ export function SecondGame({ route }) {
   const [typeModal, setTypeModal] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(0);
   const [errors, setErrors] = useState<ErrorData[]>([]);
+  const [editableIndices, setEditableIndices] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const fetchGamePhase = async () => {
@@ -83,6 +86,7 @@ export function SecondGame({ route }) {
     if (gameData.length > 0) {
       const { word } = gameData[currentWordIndex];
       setLettersView(new Array(word.length).fill(' '));
+      setEditableIndices(new Set(word.split('').map((_, index) => index)));
       setOptions(generateOptions(word));
 
       const wordAudio =
@@ -183,7 +187,11 @@ export function SecondGame({ route }) {
           } else {
             setTypeModal('error');
             setOpenModalInfo(true);
-            playAudio(profileGender, 'som_erro');
+            if (currentWordIndex === 0) {
+              playAudio(profileGender, 'ops_errou');
+            } else {
+              playAudio(profileGender, 'som_erro');
+            }
             const word = gameData[currentWordIndex].word;
             setErrors((prevErrors) => {
               const errorIndex = prevErrors.findIndex((error) => error.word === word);
@@ -201,6 +209,15 @@ export function SecondGame({ route }) {
       }
     },
     [lettersView, gameData, currentWordIndex, profileGender, finalizeGame]
+  );
+
+  const handleEditLetter = useCallback(
+    (index: number) => {
+      const newLettersView = [...lettersView];
+      newLettersView[index] = ' ';
+      setLettersView(newLettersView);
+    },
+    [lettersView]
   );
 
   const handlePlayAudio = () => {
@@ -247,9 +264,24 @@ export function SecondGame({ route }) {
             <LettersWrapper>
               {lettersView.map((letter, index) => (
                 <Options key={index} letter={letter} font={font}>
-                  <Letter letter={letter} font={font}>
-                    {formatLetter(letter)}
-                  </Letter>
+                  <LetterContainer>
+                    <Letter
+                      letter={letter}
+                      font={font}
+                      onPress={() => {
+                        if (editableIndices.has(index)) {
+                          handleEditLetter(index);
+                        }
+                      }}
+                    >
+                      {formatLetter(letter)}
+                    </Letter>
+                    {editableIndices.has(index) && letter !== ' ' && (
+                      <PencilIcon>
+                        <Icon icon="pencil" size={16} color={colors.title} lib="FontAwesome" />
+                      </PencilIcon>
+                    )}
+                  </LetterContainer>
                 </Options>
               ))}
             </LettersWrapper>
