@@ -306,7 +306,7 @@ export function FirstGame({ route }) {
           </LettersGame>
         </GameWrapper>
       )}
-      {showConfetti && <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} />}
+      {showConfetti && <ConfettiCannon count={50} origin={{ x: -10, y: 0 }} />}
     </Container>
   );
 }
