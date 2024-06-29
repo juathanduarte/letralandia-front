@@ -86,6 +86,7 @@ export function Login() {
   };
 
   function validateEmail(email) {
+    console.log('email', email);
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   }

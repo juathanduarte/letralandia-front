@@ -15,9 +15,9 @@ export const HeaderWrapper = styled.View`
   flex-direction: row;
   background-color: ${colors.yellow};
   width: 100%;
-  height: 80px;
+  height: ${Platform.OS === 'ios' ? '65px' : '105px'};
   border-radius: 0 0 16px 16px;
-  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
+  padding: ${Platform.OS === 'ios' ? '0px 16px 16px 16px' : '24px 16px'};
   justify-content: space-between;
   align-items: center;
 `;
@@ -45,4 +45,8 @@ export const HeaderTitle = styled.Text`
 export const BodyWrapper = styled.View`
   padding: 0px 16px;
   gap: 16px;
+`;
+
+export const MarginBottom = styled.View`
+  padding-bottom: ${Platform.OS === 'ios' ? '120px' : '70px'};
 `;

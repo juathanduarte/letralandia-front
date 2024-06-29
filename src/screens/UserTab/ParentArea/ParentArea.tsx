@@ -1,4 +1,3 @@
-import { MarginBottom } from '@/components/CardGameInfo/style';
 import Icon from '@/components/Icon/Icon';
 import { useUser } from '@/contexts/UserContext';
 import { getInfoGameProfile } from '@/services/profile-game-info';
@@ -14,6 +13,7 @@ import {
   Container,
   ContainerWrapper,
   LoadingContainer,
+  MarginBottom,
   WelcomeText,
   WelcomeTextContainer,
 } from './style';

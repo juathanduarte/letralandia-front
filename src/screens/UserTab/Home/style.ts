@@ -56,3 +56,7 @@ export const WrapperCards = styled.ScrollView`
 export const WrapperRow = styled.View`
   gap: 16px;
 `;
+
+export const MarginBottom = styled.View`
+  /* padding-bottom: ${Platform.OS === 'ios' ? '0px' : '70px'}; */
+`;

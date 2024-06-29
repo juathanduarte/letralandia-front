@@ -21,6 +21,10 @@ export const WelcomeText = styled.Text`
 
 export const BodyWrapper = styled.ScrollView``;
 
+export const MarginBottom = styled.View`
+  padding-bottom: ${Platform.OS === 'ios' ? '90px' : '70px'};
+`;
+
 export const LoadingContainer = styled.View`
   flex: 1;
   justify-content: center;

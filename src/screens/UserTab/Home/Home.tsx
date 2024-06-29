@@ -16,6 +16,7 @@ import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import {
   Container,
   ContainerWrapper,
+  MarginBottom,
   ScrollViewContainer,
   WelcomeButtonsContainer,
   WelcomeContainer,
@@ -219,6 +220,7 @@ export function Home({ route }) {
                       }}
                     />
                   ))}
+                  <MarginBottom />
                 </WrapperRow>
               </WrapperCards>
             </ScrollViewContainer>

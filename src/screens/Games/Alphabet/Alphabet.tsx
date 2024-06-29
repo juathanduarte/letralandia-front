@@ -5,16 +5,19 @@ import { RootStackScreenProps } from '@/types/navigation';
 import { playAudio } from '@/utils/playAudio';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Modal, TouchableOpacity } from 'react-native';
 import {
   BodyWrapper,
   ButtonWrapper,
+  CenteredView,
   Container,
+  ContainerWrapper,
   HeaderTitle,
   HeaderTitleAuxWrapper,
   HeaderTitleWrapper,
   HeaderWrapper,
-  VerticalCenteringWrapper,
+  ModalText,
+  ModalView,
 } from './style';
 
 export function Alphabet({ route }) {
@@ -41,7 +44,7 @@ export function Alphabet({ route }) {
     K: { word: 'Kiwi', emoji: '🥝' },
     L: { word: 'Leao', emoji: '🦁' },
     M: { word: 'Macaco', emoji: '🐒' },
-    N: { word: 'Narval', emoji: '🐋' },
+    N: { word: 'Navio', emoji: '🚢' },
     O: { word: 'Ovelha', emoji: '🐑' },
     P: { word: 'Pato', emoji: '🦆' },
     Q: { word: 'Queijo', emoji: '🧀' },
@@ -50,7 +53,7 @@ export function Alphabet({ route }) {
     T: { word: 'Tigre', emoji: '🐅' },
     U: { word: 'Urso', emoji: '🐻' },
     V: { word: 'Vaca', emoji: '🐄' },
-    W: { word: 'Wombat', emoji: '🐨' },
+    W: { word: 'William', emoji: '👦' },
     X: { word: 'Xicara', emoji: '☕' },
     Y: { word: 'Yak', emoji: '🦙' },
     Z: { word: 'Zebra', emoji: '🦓' },
@@ -69,17 +72,17 @@ export function Alphabet({ route }) {
 
   return (
     <Container>
-      <HeaderWrapper>
-        <TouchableOpacity onPress={handleGoBack}>
-          <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
-        </TouchableOpacity>
-      </HeaderWrapper>
-      <HeaderTitleAuxWrapper>
-        <HeaderTitleWrapper>
-          <HeaderTitle>Alfabeto</HeaderTitle>
-        </HeaderTitleWrapper>
-      </HeaderTitleAuxWrapper>
-      <VerticalCenteringWrapper>
+      <ContainerWrapper>
+        <HeaderWrapper>
+          <TouchableOpacity onPress={handleGoBack}>
+            <Icon icon="arrow-left" size={24} color={colors.title} lib="FontAwesome" />
+          </TouchableOpacity>
+        </HeaderWrapper>
+        <HeaderTitleAuxWrapper>
+          <HeaderTitleWrapper>
+            <HeaderTitle>Alfabeto</HeaderTitle>
+          </HeaderTitleWrapper>
+        </HeaderTitleAuxWrapper>
         <BodyWrapper>
           {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter, index) => (
             <ButtonWrapper key={index}>
@@ -87,52 +90,21 @@ export function Alphabet({ route }) {
             </ButtonWrapper>
           ))}
         </BodyWrapper>
-      </VerticalCenteringWrapper>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <TouchableOpacity
-          style={styles.centeredView}
-          activeOpacity={1}
-          onPressOut={() => setModalVisible(false)}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
         >
-          <TouchableOpacity style={styles.modalView} activeOpacity={1} onPress={() => {}}>
-            <Text style={styles.modalText}>{currentEmoji}</Text>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
+          <CenteredView onPress={() => setModalVisible(false)}>
+            <ModalView>
+              <ModalText>{currentEmoji}</ModalText>
+            </ModalView>
+          </CenteredView>
+        </Modal>
+      </ContainerWrapper>
     </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalText: {
-    fontSize: 48,
-  },
-});

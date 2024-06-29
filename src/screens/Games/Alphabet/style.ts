@@ -7,6 +7,10 @@ export const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
+export const ContainerWrapper = styled.View`
+  padding: ${Platform.OS === 'ios' ? '0px' : '24px 0px'};
+`;
+
 export const HeaderWrapper = styled.View`
   flex-direction: row;
   background-color: ${colors.gray};
@@ -20,6 +24,7 @@ export const HeaderWrapper = styled.View`
 
 export const HeaderTitleAuxWrapper = styled.View`
   width: 100%;
+  height: auto;
   align-items: center;
 `;
 
@@ -37,20 +42,33 @@ export const HeaderTitle = styled.Text`
   padding: 8px;
 `;
 
-export const VerticalCenteringWrapper = styled.View`
-  flex: 1;
-  justify-content: center;
-  padding: ${Platform.OS === 'ios' ? '16px' : '24px 16px'};
-`;
-
 export const BodyWrapper = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  bottom: 15px;
+  justify-content: center;
+  bottom: 25px;
 `;
 
 export const ButtonWrapper = styled.View`
-  flex: 1;
+  flex-basis: 30%;
   margin: 5px;
-  min-width: 100px;
+`;
+
+export const CenteredView = styled.TouchableOpacity`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+export const ModalView = styled.View`
+  margin: 20px;
+  background-color: white;
+  border-radius: 20px;
+  padding: 35px;
+  align-items: center;
+`;
+
+export const ModalText = styled.Text`
+  font-size: 48px;
 `;

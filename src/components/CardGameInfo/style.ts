@@ -1,6 +1,5 @@
 import colors from '@/styles/colors';
 import fonts from '@/styles/fonts';
-import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
 interface CardContainerProps {
@@ -86,8 +85,4 @@ export const ErrorText = styled.Text`
   color: ${colors.title};
   font-family: ${fonts.text_semi_bold};
   font-size: 16px;
-`;
-
-export const MarginBottom = styled.View`
-  padding-bottom: ${Platform.OS === 'ios' ? '90px' : '70px'};
 `;

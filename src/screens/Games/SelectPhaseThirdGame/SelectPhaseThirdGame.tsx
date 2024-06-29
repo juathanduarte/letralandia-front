@@ -16,6 +16,7 @@ import {
   HeaderTitleAuxWrapper,
   HeaderTitleWrapper,
   HeaderWrapper,
+  MarginBottom,
 } from './style';
 
 interface PhasesProps {
@@ -97,7 +98,7 @@ export function SelectPhaseThirdGame({ route }) {
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           />
         ) : (
-          <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+          <ScrollView>
             <BodyWrapper>
               {phases.map((phase) => (
                 <CardGame
@@ -110,6 +111,7 @@ export function SelectPhaseThirdGame({ route }) {
                   rating={phase.rating ?? 0}
                 />
               ))}
+              <MarginBottom />
             </BodyWrapper>
           </ScrollView>
         )}

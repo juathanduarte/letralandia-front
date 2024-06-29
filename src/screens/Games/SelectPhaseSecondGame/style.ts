@@ -46,3 +46,7 @@ export const BodyWrapper = styled.View`
   padding: 0px 16px;
   gap: 16px;
 `;
+
+export const MarginBottom = styled.View`
+  padding-bottom: ${Platform.OS === 'ios' ? '120px' : '70px'};
+`;
