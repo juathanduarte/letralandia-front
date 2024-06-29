@@ -188,7 +188,7 @@ export function FirstGame({ route }) {
             if (currentWordIndex < gameData.length - 1) {
               setTypeModal('success');
               setOpenModalInfo(true);
-              playAudio(profileGender, 'parabens_acertou');
+              playAudio(profileGender, 'sucesso');
               setCurrentWordIndex((prevIndex) => prevIndex + 1);
             } else {
               finalizeGame();
@@ -196,7 +196,7 @@ export function FirstGame({ route }) {
           } else {
             setTypeModal('error');
             setOpenModalInfo(true);
-            playAudio(profileGender, 'ops_errou');
+            playAudio(profileGender, 'som_erro');
             const word = gameData[currentWordIndex].word;
             setErrors((prevErrors) => {
               const errorIndex = prevErrors.findIndex((error) => error.word === word);

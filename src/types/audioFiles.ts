@@ -9,6 +9,8 @@ const maleAudioFiles = {
   parabens_acertou: require('../../assets/audios/male/parabens_acertou.mp3'),
   ops_errou: require('../../assets/audios/male/ops_errou.mp3'),
   parabens_completou: require('../../assets/audios/male/parabens_completou.mp3'),
+  sucesso: require('../../assets/audios/male/sucesso.mp3'),
+  som_erro: require('../../assets/audios/male/som_erro.mp3'),
   // ALFABETO
   a_abelha: require('../../assets/audios/male/alphabet/a_abelha.mp3'),
   b_bola: require('../../assets/audios/male/alphabet/b_bola.mp3'),
@@ -49,6 +51,8 @@ const femaleAudioFiles = {
   parabens_acertou: require('../../assets/audios/female/parabens_acertou.mp3'),
   ops_errou: require('../../assets/audios/female/ops_errou.mp3'),
   parabens_completou: require('../../assets/audios/female/parabens_completou.mp3'),
+  sucesso: require('../../assets/audios/female/sucesso.mp3'),
+  som_erro: require('../../assets/audios/female/som_erro.mp3'),
   // ALFABETO
   a_abelha: require('../../assets/audios/female/alphabet/a_abelha.mp3'),
   b_bola: require('../../assets/audios/female/alphabet/b_bola.mp3'),

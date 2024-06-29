@@ -27,9 +27,7 @@ export const playAudio = async (gender, filename) => {
 
       await soundObject.loadAsync({ uri });
       await soundObject.playAsync();
-    } catch (error) {
-      // console.error('Failed to play the base64 sound:', error);
-    }
+    } catch (error) {}
   } else {
     if (gender === 'male') {
       audioFile = maleAudioFiles[filename];
