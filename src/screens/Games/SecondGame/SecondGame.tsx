@@ -169,7 +169,11 @@ export function SecondGame({ route }) {
             if (currentWordIndex < gameData.length - 1) {
               setTypeModal('success');
               setOpenModalInfo(true);
-              playAudio(profileGender, 'sucesso');
+              if (currentWordIndex === 0) {
+                playAudio(profileGender, 'parabens_acertou');
+              } else {
+                playAudio(profileGender, 'sucesso');
+              }
               setTimeout(() => {
                 setCurrentWordIndex((prevIndex) => prevIndex + 1);
               }, 3500);

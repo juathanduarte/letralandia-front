@@ -185,10 +185,14 @@ export function FirstGame({ route }) {
           const gameDataLowerCase = gameData[currentWordIndex].word.toLowerCase();
 
           if (completedWordLowerCase === gameDataLowerCase) {
+            if (currentWordIndex === 0) {
+              playAudio(profileGender, 'parabens_acertou');
+            } else {
+              playAudio(profileGender, 'sucesso');
+            }
             if (currentWordIndex < gameData.length - 1) {
               setTypeModal('success');
               setOpenModalInfo(true);
-              playAudio(profileGender, 'sucesso');
               setCurrentWordIndex((prevIndex) => prevIndex + 1);
             } else {
               finalizeGame();
