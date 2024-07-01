@@ -42,6 +42,15 @@ export default function Input({
     setShowPassword(!showPassword);
   };
 
+  const handleChange = (text: string) => {
+    let transformedText = text;
+    if (label.toLowerCase() === 'e-mail') {
+      transformedText = text.charAt(0).toLowerCase() + text.slice(1);
+    }
+    const onlyNumber = transformedText.replace(/[^0-9]/g, '');
+    onChange && onChange(inputNumber ? onlyNumber : transformedText);
+  };
+
   return (
     <Wrapper>
       <WrapperInput error={error} errorPassword={errorPassword}>
@@ -55,10 +64,8 @@ export default function Input({
               placeholder={label}
               secureTextEntry={variant === 'password' && !showPassword}
               placeholderTextColor={colors.title}
-              onChangeText={(value) => {
-                const onlyNumber = value.replace(/[^0-9]/g, '');
-                onChange && onChange(inputNumber ? onlyNumber : value);
-              }}
+              onChangeText={handleChange}
+              value={value}
               defaultValue={defaultValue}
               keyboardType={inputNumber ? 'numeric' : 'default'}
             />
@@ -81,10 +88,8 @@ export default function Input({
               onBlur={onblur}
               placeholder={label}
               placeholderTextColor={colors.title}
-              onChangeText={(value) => {
-                const onlyNumber = value.replace(/[^0-9]/g, '');
-                onChange && onChange(inputNumber ? onlyNumber : value);
-              }}
+              onChangeText={handleChange}
+              value={value}
               defaultValue={defaultValue}
               keyboardType={inputNumber ? 'numeric' : 'default'}
             />
